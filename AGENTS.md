@@ -4,6 +4,31 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 - Add durable project-specific notes here as they are discovered through real work.
 
+## Product grain
+
+Explanation-first SIE prep. 181 official outline bites, 34 FINRA leaves. Teach-back readiness (Gap / Misconception / Rusty / Exam-Ready / Mastered) is the module assessment. QBank is right/wrong only and never writes those states. Plan: `docs/backend-plan.md`. UI blueprint (do not re-litigate): firstmate data `tb-review-teachback-frontend-interactivity-73/report.md`.
+
+## Content vs user state
+
+Product content is compiled from `content/` into `ui_kits/web/data.js` (`python3 content/compile.py`). Per-user progress, exam date, answers, results, and QBank history belong in `store/tb-store.js` (local-first). Hosted cloud is a stub. Optional file server: `node server/store-server.mjs` (writes gitignored `data/users/`).
+
+Do not invent dollar figures, holding periods, or coverage limits on outline notes. Leftovers stay labeled stub. Authored exceptions: B008, B010, B019.
+
+Keyword grader: `store/grade.js`. It never emits Misconception.
+
+## Lane split
+
+Another worker owns `ui_kits/web/screens.jsx`. Do not edit that file from a backend/content lane.
+
+The generic outline-to-HTML generator is a different local repo: `~/Developer/firstmate/projects/teachback-skill`.
+
+## Verify
+
+```sh
+python3 content/compile.py
+node store/tb-store.test.mjs
+```
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
