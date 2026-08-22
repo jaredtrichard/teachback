@@ -204,11 +204,11 @@ function QuestCard({onOpen}){
   </div>;
 }
 function LearnView({results,openModule,openQuests}){
-  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 220px',gap:20,alignItems:'start'}}>
+  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 300px',gap:16,alignItems:'start'}}>
     <LearnPath results={results} openModule={openModule}/>
-    <div style={{position:'sticky',top:16,display:'grid',gap:14}}>
-      <Mascot size={96} say="First pad is open. Hop on."/>
-      <QuestCard onOpen={openQuests}/>
+    <div style={{position:'sticky',top:16,display:'grid',justifyItems:'center',gap:16,width:'100%'}}>
+      <div style={{transform:'translateX(18px)'}}><Mascot size={108} say="First pad is open. Hop on."/></div>
+      <div style={{width:'100%'}}><QuestCard onOpen={openQuests}/></div>
     </div>
   </div>;
 }
@@ -216,7 +216,7 @@ function LearnView({results,openModule,openQuests}){
 function QuestsView(){
   return <section style={{display:'grid',gap:16,maxWidth:520}}>
     <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Daily quests</h1>
-    <QuestCard onOpen={()=>{}}/>
+    <div style={{maxWidth:560}}><QuestCard onOpen={()=>{}}/></div>
   </section>;
 }
 
