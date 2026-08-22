@@ -112,10 +112,10 @@ function pathChunks(){
   return chunks;
 }
 function CutePlay({color}){
-  return <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
-    <circle cx="17" cy="17" r="16" fill="#fff" opacity=".25"/>
-    <path d="M13 9.5c0-.9 1-1.45 1.76-.98l12.2 7.5c.72.44.72 1.52 0 1.96l-12.2 7.5c-.76.47-1.76-.08-1.76-.98V9.5z" fill={color}/>
-    <circle cx="12" cy="12" r="2.2" fill="#fff" opacity=".55"/>
+  return <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+    <circle cx="20" cy="20" r="18" fill="#fff" opacity=".35"/>
+    <path d="M16 11c0-1.1 1.2-1.75 2.1-1.15l13 8.15c.85.53.85 1.77 0 2.3l-13 8.15c-.9.56-2.1-.05-2.1-1.15V11z" fill={color}/>
+    <circle cx="15" cy="15" r="2.6" fill="#fff" opacity=".7"/>
   </svg>;
 }
 function Pad({kind,color,children}){
@@ -139,12 +139,9 @@ function LearnPath({results,openModule}){
   const kinds={1:'path',2:'lily',3:'stone',4:'star'};
   let global=0;
   return <div style={{padding:'8px 0 40px'}}>
-    <style>{`.tb-node{transition:transform .14s cubic-bezier(.34,1.56,.64,1),box-shadow .14s ease;transform:translateY(-5px) rotate(var(--tb-tilt));box-shadow:0 11px 0 var(--tb-edge)}
-.tb-node:hover{transform:translateY(-1px) rotate(var(--tb-tilt));box-shadow:0 7px 0 var(--tb-edge) !important}
-.tb-node:active{transform:translateY(6px) rotate(var(--tb-tilt));box-shadow:0 0 0 var(--tb-edge) !important}
-.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-4px);box-shadow:0 8px 0 var(--tb-edge)}
-.tb-3d:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--tb-edge)}
-.tb-3d:active{transform:translateY(4px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
+    <style>{`.tb-node{appearance:none;display:grid;place-items:center;transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-5px) rotate(var(--tb-tilt));box-shadow:0 10px 0 var(--tb-edge)}
+.tb-node:hover{transform:translateY(-1px) rotate(var(--tb-tilt));box-shadow:0 6px 0 var(--tb-edge)}
+.tb-node:active{transform:translateY(6px) rotate(var(--tb-tilt));box-shadow:0 0 0 var(--tb-edge)}`}</style>
     {chunks.map((ch,ci)=>{
       const c=SEC_COLOR[ch.sec];
       return <div key={ch.sec+'-'+ch.part} style={{marginBottom:28}}>
@@ -164,7 +161,7 @@ function LearnPath({results,openModule}){
           const tilt=[-8,6,-4,9,-6][i%5];
           return <div key={id} style={{display:'grid',justifyItems:'center',margin:'10px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
             <Pad kind={kinds[ch.sec]} color={c.fill}>
-              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{all:'unset',cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',display:'grid',placeItems:'center',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)','--tb-tilt':tilt+'deg'}}>
+              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)','--tb-tilt':tilt+'deg',padding:0}}>
                 {done?<i className="ph-fill ph-check" style={{fontSize:30}}></i>:ready?<CutePlay color={c.edge}/>:<i className="ph-fill ph-lock-simple" style={{fontSize:26,color:'var(--text-faint)'}}></i>}
               </button>
             </Pad>
@@ -182,16 +179,29 @@ function LearnPath({results,openModule}){
 }
 
 function QuestCard({onOpen}){
-  const quests=[['Teach 1 bite back','10 XP'],['Hit a 3-day streak','50 XP'],['Finish a practice','5 gems']];
-  return <Card padding={16}>
-    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
-      <strong style={{font:'800 16px var(--font-display)'}}>Quests</strong>
-      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--clover-600)'}}>See all</button>
+  const quests=[
+    ['ph-microphone-stage','var(--clover-100)','var(--clover-600)','Teach 1 bite','0/1','10 XP'],
+    ['ph-flame','var(--tangerine-100)','var(--tangerine-600)','3-day streak','1/3','50 XP'],
+    ['ph-target','var(--splash-100)','var(--splash-600)','One practice','0/1','5 gems'],
+  ];
+  return <div style={{background:'#fff',border:'3px solid var(--border)',borderRadius:24,boxShadow:'0 5px 0 var(--border-strong)',overflow:'hidden'}}>
+    <div style={{background:'var(--sunny-100)',padding:'14px 16px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+      <strong style={{font:'800 20px var(--font-display)'}}>Quests</strong>
+      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--tangerine-700)'}}>See all</button>
     </div>
-    {quests.map(([q,r])=><div key={q} style={{display:'flex',justifyContent:'space-between',gap:8,padding:'8px 0',borderTop:'2px solid var(--border)',font:'700 13px var(--font-body)'}}>
-      <span>{q}</span><span style={{color:'var(--tangerine-600)',whiteSpace:'nowrap'}}>{r}</span>
-    </div>)}
-  </Card>;
+    <div style={{padding:12,display:'grid',gap:10}}>
+      {quests.map(([icon,bg,fg,q,prog,r])=>(
+        <div key={q} style={{display:'grid',gridTemplateColumns:'44px 1fr',gap:10,alignItems:'center',background:bg,borderRadius:16,padding:'10px 12px'}}>
+          <div style={{width:44,height:44,borderRadius:14,background:'#fff',display:'grid',placeItems:'center',border:'2px solid '+fg}}><i className={'ph-fill '+icon} style={{fontSize:22,color:fg}}></i></div>
+          <div>
+            <div style={{font:'800 14px var(--font-body)'}}>{q}</div>
+            <div style={{height:8,borderRadius:99,background:'#fff',margin:'6px 0',overflow:'hidden'}}><div style={{width:prog.startsWith('1')?'33%':'8%',height:'100%',background:fg}}></div></div>
+            <div style={{font:'800 12px var(--font-display)',color:fg}}>{r} · {prog}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>;
 }
 function LearnView({results,openModule,openQuests}){
   return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 220px',gap:20,alignItems:'start'}}>
@@ -204,13 +214,9 @@ function LearnView({results,openModule,openQuests}){
 }
 
 function QuestsView(){
-  const quests=[['Teach 1 bite back','10 XP'],['Open the QBank','5 gems'],['Keep a 3-day streak','50 XP']];
-  return <section style={{display:'grid',gap:12,maxWidth:480}}>
+  return <section style={{display:'grid',gap:16,maxWidth:520}}>
     <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Daily quests</h1>
-    {quests.map(([q,r])=><Card key={q} padding={18} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
-      <span style={{font:'800 15px var(--font-body)'}}>{q}</span>
-      <span style={{font:'800 13px var(--font-display)',color:'var(--tangerine-600)'}}>{r}</span>
-    </Card>)}
+    <QuestCard onOpen={()=>{}}/>
   </section>;
 }
 
@@ -390,9 +396,9 @@ function App(){
 
   const shell=['learn','leagues','profile','quests','qbank','brush'].includes(view);
   return <div style={{minHeight:'100vh',background:'var(--surface-page)'}}>
-    <style>{`.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-4px);box-shadow:0 8px 0 var(--tb-edge)}
-.tb-3d:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--tb-edge)}
-.tb-3d:active{transform:translateY(4px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
+    <style>{`.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-2px);box-shadow:0 5px 0 var(--tb-edge)}
+.tb-3d:hover{transform:translateY(1px);box-shadow:0 2px 0 var(--tb-edge)}
+.tb-3d:active{transform:translateY(5px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
     <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,maxWidth:1100,margin:'auto',padding:'14px var(--page-pad)'}}>
       <span style={{font:'800 22px var(--font-display)'}}>teach<span style={{color:'var(--clover-500)'}}>back</span></span>
       <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
