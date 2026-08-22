@@ -80,7 +80,7 @@ function AuthScreen({mode,setMode,onEnter}){
 const fieldStyle={padding:'12px 14px',border:'2px solid var(--border-strong)',borderRadius:14,font:'600 15px var(--font-body)'};
 
 function SideNav({view,setView}){
-  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['leagues','Leagues','ph-trophy']];
+  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['quests','Quests','ph-target'],['leagues','Leagues','ph-trophy']];
   return <aside style={{display:'grid',gap:8,alignContent:'start',minWidth:160}}>
     {items.map(([id,label,icon])=>
       <button key={id} onClick={()=>setView(id)} style={{all:'unset',cursor:'pointer',display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:16,border:'2px solid',borderColor:view===id?'var(--clover-500)':'transparent',background:view===id?'var(--clover-100)':'transparent',font:'800 14px var(--font-body)',minHeight:44}}>
@@ -139,9 +139,12 @@ function LearnPath({results,openModule}){
   const kinds={1:'path',2:'lily',3:'stone',4:'star'};
   let global=0;
   return <div style={{padding:'8px 0 40px'}}>
-    <style>{`.tb-node{transition:transform .14s cubic-bezier(.34,1.56,.64,1),box-shadow .14s ease}
-.tb-node:hover{transform:translateY(-4px) rotate(var(--tb-tilt)) scale(1.04);box-shadow:0 10px 0 var(--tb-edge) !important}
-.tb-node:active{transform:translateY(6px) rotate(var(--tb-tilt));box-shadow:0 0 0 var(--tb-edge) !important}`}</style>
+    <style>{`.tb-node{transition:transform .14s cubic-bezier(.34,1.56,.64,1),box-shadow .14s ease;transform:translateY(-5px) rotate(var(--tb-tilt));box-shadow:0 11px 0 var(--tb-edge)}
+.tb-node:hover{transform:translateY(-1px) rotate(var(--tb-tilt));box-shadow:0 7px 0 var(--tb-edge) !important}
+.tb-node:active{transform:translateY(6px) rotate(var(--tb-tilt));box-shadow:0 0 0 var(--tb-edge) !important}
+.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-4px);box-shadow:0 8px 0 var(--tb-edge)}
+.tb-3d:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--tb-edge)}
+.tb-3d:active{transform:translateY(4px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
     {chunks.map((ch,ci)=>{
       const c=SEC_COLOR[ch.sec];
       return <div key={ch.sec+'-'+ch.part} style={{marginBottom:28}}>
@@ -161,7 +164,7 @@ function LearnPath({results,openModule}){
           const tilt=[-8,6,-4,9,-6][i%5];
           return <div key={id} style={{display:'grid',justifyItems:'center',margin:'10px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
             <Pad kind={kinds[ch.sec]} color={c.fill}>
-              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{all:'unset',cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',display:'grid',placeItems:'center',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',boxShadow:`0 7px 0 ${done||ready?c.edge:'var(--border-strong)'}`,color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)','--tb-tilt':tilt+'deg',transform:`rotate(${tilt}deg)`}}>
+              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{all:'unset',cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',display:'grid',placeItems:'center',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)','--tb-tilt':tilt+'deg'}}>
                 {done?<i className="ph-fill ph-check" style={{fontSize:30}}></i>:ready?<CutePlay color={c.edge}/>:<i className="ph-fill ph-lock-simple" style={{fontSize:26,color:'var(--text-faint)'}}></i>}
               </button>
             </Pad>
@@ -178,10 +181,25 @@ function LearnPath({results,openModule}){
   </div>;
 }
 
-function LearnView({results,openModule}){
-  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 200px',gap:20,alignItems:'start'}}>
+function QuestCard({onOpen}){
+  const quests=[['Teach 1 bite back','10 XP'],['Hit a 3-day streak','50 XP'],['Finish a practice','5 gems']];
+  return <Card padding={16}>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+      <strong style={{font:'800 16px var(--font-display)'}}>Quests</strong>
+      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--clover-600)'}}>See all</button>
+    </div>
+    {quests.map(([q,r])=><div key={q} style={{display:'flex',justifyContent:'space-between',gap:8,padding:'8px 0',borderTop:'2px solid var(--border)',font:'700 13px var(--font-body)'}}>
+      <span>{q}</span><span style={{color:'var(--tangerine-600)',whiteSpace:'nowrap'}}>{r}</span>
+    </div>)}
+  </Card>;
+}
+function LearnView({results,openModule,openQuests}){
+  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 220px',gap:20,alignItems:'start'}}>
     <LearnPath results={results} openModule={openModule}/>
-    <div style={{position:'sticky',top:16}}><Mascot size={110} say="First pad is open. Hop on."/></div>
+    <div style={{position:'sticky',top:16,display:'grid',gap:14}}>
+      <Mascot size={96} say="First pad is open. Hop on."/>
+      <QuestCard onOpen={openQuests}/>
+    </div>
   </div>;
 }
 
@@ -370,15 +388,15 @@ function App(){
 
   if(!user) return <AuthScreen mode={authMode} setMode={setAuthMode} onEnter={enter}/>;
 
-  const shell=['learn','leagues','profile','courses','qbank','brush'].includes(view);
+  const shell=['learn','leagues','profile','quests','qbank','brush'].includes(view);
   return <div style={{minHeight:'100vh',background:'var(--surface-page)'}}>
     <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,maxWidth:1100,margin:'auto',padding:'14px var(--page-pad)'}}>
       <span style={{font:'800 22px var(--font-display)'}}>teach<span style={{color:'var(--clover-500)'}}>back</span></span>
       <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
         <div style={{position:'relative'}}>
-          <button type="button" onClick={()=>setCourseOpen(!courseOpen)} style={{padding:'10px 18px',borderRadius:16,border:'2px solid var(--tangerine-700)',background:'var(--tangerine-500)',color:'#fff',font:'800 16px var(--font-display)',boxShadow:'0 4px 0 var(--tangerine-700)',cursor:'pointer'}}>Courses ▾</button>
-          {courseOpen && <div style={{position:'absolute',top:'calc(100% + 10px)',right:0,background:'#fff',border:'2px solid var(--border)',borderRadius:16,boxShadow:'0 4px 0 var(--border-strong)',minWidth:200,zIndex:5,padding:8}}>
-            <div style={{position:'absolute',top:-8,right:24,width:0,height:0,borderLeft:'8px solid transparent',borderRight:'8px solid transparent',borderBottom:'8px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
+          <button type="button" className="tb-3d" onClick={()=>setCourseOpen(!courseOpen)} style={{padding:'10px 18px',borderRadius:16,border:'2px solid var(--tangerine-700)',background:'var(--tangerine-500)',color:'#fff',font:'800 16px var(--font-display)',cursor:'pointer','--tb-edge':'var(--tangerine-700)'}}>Courses</button>
+          {courseOpen && <div style={{position:'absolute',top:'calc(100% + 12px)',right:0,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,minWidth:220,zIndex:5}}>
+            <div style={{position:'absolute',top:-10,right:28,width:0,height:0,borderLeft:'10px solid transparent',borderRight:'10px solid transparent',borderBottom:'10px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
             <button type="button" onClick={()=>setCourseOpen(false)} style={{width:'100%',textAlign:'left',padding:'10px 12px',border:'none',background:'var(--clover-100)',borderRadius:12,font:'800 14px var(--font-body)',cursor:'pointer'}}>SIE · active</button>
             <div style={{padding:'10px 12px',color:'var(--text-faint)',font:'700 13px var(--font-body)'}}>Series 7 · later</div>
           </div>}
@@ -393,7 +411,7 @@ function App(){
     <div style={{maxWidth:1100,margin:'auto',padding:'8px var(--page-pad) 60px',display:shell?'grid':'block',gridTemplateColumns:'180px minmax(0,1fr)',gap:24}}>
       {shell && <SideNav view={view} setView={changeView}/>}
       <main>
-        {view==='learn' && <LearnView results={results} openModule={openModule}/>}
+        {view==='learn' && <LearnView results={results} openModule={openModule} openQuests={()=>changeView('quests')}/>}
         {view==='leaf' && leaf && <LeafPicker node={leaf} results={results} openModule={openModule} back={()=>changeView('learn')}/>}
         {view==='module' && topic && <ModuleView topic={topic} state={result?result.state:'Unassessed'} goTeach={goTeach} back={()=>changeView('leaf')}/>}
         {view==='teach' && topic && <TeachView topic={topic} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={()=>changeView('module')}/>}
