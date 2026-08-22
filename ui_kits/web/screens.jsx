@@ -390,6 +390,9 @@ function App(){
 
   const shell=['learn','leagues','profile','quests','qbank','brush'].includes(view);
   return <div style={{minHeight:'100vh',background:'var(--surface-page)'}}>
+    <style>{`.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-4px);box-shadow:0 8px 0 var(--tb-edge)}
+.tb-3d:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--tb-edge)}
+.tb-3d:active{transform:translateY(4px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
     <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,maxWidth:1100,margin:'auto',padding:'14px var(--page-pad)'}}>
       <span style={{font:'800 22px var(--font-display)'}}>teach<span style={{color:'var(--clover-500)'}}>back</span></span>
       <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
