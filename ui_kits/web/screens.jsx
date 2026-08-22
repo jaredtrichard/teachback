@@ -84,7 +84,10 @@ function SideNav({view,setView}){
   return <aside style={{display:'grid',gap:8,alignContent:'start',minWidth:160}}>
     {items.map(([id,label,icon])=>
       <button key={id} onClick={()=>setView(id)} style={{all:'unset',cursor:'pointer',display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:16,border:'2px solid',borderColor:view===id?'var(--clover-500)':'transparent',background:view===id?'var(--clover-100)':'transparent',font:'800 14px var(--font-body)',minHeight:44}}>
-        <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>{label}
+        {id==='profile'
+          ? <span style={{width:28,height:28,borderRadius:'50%',background:view===id?'var(--clover-500)':'var(--tint)',border:'2px solid var(--border-strong)',display:'grid',placeItems:'center',color:view===id?'#fff':'var(--text-faint)'}}><i className="ph-fill ph-user" style={{fontSize:14}}></i></span>
+          : <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>}
+        {label}
       </button>
     )}
     <Card padding={14} style={{marginTop:8,background:'linear-gradient(180deg,var(--sunny-100),var(--paper))'}}>
@@ -101,122 +104,74 @@ const SEC_COLOR={
   '3':{fill:'var(--splash-500)',edge:'var(--splash-700)',soft:'var(--splash-100)'},
   '4':{fill:'var(--grape-500)',edge:'var(--grape-700)',soft:'var(--grape-100)'},
 };
-function pathChunks(){
-  const chunks=[];
-  Object.entries(window.TB_TREE).forEach(([sec,s])=>{
-    const ids=Object.values(s.leaves).flatMap(l=>l.ids);
-    for(let i=0;i<ids.length;i+=10){
-      chunks.push({sec,sectionTitle:s.title,part:Math.floor(i/10)+1,parts:Math.ceil(ids.length/10),ids:ids.slice(i,i+10)});
-    }
-  });
-  return chunks;
-}
-function CutePlay({color}){
-  return <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
-    <circle cx="20" cy="20" r="18" fill="#fff" opacity=".35"/>
-    <path d="M16 11c0-1.1 1.2-1.75 2.1-1.15l13 8.15c.85.53.85 1.77 0 2.3l-13 8.15c-.9.56-2.1-.05-2.1-1.15V11z" fill={color}/>
-    <circle cx="15" cy="15" r="2.6" fill="#fff" opacity=".7"/>
-  </svg>;
-}
-function Pad({kind,color,children}){
-  if(kind==='lily') return <div style={{position:'relative',width:108,height:92,display:'grid',placeItems:'center'}}>
-    <svg width="108" height="92" viewBox="0 0 108 92" style={{position:'absolute',inset:0}}><ellipse cx="54" cy="50" rx="48" ry="28" fill={color} opacity=".35"/><ellipse cx="54" cy="46" rx="40" ry="22" fill={color} opacity=".55"/><path d="M54 24v22" stroke={color} strokeWidth="4"/></svg>
-    {children}
-  </div>;
-  if(kind==='stone') return <div style={{position:'relative',width:96,height:84,display:'grid',placeItems:'center'}}>
-    <svg width="96" height="84" viewBox="0 0 96 84" style={{position:'absolute'}}><ellipse cx="48" cy="50" rx="40" ry="18" fill={color} opacity=".25"/><ellipse cx="48" cy="40" rx="36" ry="26" fill={color} opacity=".4"/></svg>
-    {children}
-  </div>;
-  if(kind==='star') return <div style={{position:'relative',width:100,height:100,display:'grid',placeItems:'center'}}>
-    <svg width="100" height="100" viewBox="0 0 100 100" style={{position:'absolute'}}><path d="M50 8 60 38h32L66 56l10 32-26-18-26 18 10-32L8 38h32z" fill={color} opacity=".28"/></svg>
-    {children}
-  </div>;
-  return <div style={{width:88,height:88,display:'grid',placeItems:'center'}}>{children}</div>;
-}
-function LearnPath({results,openModule}){
+function LearnPath({results,openLeaf}){
   const [bubble,setBubble]=React.useState(null);
-  const chunks=pathChunks();
-  const kinds={1:'path',2:'lily',3:'stone',4:'star'};
-  let global=0;
-  return <div style={{padding:'8px 0 40px'}}>
-    <style>{`.tb-node{appearance:none;display:grid;place-items:center;transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-5px) rotate(var(--tb-tilt));box-shadow:0 10px 0 var(--tb-edge)}
-.tb-node:hover{transform:translateY(-1px) rotate(var(--tb-tilt));box-shadow:0 6px 0 var(--tb-edge)}
-.tb-node:active{transform:translateY(6px) rotate(var(--tb-tilt));box-shadow:0 0 0 var(--tb-edge)}`}</style>
-    {chunks.map((ch,ci)=>{
-      const c=SEC_COLOR[ch.sec];
-      return <div key={ch.sec+'-'+ch.part} style={{marginBottom:28}}>
-        <div style={{margin:'20px auto 14px',maxWidth:440,background:c.fill,color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:`0 4px 0 ${c.edge}`}}>
-          <div style={{font:'800 11px var(--font-body)',letterSpacing:'.08em',opacity:.85}}>SECTION {ch.sec}{ch.parts>1?` · PATH ${ch.part}/${ch.parts}`:''}</div>
-          <div style={{font:'800 20px var(--font-display)'}}>{ch.sectionTitle}</div>
+  const nodes=leafNodes();
+  let lastSec='';
+  return <div style={{position:'relative',padding:'8px 0 40px'}}>
+    <style>{`.tb-node{appearance:none;padding:0;transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-5px);box-shadow:0 10px 0 var(--tb-edge)}
+.tb-node:hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--tb-edge)}
+.tb-node:active{transform:translateY(6px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
+    {nodes.map((n,i)=>{
+      const st=leafState(n,results);
+      const first=i===0;
+      const done=st==='done';
+      const open=first || st==='active' || done;
+      const c=SEC_COLOR[n.sec];
+      const zigzag=[0,56,56,0][i%4];
+      const banner=n.sec!==lastSec;
+      lastSec=n.sec;
+      const bg=done?c.fill:open?c.soft:'var(--paper)';
+      const edge=done||open?c.edge:'var(--border-strong)';
+      const fg=done?'#fff':open?c.edge:'var(--text-faint)';
+      return <React.Fragment key={n.leaf}>
+        {banner && <div style={{margin:'28px auto 18px',maxWidth:420,background:c.fill,color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:`0 4px 0 ${c.edge}`}}>
+          <div style={{font:'800 11px var(--font-body)',letterSpacing:'.08em',opacity:.85}}>SECTION {n.sec}</div>
+          <div style={{font:'800 20px var(--font-display)'}}>{n.sectionTitle}</div>
+        </div>}
+        <div style={{display:'grid',justifyItems:'center',margin:'18px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
+          <button className="tb-node" onClick={()=>setBubble(bubble===n.leaf?null:n.leaf)} title={n.title} style={{cursor:'pointer',width:70,height:70,borderRadius:'50%',display:'grid',placeItems:'center',background:bg,border:'4px solid '+edge,color:fg,'--tb-edge':edge}}>
+            <i className={`ph-fill ${done?'ph-check':open?'ph-play':'ph-lock-simple'}`} style={{fontSize:28}}></i>
+          </button>
+          {bubble===n.leaf && <div style={{marginTop:14,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,width:228,zIndex:3,position:'relative'}}>
+            <div style={{position:'absolute',top:-10,left:'50%',transform:'translateX(-50%)',width:0,height:0,borderLeft:'10px solid transparent',borderRight:'10px solid transparent',borderBottom:'10px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
+            <div style={{font:'800 12px var(--font-body)',marginBottom:8,color:'var(--text-muted)'}}>{n.title}</div>
+            <button type="button" onClick={()=>openLeaf(n,'practice')} style={{width:'100%',marginBottom:8,padding:'10px 12px',borderRadius:14,border:'2px solid var(--clover-600)',background:'var(--clover-100)',color:'var(--clover-700)',font:'800 14px var(--font-display)',cursor:'pointer'}}>Practice · simpler</button>
+            <button type="button" onClick={()=>openLeaf(n,'legendary')} style={{width:'100%',padding:'10px 12px',borderRadius:14,border:'2px solid #C99212',background:'linear-gradient(180deg,#FFE9A0 0%,#F5C542 48%,#D4A017 100%)',color:'#6B4A00',font:'800 14px var(--font-display)',cursor:'pointer',boxShadow:'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 0 #A8740C'}}>Legendary · mastery</button>
+          </div>}
         </div>
-        {ch.ids.map((id,i)=>{
-          const idx=global++;
-          const topic=window.TB_BITES.find(t=>t.id===id);
-          const scored=!!results[id];
-          const done=scored && ['Exam-Ready','Mastered'].includes(results[id].state);
-          const open=idx===0 || scored || (idx>0 && !!results[ch.ids[i-1]]);
-          const firstOpen=idx===0 && !scored;
-          const zigzag=[0,64,64,0, -20][i%5];
-          const ready=open||firstOpen;
-          const tilt=[-8,6,-4,9,-6][i%5];
-          return <div key={id} style={{display:'grid',justifyItems:'center',margin:'10px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
-            <Pad kind={kinds[ch.sec]} color={c.fill}>
-              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)','--tb-tilt':tilt+'deg',padding:0}}>
-                {done?<i className="ph-fill ph-check" style={{fontSize:30}}></i>:ready?<CutePlay color={c.edge}/>:<i className="ph-fill ph-lock-simple" style={{fontSize:26,color:'var(--text-faint)'}}></i>}
-              </button>
-            </Pad>
-            {bubble===id && <div style={{position:'relative',marginTop:14,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,width:228,zIndex:3}}>
-              <div style={{position:'absolute',top:-10,left:'50%',transform:'translateX(-50%)',width:0,height:0,borderLeft:'10px solid transparent',borderRight:'10px solid transparent',borderBottom:'10px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
-              <div style={{font:'800 12px var(--font-body)',marginBottom:8,color:'var(--text-muted)'}}>{topic.title}</div>
-              <button type="button" onClick={()=>openModule(id,'practice')} style={{width:'100%',marginBottom:8,padding:'10px 12px',borderRadius:14,border:'2px solid var(--clover-600)',background:'var(--clover-100)',color:'var(--clover-700)',font:'800 14px var(--font-display)',cursor:'pointer'}}>Practice · simpler</button>
-              <button type="button" onClick={()=>openModule(id,'legendary')} style={{width:'100%',padding:'10px 12px',borderRadius:14,border:'2px solid #C99212',background:'linear-gradient(180deg,#FFE9A0 0%,#F5C542 48%,#D4A017 100%)',color:'#6B4A00',font:'800 14px var(--font-display)',cursor:'pointer',boxShadow:'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 0 #A8740C'}}>Legendary · mastery</button>
-            </div>}
-          </div>;
-        })}
-      </div>;
+      </React.Fragment>;
     })}
   </div>;
 }
-
 function QuestCard({onOpen}){
-  const quests=[
-    ['ph-microphone-stage','var(--clover-100)','var(--clover-600)','Teach 1 bite','0/1','10 XP'],
-    ['ph-flame','var(--tangerine-100)','var(--tangerine-600)','3-day streak','1/3','50 XP'],
-    ['ph-target','var(--splash-100)','var(--splash-600)','One practice','0/1','5 gems'],
-  ];
-  return <div style={{background:'#fff',border:'3px solid var(--border)',borderRadius:24,boxShadow:'0 5px 0 var(--border-strong)',overflow:'hidden'}}>
-    <div style={{background:'var(--sunny-100)',padding:'14px 16px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-      <strong style={{font:'800 20px var(--font-display)'}}>Quests</strong>
-      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--tangerine-700)'}}>See all</button>
+  const quests=[['Teach 1 bite back','10 XP'],['Hit a 3-day streak','50 XP'],['Finish a practice','5 gems']];
+  return <Card padding={16}>
+    <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+      <strong style={{font:'800 16px var(--font-display)'}}>Quests</strong>
+      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--clover-600)'}}>See all</button>
     </div>
-    <div style={{padding:12,display:'grid',gap:10}}>
-      {quests.map(([icon,bg,fg,q,prog,r])=>(
-        <div key={q} style={{display:'grid',gridTemplateColumns:'44px 1fr',gap:10,alignItems:'center',background:bg,borderRadius:16,padding:'10px 12px'}}>
-          <div style={{width:44,height:44,borderRadius:14,background:'#fff',display:'grid',placeItems:'center',border:'2px solid '+fg}}><i className={'ph-fill '+icon} style={{fontSize:22,color:fg}}></i></div>
-          <div>
-            <div style={{font:'800 14px var(--font-body)'}}>{q}</div>
-            <div style={{height:8,borderRadius:99,background:'#fff',margin:'6px 0',overflow:'hidden'}}><div style={{width:prog.startsWith('1')?'33%':'8%',height:'100%',background:fg}}></div></div>
-            <div style={{font:'800 12px var(--font-display)',color:fg}}>{r} · {prog}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>;
+    {quests.map(([q,r])=><div key={q} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderTop:'2px solid var(--border)',font:'700 13px var(--font-body)'}}><span>{q}</span><span style={{color:'var(--tangerine-600)'}}>{r}</span></div>)}
+  </Card>;
 }
-function LearnView({results,openModule,openQuests}){
-  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 300px',gap:16,alignItems:'start'}}>
-    <LearnPath results={results} openModule={openModule}/>
-    <div style={{position:'sticky',top:16,display:'grid',justifyItems:'center',gap:16,width:'100%'}}>
-      <div style={{transform:'translateX(18px)'}}><Mascot size={108} say="First pad is open. Hop on."/></div>
+function LearnView({results,openLeaf,openQuests}){
+  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 260px',gap:20,alignItems:'start'}}>
+    <LearnPath results={results} openLeaf={openLeaf}/>
+    <div style={{position:'sticky',top:16,display:'grid',justifyItems:'center',gap:14,width:'100%'}}>
+      <div style={{transform:'translateX(12px)'}}><Mascot size={100} say="Tap a circle. Teach that leaf."/></div>
       <div style={{width:'100%'}}><QuestCard onOpen={openQuests}/></div>
     </div>
   </div>;
 }
 
 function QuestsView(){
-  return <section style={{display:'grid',gap:16,maxWidth:520}}>
+  const quests=[['Teach 1 bite back','10 XP'],['Open the QBank','5 gems'],['Keep a 3-day streak','50 XP']];
+  return <section style={{display:'grid',gap:12,maxWidth:480}}>
     <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Daily quests</h1>
-    <div style={{maxWidth:560}}><QuestCard onOpen={()=>{}}/></div>
+    {quests.map(([q,r])=><Card key={q} padding={18} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
+      <span style={{font:'800 15px var(--font-body)'}}>{q}</span>
+      <span style={{font:'800 13px var(--font-display)',color:'var(--tangerine-600)'}}>{r}</span>
+    </Card>)}
   </section>;
 }
 
@@ -329,7 +284,7 @@ function QBankView({openModule}){
   const items=window.TB_BITES.filter(t=>t.demo);
   return <section style={{display:'grid',gap:16}}>
     <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>QBank</h1>
-    <p style={{margin:0,color:'var(--text-muted)',maxWidth:560}}>Authored multiple-choice, written like the real exam. Not AI. Does not write Gap / Rusty / Exam-ready / Mastered. Bank is a stub until those items are written.</p>
+    <p style={{margin:0,color:'var(--text-muted)',maxWidth:520}}>Random practice. Does not write Gap / Rusty / Exam-ready / Mastered.</p>
     {items.map(t=><Card key={t.id} padding={20}>
       <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{t.id}</span>
       <h3 style={{margin:'6px 0',font:'700 20px var(--font-display)'}}>{t.title}</h3>
@@ -385,8 +340,8 @@ function App(){
     setResults(nextResults);setXp(nextXp);setHearts(nextHearts);
     persist({results:nextResults,xp:nextXp,hearts:nextHearts});
   };
-  const openLeaf=(n)=>{setLeaf(n);setView('leaf');persist({leaf:n,view:'leaf'});};
-  const openModule=(id,mode)=>{setTopicId(id);setView(mode==='practice'?'teach':'module');setErr('');persist({topicId:id,view:mode==='practice'?'teach':'module',mode:mode||'legendary'});};
+  const openLeaf=(n,mode)=>{setLeaf(n);setView(mode==='practice'?'teach':'leaf');if(mode==='practice'&&n.ids&&n.ids[0]) setTopicId(n.ids[0]);persist({leaf:n,view:mode==='practice'?'teach':'leaf'});};
+  const openModule=(id)=>{setTopicId(id);setView('module');setErr('');persist({topicId:id,view:'module'});};
   const goTeach=()=>{setView('teach');persist({view:'teach'});};
   const setAnswer=(v)=>{const na={...answers,[topicId]:v};setAnswers(na);persist({answers:na});};
   const changeView=(v)=>{setView(v);persist({view:v});};
@@ -420,7 +375,7 @@ function App(){
     <div style={{maxWidth:1100,margin:'auto',padding:'8px var(--page-pad) 60px',display:shell?'grid':'block',gridTemplateColumns:'180px minmax(0,1fr)',gap:24}}>
       {shell && <SideNav view={view} setView={changeView}/>}
       <main>
-        {view==='learn' && <LearnView results={results} openModule={openModule} openQuests={()=>changeView('quests')}/>}
+        {view==='learn' && <LearnView results={results} openLeaf={openLeaf} openQuests={()=>changeView('quests')}/>}
         {view==='leaf' && leaf && <LeafPicker node={leaf} results={results} openModule={openModule} back={()=>changeView('learn')}/>}
         {view==='module' && topic && <ModuleView topic={topic} state={result?result.state:'Unassessed'} goTeach={goTeach} back={()=>changeView('leaf')}/>}
         {view==='teach' && topic && <TeachView topic={topic} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={()=>changeView('module')}/>}
