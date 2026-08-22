@@ -4,8 +4,9 @@ const SIZES={sm:{pad:'9px 14px',font:'600 13px var(--font-display)',edge:2,rad:'
 export function Button({variant='primary',size='md',ghost=false,fullWidth=false,disabled=false,children,onClick,style}){
   const [hover,setHover]=useState(false),[press,setPress]=useState(false);
   const f=FILLS[variant]||FILLS.primary,s=SIZES[size]||SIZES.md;
+  const isGhost=ghost||variant==='ghost';
   const base={display:fullWidth?'flex':'inline-flex',width:fullWidth?'100%':undefined,alignItems:'center',justifyContent:'center',gap:8,border:0,borderRadius:s.rad,padding:s.pad,font:s.font,letterSpacing:'.01em',cursor:disabled?'default':'pointer',userSelect:'none',minHeight:44,transition:'transform var(--dur-press) linear, box-shadow var(--dur-press) linear, background var(--dur-press) linear'};
-  const sty=ghost
+  const sty=isGhost
     ?{...base,background:hover&&!disabled?'var(--tint)':'transparent',color:disabled?'var(--text-faint)':f[0],border:'1px solid '+(disabled?'var(--border)':f[0]),boxShadow:press?'none':`0 ${s.edge-1}px 0 ${disabled?'var(--border)':f[2]}`,transform:press?`translateY(${s.edge-1}px)`:'none'}
     :{...base,background:disabled?'var(--border)':hover?f[1]:f[0],color:disabled?'var(--text-faint)':f[3],boxShadow:disabled||press?'none':`0 ${s.edge}px 0 ${f[2]}`,transform:press&&!disabled?`translateY(${s.edge}px)`:'none'};
   return <button type="button" disabled={disabled} onClick={onClick} style={{...sty,...style}}

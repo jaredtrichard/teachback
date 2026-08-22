@@ -54,6 +54,7 @@ function Button({
     [press, setPress] = useState(false);
   const f = FILLS[variant] || FILLS.primary,
     s = SIZES[size] || SIZES.md;
+  const isGhost = ghost || variant === 'ghost';
   const base = {
     display: fullWidth ? 'flex' : 'inline-flex',
     width: fullWidth ? '100%' : undefined,
@@ -70,7 +71,7 @@ function Button({
     minHeight: 44,
     transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear, background var(--dur-press) linear'
   };
-  const sty = ghost ? {
+  const sty = isGhost ? {
     ...base,
     background: hover && !disabled ? 'var(--tint)' : 'transparent',
     color: disabled ? 'var(--text-faint)' : f[0],

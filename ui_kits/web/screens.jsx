@@ -192,14 +192,15 @@ function PlanChart({ready,total,planStart,examDate}){
   const today=startOfDay(new Date());
   const start=startOfDay(parseYmd(planStart||ymd(today)));
   const exam=startOfDay(parseYmd(examDate));
-  const span=Math.max(1,daysBetween(start,exam)+1);
-  const elapsed=Math.max(0,Math.min(span,daysBetween(start,today)));
+  const duration=Math.max(0,daysBetween(start,exam));
+  const domain=Math.max(1,duration);
+  const elapsed=duration===0?domain:Math.max(0,Math.min(duration,daysBetween(start,today)));
   const w=280,h=110,pad=22;
-  const x=t=>pad+(t/span)*(w-2*pad);
+  const x=t=>pad+(t/domain)*(w-2*pad);
   const y=v=>h-pad-(v/Math.max(1,total))*(h-2*pad);
   return <svg viewBox={'0 0 '+w+' '+h} width="100%" height="110" role="img" aria-label="Progress versus plan">
     <rect x="0" y="0" width={w} height={h} fill="var(--cream)" rx="8"/>
-    <line x1={x(0)} y1={y(0)} x2={x(span)} y2={y(total)} stroke="var(--tangerine-500)" strokeDasharray="4 4" strokeWidth="1.5"/>
+    <line x1={x(0)} y1={y(0)} x2={x(domain)} y2={y(total)} stroke="var(--tangerine-500)" strokeDasharray="4 4" strokeWidth="1.5"/>
     <line x1={x(0)} y1={y(0)} x2={x(elapsed)} y2={y(ready)} stroke="var(--clover-500)" strokeWidth="2.2"/>
     <circle cx={x(elapsed)} cy={y(ready)} r="4" fill="var(--clover-500)"/>
   </svg>;
@@ -275,8 +276,9 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
             const isSel=key===selected;
             const shown=ids.slice(0,3);
             const extra=ids.length-shown.length;
-            const allReady=ids.length>0&&ids.every(id=>isReady(biteState(results,id)));
-            const behind=!cell.outside&&key<todayStr&&ids.some(id=>!isReady(biteState(results,id)));
+            const authoredIds=ids.filter(id=>!isStub(biteOf(id)));
+            const allReady=authoredIds.length>0&&authoredIds.every(id=>isReady(biteState(results,id)));
+            const behind=!cell.outside&&key<todayStr&&authoredIds.some(id=>!isReady(biteState(results,id)));
             return <button key={i} type="button" onClick={()=>setSelected(key)} style={{display:'grid',alignContent:'start',gap:4,minHeight:92,padding:6,textAlign:'left',border:isSel?'1px solid var(--clover-500)':'1px solid var(--border)',borderRadius:'var(--radius-sm)',background:isToday?'var(--sunny-100)':'var(--paper)',boxShadow:isToday?'inset 0 3px 0 var(--sunny-500)':'none',cursor:'pointer',opacity:cell.outside?.5:1}}>
               <span style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                 <span style={{font:'600 12px var(--font-display)',color:behind?'var(--coral-700)':isToday?'var(--sunny-700)':'var(--text-body)',background:behind?'var(--coral-100)':'transparent',borderRadius:6,padding:behind?'0 5px':0}}>{cell.date.getDate()}</span>
@@ -529,7 +531,8 @@ function makeQuizItems(bites,count,styles){
     if(useTF){
       return {id:'Q'+(i+1),biteId:b.id,style:'tf',stub:true,stem:'Stub item · '+b.id+' '+b.title+'. No authored QBank item yet. Is this bite on the official SIE outline?',choices:['True','False'],correct:0};
     }
-    const others=shuffle(window.TB_BITES.filter(x=>x.id!==b.id)).slice(0,3).map(x=>x.title);
+    const otherTitles=Array.from(new Set(window.TB_BITES.filter(x=>x.id!==b.id&&x.title!==b.title).map(x=>x.title)));
+    const others=shuffle(otherTitles).slice(0,3);
     const choices=shuffle([b.title,...others]);
     return {id:'Q'+(i+1),biteId:b.id,style:'mc',stub:true,stem:'Stub item · '+b.id+'. No authored QBank item yet. Which outline bite is this?',choices,correct:choices.indexOf(b.title)};
   });
