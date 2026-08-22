@@ -30,15 +30,19 @@ function leafState(node,results){
 
 function Mascot({size=88,say}){
   return <div style={{display:'grid',justifyItems:'center',gap:8}}>
-    <div style={{width:size,height:size,borderRadius:'50%',border:'3px dashed var(--border-strong)',background:'var(--tint)',display:'grid',placeItems:'center',textAlign:'center',padding:10,font:'800 11px var(--font-body)',color:'var(--text-faint)'}}>Mascot incoming</div>
+    <svg width={size} height={size} viewBox="0 0 88 88" aria-hidden="true">
+      <ellipse cx="44" cy="50" rx="28" ry="26" fill="var(--clover-500)"/>
+      <ellipse cx="44" cy="48" rx="22" ry="20" fill="var(--clover-100)"/>
+      <circle cx="36" cy="46" r="4" fill="var(--ink)"/>
+      <circle cx="52" cy="46" r="4" fill="var(--ink)"/>
+      <circle cx="37.2" cy="44.8" r="1.2" fill="#fff"/>
+      <circle cx="53.2" cy="44.8" r="1.2" fill="#fff"/>
+      <path d="M38 56c2.4 3 9.6 3 12 0" fill="none" stroke="var(--tangerine-500)" strokeWidth="3" strokeLinecap="round"/>
+      <ellipse cx="24" cy="58" rx="7" ry="5" fill="var(--clover-600)"/>
+      <ellipse cx="64" cy="58" rx="7" ry="5" fill="var(--clover-600)"/>
+    </svg>
     {say && <div style={{background:'#fff',border:'2px solid var(--border)',borderRadius:16,padding:'8px 12px',font:'800 13px var(--font-body)',boxShadow:'0 3px 0 var(--border-strong)',maxWidth:180,textAlign:'center'}}>{say}</div>}
   </div>;
-}
-function GoogleMark(){
-  return <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.71A5.41 5.41 0 0 1 3.69 9c0-.59.1-1.17.28-1.71V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>;
-}
-function FacebookMark(){
-  return <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#fff" d="M17 9.05C17 4.58 13.42 1 8.95 1S.9 4.58.9 9.05c0 4.02 2.94 7.35 6.79 7.95v-5.62H5.9V9.05h1.79V7.2c0-1.77 1.05-2.75 2.67-2.75.77 0 1.58.14 1.58.14v1.74h-.89c-.88 0-1.15.54-1.15 1.1v1.62h1.96l-.31 2.33H7.9v5.62C11.75 16.4 14.7 13.07 14.7 9.05H17z"/></svg>;
 }
 
 function StatPill({icon,value,tone}){
@@ -68,9 +72,9 @@ function AuthScreen({mode,setMode,onEnter}){
           <input type="password" value={pw} onChange={e=>setPw(e.target.value)} style={fieldStyle}/>
         </label>
         <div style={{marginTop:16}}><Button fullWidth size="lg" onClick={()=>onEnter(id||'you')}>{mode==='login'?'Log in':'Sign up'}</Button></div>
-        <div style={{display:'grid',gap:10,marginTop:14}}>
-          <button type="button" onClick={()=>onEnter('google')} style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,height:48,borderRadius:16,border:'1px solid #dadce0',background:'#fff',color:'#3c4043',font:'600 15px var(--font-body)',cursor:'pointer'}}><GoogleMark/> Continue with Google</button>
-          <button type="button" onClick={()=>onEnter('facebook')} style={{display:'flex',alignItems:'center',justifyContent:'center',gap:10,height:48,borderRadius:16,border:'none',background:'#1877F2',color:'#fff',font:'600 15px var(--font-body)',cursor:'pointer'}}><FacebookMark/> Continue with Facebook</button>
+        <div style={{display:'grid',gap:8,marginTop:12}}>
+          <Button fullWidth variant="ghost" onClick={()=>onEnter('google')}>Continue with Google</Button>
+          <Button fullWidth variant="ghost" onClick={()=>onEnter('facebook')}>Continue with Facebook</Button>
         </div>
         <p style={{margin:'12px 0 0',font:'500 11px var(--font-mono)',color:'var(--text-faint)'}}>Frontend stub · no account is created</p>
       </Card>
@@ -80,14 +84,11 @@ function AuthScreen({mode,setMode,onEnter}){
 const fieldStyle={padding:'12px 14px',border:'2px solid var(--border-strong)',borderRadius:14,font:'600 15px var(--font-body)'};
 
 function SideNav({view,setView}){
-  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['quests','Quests','ph-target'],['leagues','Leagues','ph-trophy']];
+  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['leagues','Leagues','ph-trophy'],['quests','Quests','ph-target'],['shop','Shop','ph-storefront'],['profile','Profile','ph-user'],['courses','Courses','ph-books']];
   return <aside style={{display:'grid',gap:8,alignContent:'start',minWidth:160}}>
     {items.map(([id,label,icon])=>
       <button key={id} onClick={()=>setView(id)} style={{all:'unset',cursor:'pointer',display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:16,border:'2px solid',borderColor:view===id?'var(--clover-500)':'transparent',background:view===id?'var(--clover-100)':'transparent',font:'800 14px var(--font-body)',minHeight:44}}>
-        {id==='profile'
-          ? <span style={{width:28,height:28,borderRadius:'50%',background:view===id?'var(--clover-500)':'var(--tint)',border:'2px solid var(--border-strong)',display:'grid',placeItems:'center',color:view===id?'#fff':'var(--text-faint)'}}><i className="ph-fill ph-user" style={{fontSize:14}}></i></span>
-          : <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>}
-        {label}
+        <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>{label}
       </button>
     )}
     <Card padding={14} style={{marginTop:8,background:'linear-gradient(180deg,var(--sunny-100),var(--paper))'}}>
@@ -98,69 +99,36 @@ function SideNav({view,setView}){
   </aside>;
 }
 
-const SEC_COLOR={
-  '1':{fill:'var(--clover-500)',edge:'var(--clover-700)',soft:'var(--clover-100)'},
-  '2':{fill:'var(--tangerine-500)',edge:'var(--tangerine-700)',soft:'var(--tangerine-100)'},
-  '3':{fill:'var(--splash-500)',edge:'var(--splash-700)',soft:'var(--splash-100)'},
-  '4':{fill:'var(--grape-500)',edge:'var(--grape-700)',soft:'var(--grape-100)'},
-};
 function LearnPath({results,openLeaf}){
-  const [bubble,setBubble]=React.useState(null);
   const nodes=leafNodes();
   let lastSec='';
   return <div style={{position:'relative',padding:'8px 0 40px'}}>
-    <style>{`.tb-node{appearance:none;padding:0;transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-5px);box-shadow:0 10px 0 var(--tb-edge)}
-.tb-node:hover{transform:translateY(-1px);box-shadow:0 6px 0 var(--tb-edge)}
-.tb-node:active{transform:translateY(6px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
     {nodes.map((n,i)=>{
       const st=leafState(n,results);
-      const first=i===0;
       const done=st==='done';
-      const open=first || st==='active' || done;
-      const c=SEC_COLOR[n.sec];
+      const offset=(i%4===1||i%4===2)?72:i%4===3?0:0;
       const zigzag=[0,56,56,0][i%4];
       const banner=n.sec!==lastSec;
       lastSec=n.sec;
-      const bg=done?c.fill:open?c.soft:'var(--paper)';
-      const edge=done||open?c.edge:'var(--border-strong)';
-      const fg=done?'#fff':open?c.edge:'var(--text-faint)';
       return <React.Fragment key={n.leaf}>
-        {banner && <div style={{margin:'28px auto 18px',maxWidth:420,background:c.fill,color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:`0 4px 0 ${c.edge}`}}>
+        {banner && <div style={{margin:'28px auto 18px',maxWidth:420,background:'var(--clover-500)',color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:'0 4px 0 var(--clover-700)'}}>
           <div style={{font:'800 11px var(--font-body)',letterSpacing:'.08em',opacity:.85}}>SECTION {n.sec}</div>
           <div style={{font:'800 20px var(--font-display)'}}>{n.sectionTitle}</div>
         </div>}
-        <div style={{display:'grid',justifyItems:'center',margin:'18px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
-          <button className="tb-node" onClick={()=>setBubble(bubble===n.leaf?null:n.leaf)} title={n.title} style={{cursor:'pointer',width:70,height:70,borderRadius:'50%',display:'grid',placeItems:'center',background:bg,border:'4px solid '+edge,color:fg,'--tb-edge':edge}}>
-            <i className={`ph-fill ${done?'ph-check':open?'ph-play':'ph-lock-simple'}`} style={{fontSize:28}}></i>
+        <div style={{display:'flex',justifyContent:'center',margin:'18px 0',transform:`translateX(${zigzag}px)`}}>
+          <button onClick={()=>openLeaf(n)} title={n.title} style={{all:'unset',cursor:'pointer',width:70,height:70,borderRadius:'50%',display:'grid',placeItems:'center',background:done?'var(--clover-500)':st==='active'?'var(--sunny-500)':'var(--paper)',border:'4px solid',borderColor:done?'var(--clover-700)':st==='active'?'var(--sunny-700)':'var(--border-strong)',boxShadow:'0 5px 0 '+(done?'var(--clover-700)':st==='active'?'var(--sunny-700)':'var(--border-strong)'),color:done||st==='active'?'#fff':'var(--text-faint)'}}>
+            <i className={`ph-fill ${done?'ph-check':st==='active'?'ph-star':'ph-lock-simple'}`} style={{fontSize:28}}></i>
           </button>
-          {bubble===n.leaf && <div style={{marginTop:14,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,width:228,zIndex:3,position:'relative'}}>
-            <div style={{position:'absolute',top:-10,left:'50%',transform:'translateX(-50%)',width:0,height:0,borderLeft:'10px solid transparent',borderRight:'10px solid transparent',borderBottom:'10px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
-            <div style={{font:'800 12px var(--font-body)',marginBottom:8,color:'var(--text-muted)'}}>{n.title}</div>
-            <button type="button" onClick={()=>openLeaf(n,'practice')} style={{width:'100%',marginBottom:8,padding:'10px 12px',borderRadius:14,border:'2px solid var(--clover-600)',background:'var(--clover-100)',color:'var(--clover-700)',font:'800 14px var(--font-display)',cursor:'pointer'}}>Practice · simpler</button>
-            <button type="button" onClick={()=>openLeaf(n,'legendary')} style={{width:'100%',padding:'10px 12px',borderRadius:14,border:'2px solid #C99212',background:'linear-gradient(180deg,#FFE9A0 0%,#F5C542 48%,#D4A017 100%)',color:'#6B4A00',font:'800 14px var(--font-display)',cursor:'pointer',boxShadow:'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 0 #A8740C'}}>Legendary · mastery</button>
-          </div>}
         </div>
       </React.Fragment>;
     })}
   </div>;
 }
-function QuestCard({onOpen}){
-  const quests=[['Teach 1 bite back','10 XP'],['Hit a 3-day streak','50 XP'],['Finish a practice','5 gems']];
-  return <Card padding={16}>
-    <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
-      <strong style={{font:'800 16px var(--font-display)'}}>Quests</strong>
-      <button type="button" onClick={onOpen} style={{all:'unset',cursor:'pointer',font:'800 12px var(--font-body)',color:'var(--clover-600)'}}>See all</button>
-    </div>
-    {quests.map(([q,r])=><div key={q} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderTop:'2px solid var(--border)',font:'700 13px var(--font-body)'}}><span>{q}</span><span style={{color:'var(--tangerine-600)'}}>{r}</span></div>)}
-  </Card>;
-}
-function LearnView({results,openLeaf,openQuests}){
-  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 260px',gap:20,alignItems:'start'}}>
+
+function LearnView({results,openLeaf}){
+  return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 200px',gap:20,alignItems:'start'}}>
     <LearnPath results={results} openLeaf={openLeaf}/>
-    <div style={{position:'sticky',top:16,display:'grid',justifyItems:'center',gap:14,width:'100%'}}>
-      <div style={{transform:'translateX(12px)'}}><Mascot size={100} say="Tap a circle. Teach that leaf."/></div>
-      <div style={{width:'100%'}}><QuestCard onOpen={openQuests}/></div>
-    </div>
+    <div style={{position:'sticky',top:16}}><Mascot size={110} say="Tap a circle. Teach that leaf."/></div>
   </div>;
 }
 
@@ -324,7 +292,6 @@ function App(){
   const [gems,setGems]=React.useState(saved.gems||120);
   const [hearts,setHearts]=React.useState(saved.hearts??5);
   const [view,setView]=React.useState(saved.view||'learn');
-  const [courseOpen,setCourseOpen]=React.useState(false);
   const [err,setErr]=React.useState('');
   const topic=window.TB_BITES.find(t=>t.id===topicId);
   const answer=answers[topicId]||'';
@@ -340,7 +307,7 @@ function App(){
     setResults(nextResults);setXp(nextXp);setHearts(nextHearts);
     persist({results:nextResults,xp:nextXp,hearts:nextHearts});
   };
-  const openLeaf=(n,mode)=>{setLeaf(n);setView(mode==='practice'?'teach':'leaf');if(mode==='practice'&&n.ids&&n.ids[0]) setTopicId(n.ids[0]);persist({leaf:n,view:mode==='practice'?'teach':'leaf'});};
+  const openLeaf=(n)=>{setLeaf(n);setView('leaf');persist({leaf:n,view:'leaf'});};
   const openModule=(id)=>{setTopicId(id);setView('module');setErr('');persist({topicId:id,view:'module'});};
   const goTeach=()=>{setView('teach');persist({view:'teach'});};
   const setAnswer=(v)=>{const na={...answers,[topicId]:v};setAnswers(na);persist({answers:na});};
@@ -349,33 +316,21 @@ function App(){
 
   if(!user) return <AuthScreen mode={authMode} setMode={setAuthMode} onEnter={enter}/>;
 
-  const shell=['learn','leagues','profile','quests','qbank','brush'].includes(view);
+  const shell=['learn','leagues','quests','shop','profile','courses','qbank','brush'].includes(view);
   return <div style={{minHeight:'100vh',background:'var(--surface-page)'}}>
-    <style>{`.tb-3d{transition:transform .14s ease,box-shadow .14s ease;transform:translateY(-2px);box-shadow:0 5px 0 var(--tb-edge)}
-.tb-3d:hover{transform:translateY(1px);box-shadow:0 2px 0 var(--tb-edge)}
-.tb-3d:active{transform:translateY(5px);box-shadow:0 0 0 var(--tb-edge)}`}</style>
     <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,maxWidth:1100,margin:'auto',padding:'14px var(--page-pad)'}}>
       <span style={{font:'800 22px var(--font-display)'}}>teach<span style={{color:'var(--clover-500)'}}>back</span></span>
-      <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
-        <div style={{position:'relative'}}>
-          <button type="button" className="tb-3d" onClick={()=>setCourseOpen(!courseOpen)} style={{padding:'10px 18px',borderRadius:16,border:'2px solid var(--tangerine-700)',background:'var(--tangerine-500)',color:'#fff',font:'800 16px var(--font-display)',cursor:'pointer','--tb-edge':'var(--tangerine-700)'}}>Courses</button>
-          {courseOpen && <div style={{position:'absolute',top:'calc(100% + 12px)',right:0,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,minWidth:220,zIndex:5}}>
-            <div style={{position:'absolute',top:-10,right:28,width:0,height:0,borderLeft:'10px solid transparent',borderRight:'10px solid transparent',borderBottom:'10px solid #fff',filter:'drop-shadow(0 -2px 0 var(--border))'}}></div>
-            <button type="button" onClick={()=>setCourseOpen(false)} style={{width:'100%',textAlign:'left',padding:'10px 12px',border:'none',background:'var(--clover-100)',borderRadius:12,font:'800 14px var(--font-body)',cursor:'pointer'}}>SIE · active</button>
-            <div style={{padding:'10px 12px',color:'var(--text-faint)',font:'700 13px var(--font-body)'}}>Series 7 · later</div>
-          </div>}
-        </div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
         <StatPill tone="streak" value={3}/>
         <StatPill tone="gem" value={gems}/>
         <StatPill tone="heart" value={hearts}/>
         <StatPill tone="xp" value={xp}/>
-        <button type="button" aria-label="Profile" onClick={()=>changeView('profile')} style={{width:44,height:44,borderRadius:'50%',border:'3px solid var(--border-strong)',background:'var(--clover-100)',cursor:'pointer',display:'grid',placeItems:'center'}}><i className="ph-fill ph-user" style={{fontSize:20,color:'var(--clover-700)'}}></i></button>
       </div>
     </header>
     <div style={{maxWidth:1100,margin:'auto',padding:'8px var(--page-pad) 60px',display:shell?'grid':'block',gridTemplateColumns:'180px minmax(0,1fr)',gap:24}}>
       {shell && <SideNav view={view} setView={changeView}/>}
       <main>
-        {view==='learn' && <LearnView results={results} openLeaf={openLeaf} openQuests={()=>changeView('quests')}/>}
+        {view==='learn' && <LearnView results={results} openLeaf={openLeaf}/>}
         {view==='leaf' && leaf && <LeafPicker node={leaf} results={results} openModule={openModule} back={()=>changeView('learn')}/>}
         {view==='module' && topic && <ModuleView topic={topic} state={result?result.state:'Unassessed'} goTeach={goTeach} back={()=>changeView('leaf')}/>}
         {view==='teach' && topic && <TeachView topic={topic} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={()=>changeView('module')}/>}
