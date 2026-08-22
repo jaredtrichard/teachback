@@ -59,6 +59,7 @@ function buildPlan(examDate,planStart){
   if(!examDate) return {byDay:{},days:0};
   const start=startOfDay(parseYmd(planStart||ymd(new Date())));
   const exam=startOfDay(parseYmd(examDate));
+  if(exam<start) return {byDay:{},days:0};
   const span=Math.max(1,daysBetween(start,exam)+1);
   const byDay={};
   window.TB_BITES.forEach((b,i)=>{
@@ -192,6 +193,7 @@ function PlanChart({ready,total,planStart,examDate}){
   const today=startOfDay(new Date());
   const start=startOfDay(parseYmd(planStart||ymd(today)));
   const exam=startOfDay(parseYmd(examDate));
+  if(exam<start) return null;
   const duration=Math.max(0,daysBetween(start,exam));
   const domain=Math.max(1,duration);
   const elapsed=duration===0?domain:Math.max(0,Math.min(duration,daysBetween(start,today)));
@@ -251,6 +253,7 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
 
   const onDate=e=>{
     const v=e.target.value;
+    if(v&&v<todayStr) return;
     setExamDate(v);
     setPlanStart(v?todayStr:'');
     if(v) setSelected(todayStr);
@@ -302,7 +305,7 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
         <Card padding={18}>
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Exam</span>
           <h2 style={{margin:'6px 0 10px',font:'600 20px var(--font-display)'}}>{examDate?('SIE · '+fmtLong(examDate)):'Set your exam date.'}</h2>
-          <input className="tb-field" type="date" name="exam-date" value={examDate} onChange={onDate} aria-label="Exam date"/>
+          <input className="tb-field" type="date" name="exam-date" min={todayStr} value={examDate} onChange={onDate} aria-label="Exam date"/>
         </Card>
         <Card padding={18}>
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
@@ -428,14 +431,14 @@ function OutlineView({results,openModule,openSecs,setOpenSecs,openLeaves,setOpen
   </section>;
 }
 
-function WorkView({topic,state,answer,setAnswer,result,err,submit,back,openModule,goBrush,results,examDate}){
+function WorkView({topic,state,answer,setAnswer,result,err,submit,back,goHome,openModule,goBrush,results,examDate}){
   const [openSecs,setOpenSecs]=React.useState(()=>[topic.section]);
   const [openLeaves,setOpenLeaves]=React.useState(()=>[topic.leaf]);
   React.useEffect(()=>{
     setOpenSecs(s=>s.includes(topic.section)?s:s.concat(topic.section));
     setOpenLeaves(s=>s.includes(topic.leaf)?s:s.concat(topic.leaf));
   },[topic.id,topic.section,topic.leaf]);
-  const next=window.TB_BITES.find(b=>window.TB_BITES.indexOf(b)>window.TB_BITES.indexOf(topic));
+  const next=window.TB_BITES.slice(window.TB_BITES.indexOf(topic)+1).find(b=>b.demo);
   const pop=result&&(result.state==='Exam-Ready'||result.state==='Mastered');
   return <section style={{display:'grid',gap:16}}>
     <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
@@ -513,8 +516,8 @@ function WorkView({topic,state,answer,setAnswer,result,err,submit,back,openModul
               {STRUGGLE.has(result.state)
                 ? <Button variant="ghost" onClick={goBrush}>Review this miss in Brush-up</Button>
                 : pop && <div style={{display:'grid',gap:8}}>
-                    {next&&<Button onClick={()=>openModule(next.id,'work')}>Open the next bite</Button>}
-                    <Button variant="ghost" onClick={back}>Back to today</Button>
+                    {next&&<Button onClick={()=>openModule(next.id,'work')}>Open the next authored bite</Button>}
+                    <Button variant="ghost" onClick={goHome}>Back to today</Button>
                   </div>}
             </>}
       </div>
@@ -752,6 +755,9 @@ function BrushView({results,openModule}){
 
 function App(){
   const saved=React.useMemo(()=>loadStore(),[]);
+  const todayStr=ymd(new Date());
+  const savedExamDate=saved.examDate&&saved.examDate>=todayStr?saved.examDate:'';
+  const savedPlanStart=savedExamDate&&saved.planStart&&saved.planStart<=savedExamDate?saved.planStart:'';
   const firstDemo=window.TB_BITES.find(t=>t.demo)?.id || window.TB_BITES[0].id;
   const [topicId,setTopicId]=React.useState(saved.topicId||firstDemo);
   const [answers,setAnswers]=React.useState(saved.answers||{});
@@ -760,8 +766,8 @@ function App(){
   const [fromView,setFromView]=React.useState(saved.fromView||'home');
   const [user,setUser]=React.useState(saved.user||'');
   const [course,setCourse]=React.useState(saved.course||'SIE');
-  const [examDate,setExamDate]=React.useState(saved.examDate||'');
-  const [planStart,setPlanStart]=React.useState(saved.planStart||'');
+  const [examDate,setExamDate]=React.useState(savedExamDate);
+  const [planStart,setPlanStart]=React.useState(savedPlanStart);
   const [openSecs,setOpenSecs]=React.useState(saved.openSecs||['1']);
   const [openLeaves,setOpenLeaves]=React.useState(saved.openLeaves||['1.1.1']);
   const [quizzes,setQuizzes]=React.useState(saved.quizzes||[]);
@@ -806,7 +812,7 @@ function App(){
           <main className="tb-main">
             {view==='home' && <HomeView results={results} examDate={examDate} setExamDate={setExamDate} planStart={planStart} setPlanStart={setPlanStart} openModule={openModule}/>}
             {view==='outline' && <OutlineView results={results} openModule={openModule} openSecs={openSecs} setOpenSecs={setOpenSecs} openLeaves={openLeaves} setOpenLeaves={setOpenLeaves}/>}
-            {view==='work' && topic && <WorkView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={back} openModule={openModule} goBrush={()=>changeView('brush')} results={results} examDate={examDate}/>}
+            {view==='work' && topic && <WorkView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={back} goHome={()=>changeView('home')} openModule={openModule} goBrush={()=>changeView('brush')} results={results} examDate={examDate}/>} 
             {view==='qbank' && <QBankView results={results} openModule={openModule} quizzes={quizzes} setQuizzes={setQuizzes} qbankLog={qbankLog} setQbankLog={setQbankLog}/>}
             {view==='brush' && <BrushView results={results} openModule={openModule}/>}
           </main>
