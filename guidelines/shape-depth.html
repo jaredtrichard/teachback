@@ -1,0 +1,12 @@
+<!-- @dsCard group="Foundations" viewport="700x170" name="Shape & depth" subtitle="2px borders, 10–28px radii, hard offset edges — no blur" -->
+<!DOCTYPE html><html><head><link rel="stylesheet" href="../styles.css"><style>body{margin:0;padding:22px;background:var(--surface-page);font-family:var(--font-body);color:var(--text-body);display:flex;gap:16px;align-items:center}
+.c{background:var(--paper);border:2px solid var(--border);box-shadow:var(--edge-card);display:grid;place-items:center;font:500 10px var(--font-mono);color:var(--text-faint);width:110px;height:86px}
+.btn{border:0;border-radius:var(--radius-md);padding:14px 20px;background:var(--clover-500);color:#fff;font:700 15px var(--font-display);box-shadow:var(--edge-btn) var(--clover-700)}
+.btn.pressed{transform:translateY(4px);box-shadow:none}a{color:var(--color-primary)}a:hover{color:var(--color-primary-hover)}</style></head><body>
+<div class="c" style="border-radius:var(--radius-sm)">sm 10</div>
+<div class="c" style="border-radius:var(--radius-md)">md 14</div>
+<div class="c" style="border-radius:var(--radius-lg)">lg 20</div>
+<div class="c" style="border-radius:var(--radius-xl)">xl 28</div>
+<button class="btn">Rest edge</button>
+<button class="btn pressed">Pressed</button>
+</body></html>

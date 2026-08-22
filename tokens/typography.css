@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap');
+:root{
+--font-display:'Baloo 2',system-ui,sans-serif; /* chunky, rounded — headlines, numbers, buttons */
+--font-body:'Nunito',system-ui,sans-serif;     /* friendly rounded sans — everything else */
+--font-mono:'DM Mono',monospace;               /* topic IDs + tiny meta only (heritage from v1) */
+--text-hero:800 clamp(40px,5.5vw,64px)/1.02 var(--font-display);
+--text-h1:800 40px/1.08 var(--font-display);
+--text-h2:700 28px/1.15 var(--font-display);
+--text-h3:700 21px/1.2 var(--font-display);
+--text-body-lg:600 17px/1.6 var(--font-body);
+--text-body-md:600 15px/1.65 var(--font-body);
+--text-body-sm:600 13px/1.55 var(--font-body);
+--text-label:800 11px/1.3 var(--font-body);   /* + uppercase + .09em tracking */
+--text-mono-meta:500 11px/1.4 var(--font-mono);
+--tracking-label:.09em;
+--tracking-display:-.01em;
+}
