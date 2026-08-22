@@ -2,12 +2,14 @@
 
 Explanation-first SIE prep. Read a bite, teach it back.
 
-This first commit is a **frontend review** of the Teachback design system on the frozen product grain:
+Frontend review kit on the frozen product grain:
 
-- **181** official outline bites
-- **34** FINRA leaves as folders
+- **181** official outline bites, colored by that bite's readiness
+- Home calendar spaces modules to a learner-set exam date
 - Tutor on the same page as the note (no read-gate)
+- QBank is right/wrong only and does not write readiness
 - Brush-up from misses (not the official 181)
+- v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
 
 ## Review the frontend
 

@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"29d9218630af","components/core/Card.jsx":"52e062c6dc8c","components/core/IconButton.jsx":"2f6a95ea758e","components/core/ProgressBar.jsx":"7f78a7a73f07","components/core/StateBadge.jsx":"8baa22718a79","components/core/StreakBadge.jsx":"5cde1c524a10","components/feedback/CriterionRow.jsx":"82a4d54d5823","components/feedback/ResultBanner.jsx":"4d95a67a9a85","components/forms/TeachBackBox.jsx":"7b5b4cb1d495","components/forms/TopicChip.jsx":"6cbae117910d","ui_kits/app/ios-frame.jsx":"24642b887be3","ui_kits/app/screens.jsx":"e893c5c6f5b1","ui_kits/web/data.js":"7e189bdb9a90","ui_kits/web/screens.jsx":"0e472e730026"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"dffd2a9af157","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/app/ios-frame.jsx":"24642b887be3","ui_kits/app/screens.jsx":"4d5fb1b87f81","ui_kits/web/data.js":"7e189bdb9a90","ui_kits/web/screens.jsx":"9107e1db2411"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
@@ -23,20 +23,20 @@ const FILLS = {
 const SIZES = {
   sm: {
     pad: '9px 14px',
-    font: '700 13px var(--font-display)',
-    edge: 3,
+    font: '600 13px var(--font-display)',
+    edge: 2,
     rad: 'var(--radius-sm)'
   },
   md: {
     pad: '13px 20px',
-    font: '700 15px var(--font-display)',
-    edge: 4,
+    font: '600 15px var(--font-display)',
+    edge: 3,
     rad: 'var(--radius-md)'
   },
   lg: {
     pad: '16px 26px',
-    font: '700 18px var(--font-display)',
-    edge: 4,
+    font: '600 18px var(--font-display)',
+    edge: 3,
     rad: 'var(--radius-md)'
   }
 };
@@ -74,7 +74,7 @@ function Button({
     ...base,
     background: hover && !disabled ? 'var(--tint)' : 'transparent',
     color: disabled ? 'var(--text-faint)' : f[0],
-    border: '2px solid ' + (disabled ? 'var(--border)' : f[0]),
+    border: '1px solid ' + (disabled ? 'var(--border)' : f[0]),
     boxShadow: press ? 'none' : `0 ${s.edge - 1}px 0 ${disabled ? 'var(--border)' : f[2]}`,
     transform: press ? `translateY(${s.edge - 1}px)` : 'none'
   } : {
@@ -112,7 +112,7 @@ const ACCENTS = {
   info: 'var(--splash-500)',
   star: 'var(--sunny-500)',
   danger: 'var(--coral-500)',
-  mastered: 'var(--grape-500)'
+  mastered: 'var(--teal-500)'
 };
 function Card({
   sunken = false,
@@ -124,7 +124,7 @@ function Card({
   return /*#__PURE__*/React.createElement("div", {
     style: {
       background: sunken ? 'var(--surface-sunken)' : 'var(--surface-card)',
-      border: '2px solid ' + (accent ? ACCENTS[accent] || 'var(--border)' : 'var(--border)'),
+      border: '1px solid ' + (accent ? ACCENTS[accent] || 'var(--border)' : 'var(--border)'),
       borderRadius: 'var(--radius-lg)',
       boxShadow: sunken ? 'none' : 'var(--edge-card)',
       padding,
@@ -167,19 +167,19 @@ function IconButton({
       height: size,
       display: 'inline-grid',
       placeItems: 'center',
-      border: '2px solid ' + (filled ? 'transparent' : 'var(--border)'),
+      border: '1px solid ' + (filled ? 'transparent' : 'var(--border)'),
       borderRadius: 'var(--radius-md)',
       background: filled ? hover ? 'var(--clover-600)' : 'var(--clover-500)' : hover ? 'var(--tint)' : 'var(--paper)',
       color: filled ? '#fff' : 'var(--text-muted)',
       fontSize: Math.round(size * .45),
       cursor: 'pointer',
       boxShadow: press ? 'none' : `0 3px 0 ${filled ? 'var(--clover-700)' : 'var(--border-strong)'}`,
-      transform: press ? 'translateY(3px)' : 'none',
+      transform: press ? 'translateY(2px)' : 'none',
       transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear',
       ...style
     }
   }, typeof icon === 'string' ? /*#__PURE__*/React.createElement("i", {
-    className: `ph-fill ph-${icon}`,
+    className: `ph-bold ph-${icon}`,
     "aria-hidden": "true"
   }) : icon);
 }
@@ -193,7 +193,7 @@ const FILLS = {
   accent: 'var(--tangerine-500)',
   star: 'var(--sunny-500)',
   info: 'var(--splash-500)',
-  mastered: 'var(--grape-500)'
+  mastered: 'var(--teal-500)'
 };
 function ProgressBar({
   value,
@@ -214,7 +214,7 @@ function ProgressBar({
     style: {
       display: 'flex',
       justifyContent: 'space-between',
-      font: '800 11px var(--font-body)',
+      font: '700 11px var(--font-body)',
       letterSpacing: 'var(--tracking-label)',
       textTransform: 'uppercase',
       color: 'var(--text-muted)'
@@ -227,7 +227,7 @@ function ProgressBar({
       height,
       borderRadius: 'var(--radius-pill)',
       background: 'var(--surface-sunken)',
-      border: '2px solid var(--border)',
+      border: '1px solid var(--border)',
       overflow: 'hidden'
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -262,7 +262,7 @@ function StateBadge({
       borderRadius: 'var(--radius-pill)',
       background: `var(--state-${k}-bg)`,
       color: `var(--state-${k})`,
-      font: `800 ${fs}px var(--font-body)`,
+      font: `700 ${fs}px var(--font-body)`,
       whiteSpace: 'nowrap',
       ...style
     }
@@ -286,13 +286,13 @@ function StreakBadge({
       padding: '8px 14px',
       borderRadius: 'var(--radius-pill)',
       background: active ? 'var(--tangerine-100)' : 'var(--surface-sunken)',
-      border: '2px solid ' + (active ? 'var(--tangerine-500)' : 'var(--border)'),
+      border: '1px solid ' + (active ? 'var(--tangerine-500)' : 'var(--border)'),
       color: active ? 'var(--tangerine-700)' : 'var(--text-faint)',
-      font: '800 15px var(--font-display)',
+      font: '700 15px var(--font-display)',
       ...style
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-flame",
+    className: "ph-bold ph-flame",
     "aria-hidden": "true",
     style: {
       fontSize: 18,
@@ -300,7 +300,7 @@ function StreakBadge({
     }
   }), count, /*#__PURE__*/React.createElement("span", {
     style: {
-      font: '800 11px var(--font-body)',
+      font: '700 11px var(--font-body)',
       letterSpacing: '.06em'
     }
   }, "DAY", count === 1 ? '' : 'S'));
@@ -361,15 +361,15 @@ function CriterionRow({
       borderRadius: '50%',
       background: o.fill,
       color: o.fg,
-      font: '800 13px/24px var(--font-body)',
+      font: '700 13px/24px var(--font-body)',
       textAlign: 'center',
-      border: '2px solid ' + o.fg
+      border: '1px solid ' + o.fg
     }
   }, o.mark), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", {
     style: {
       display: 'block',
       color: 'var(--text-body)',
-      font: '800 13px/1.35 var(--font-body)'
+      font: '700 13px/1.35 var(--font-body)'
     }
   }, label), feedback && /*#__PURE__*/React.createElement("span", {
     style: {
@@ -381,7 +381,7 @@ function CriterionRow({
   }, feedback)), /*#__PURE__*/React.createElement("span", {
     style: {
       color: o.fg,
-      font: '800 10px var(--font-body)',
+      font: '700 10px var(--font-body)',
       letterSpacing: '.08em',
       textTransform: 'uppercase',
       paddingTop: 5
@@ -404,7 +404,6 @@ const HEADS = {
 };
 function ResultBanner({
   state,
-  xp,
   message,
   style
 }) {
@@ -417,7 +416,7 @@ function ResultBanner({
       padding: '18px 22px',
       borderRadius: 'var(--radius-lg)',
       background: `var(--state-${k}-bg)`,
-      border: `2px solid var(--state-${k})`,
+      border: `1px solid var(--state-${k})`,
       ...style
     }
   }, /*#__PURE__*/React.createElement("span", {
@@ -434,7 +433,7 @@ function ResultBanner({
       fontSize: 22
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: 'ph-fill ' + (k === 'examready' || k === 'mastered' ? 'ph-check-fat' : k === 'gap' ? 'ph-arrow-counter-clockwise' : k === 'misconception' ? 'ph-warning' : 'ph-arrows-clockwise')
+    className: 'ph-bold ' + (k === 'examready' || k === 'mastered' ? 'ph-check-fat' : k === 'gap' ? 'ph-arrow-counter-clockwise' : k === 'misconception' ? 'ph-warning' : 'ph-arrows-clockwise')
   })), /*#__PURE__*/React.createElement("span", {
     style: {
       flex: 1
@@ -443,23 +442,14 @@ function ResultBanner({
     style: {
       display: 'block',
       color: `var(--state-${k})`,
-      font: '700 19px var(--font-display)'
+      font: '600 19px var(--font-display)'
     }
   }, message || HEADS[state]), /*#__PURE__*/React.createElement("span", {
     style: {
       color: 'var(--text-muted)',
-      font: '700 13px var(--font-body)'
+      font: '600 13px var(--font-body)'
     }
-  }, "Topic state: ", state)), xp != null && /*#__PURE__*/React.createElement("span", {
-    style: {
-      padding: '8px 14px',
-      borderRadius: 'var(--radius-pill)',
-      background: 'var(--sunny-500)',
-      color: '#6B5200',
-      font: '800 14px var(--font-display)',
-      boxShadow: '0 3px 0 var(--sunny-700)'
-    }
-  }, "+", xp, " XP"));
+  }, "Topic state: ", state)));
 }
 Object.assign(__ds_scope, { ResultBanner });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/ResultBanner.jsx", error: String((e && e.message) || e) }); }
@@ -488,7 +478,7 @@ function TeachBackBox({
     }
   }, prompt && /*#__PURE__*/React.createElement("label", {
     style: {
-      font: '700 15px var(--font-body)',
+      font: '600 15px var(--font-body)',
       color: 'var(--text-body)',
       lineHeight: 1.5
     }
@@ -505,13 +495,13 @@ function TeachBackBox({
       boxSizing: 'border-box',
       resize: 'vertical',
       padding: 16,
-      border: '2px solid ' + (focus ? 'var(--clover-500)' : 'var(--border)'),
+      border: '1px solid ' + (focus ? 'var(--clover-500)' : 'var(--border)'),
       borderRadius: 'var(--radius-md)',
       outline: 'none',
       background: focus ? 'var(--paper)' : 'var(--surface-sunken)',
       color: 'var(--text-body)',
       font: '600 15px/1.65 var(--font-body)',
-      boxShadow: focus ? '0 3px 0 var(--clover-700)' : 'none',
+      boxShadow: focus ? '0 2px 0 var(--clover-700)' : 'none',
       transition: 'border-color var(--dur-press) linear, box-shadow var(--dur-press) linear'
     }
   }), /*#__PURE__*/React.createElement("div", {
@@ -557,14 +547,14 @@ function TopicChip({
       gap: 9,
       padding: '11px 16px',
       minHeight: 44,
-      border: '2px solid ' + (on ? 'var(--clover-500)' : 'var(--border)'),
+      border: '1px solid ' + (on ? 'var(--clover-500)' : 'var(--border)'),
       borderRadius: 'var(--radius-pill)',
       background: selected ? 'var(--clover-100)' : 'var(--paper)',
       color: selected ? 'var(--clover-700)' : 'var(--text-muted)',
-      font: '700 13px var(--font-body)',
+      font: '600 13px var(--font-body)',
       cursor: 'pointer',
-      boxShadow: press ? 'none' : '0 3px 0 ' + (on ? 'var(--clover-700)' : 'var(--border-strong)'),
-      transform: press ? 'translateY(3px)' : 'none',
+      boxShadow: press ? 'none' : '0 2px 0 ' + (on ? 'var(--clover-700)' : 'var(--border-strong)'),
+      transform: press ? 'translateY(2px)' : 'none',
       transition: 'all var(--dur-press) linear',
       ...style
     }
@@ -1317,17 +1307,17 @@ function PathNode({
       border: 0,
       cursor: 'pointer',
       background: t.locked ? 'var(--surface-sunken)' : done ? 'var(--clover-500)' : t.state === 'Unassessed' ? 'var(--splash-500)' : stateColor(t.state),
-      boxShadow: t.locked ? '0 5px 0 var(--border-strong)' : '0 6px 0 ' + (t.locked ? 'var(--border-strong)' : done ? 'var(--clover-700)' : t.state === 'Unassessed' ? 'var(--splash-700)' : 'var(--sunny-700)'),
+      boxShadow: t.locked ? '0 3px 0 var(--border-strong)' : '0 4px 0 ' + (t.locked ? 'var(--border-strong)' : done ? 'var(--clover-700)' : t.state === 'Unassessed' ? 'var(--splash-700)' : 'var(--sunny-700)'),
       display: 'grid',
       placeItems: 'center',
       color: t.locked ? 'var(--text-faint)' : '#fff',
       fontSize: 30
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: 'ph-fill ' + (t.locked ? 'ph-lock-simple' : done ? 'ph-check-fat' : 'ph-chat-circle-text')
+    className: 'ph-bold ' + (t.locked ? 'ph-lock-simple' : done ? 'ph-check-fat' : 'ph-chat-circle-text')
   })), /*#__PURE__*/React.createElement("span", {
     style: {
-      font: '800 11px var(--font-body)',
+      font: '700 11px var(--font-body)',
       color: t.locked ? 'var(--text-faint)' : 'var(--text-body)',
       maxWidth: 120,
       textAlign: 'center',
@@ -1352,7 +1342,7 @@ function HomeScreen() {
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      font: '800 24px var(--font-display)',
+      font: '700 24px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, "teach", /*#__PURE__*/React.createElement("span", {
@@ -1365,21 +1355,7 @@ function HomeScreen() {
       gap: 8,
       alignItems: 'center'
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 5,
-      color: 'var(--sunny-700)',
-      font: '800 15px var(--font-display)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-star",
-    style: {
-      color: 'var(--sunny-500)',
-      fontSize: 19
-    }
-  }), "340"), /*#__PURE__*/React.createElement(StreakBadge, {
+  }, /*#__PURE__*/React.createElement(StreakBadge, {
     count: 7,
     style: {
       padding: '5px 11px'
@@ -1441,10 +1417,10 @@ function LessonScreen() {
   })), /*#__PURE__*/React.createElement("span", {
     style: {
       color: 'var(--tangerine-600)',
-      font: '800 14px var(--font-display)'
+      font: '700 14px var(--font-display)'
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-flame"
+    className: "ph-bold ph-flame"
   }), " 7")), /*#__PURE__*/React.createElement("span", {
     style: {
       font: 'var(--text-label)',
@@ -1455,7 +1431,7 @@ function LessonScreen() {
   }, "Your turn \xB7 T004"), /*#__PURE__*/React.createElement("h2", {
     style: {
       margin: 0,
-      font: '700 24px var(--font-display)',
+      font: '600 24px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, "Explain it to a colleague."), /*#__PURE__*/React.createElement(Card, {
@@ -1464,7 +1440,7 @@ function LessonScreen() {
   }, /*#__PURE__*/React.createElement("strong", {
     style: {
       color: 'var(--text-body)',
-      font: '800 13px var(--font-body)'
+      font: '700 13px var(--font-body)'
     }
   }, "In short:"), /*#__PURE__*/React.createElement("span", {
     style: {
@@ -1505,18 +1481,18 @@ function ResultScreen() {
       height: 92,
       borderRadius: '50%',
       background: 'var(--clover-500)',
-      boxShadow: '0 7px 0 var(--clover-700)',
+      boxShadow: '0 5px 0 var(--clover-700)',
       display: 'grid',
       placeItems: 'center',
       color: '#fff',
       fontSize: 46
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-check-fat"
+    className: "ph-bold ph-check-fat"
   })), /*#__PURE__*/React.createElement("h2", {
     style: {
       margin: 0,
-      font: '800 28px var(--font-display)',
+      font: '700 28px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, "Exam-Ready!"), /*#__PURE__*/React.createElement("p", {
@@ -1528,7 +1504,6 @@ function ResultScreen() {
     }
   }, "Come back tomorrow to push T004 toward Mastered.")), /*#__PURE__*/React.createElement(ResultBanner, {
     state: "Exam-Ready",
-    xp: 40,
     message: "That explanation is exam-ready!"
   }), /*#__PURE__*/React.createElement(Card, {
     padding: "2px 18px"
@@ -1717,8 +1692,7 @@ function grade(topic, answer) {
   const state = n === crits.length ? 'Exam-Ready' : n >= Math.ceil(crits.length / 2) ? 'Rusty' : 'Gap';
   return {
     crits,
-    state,
-    xp: 10 + n * 10
+    state
   };
 }
 function StatePath({
@@ -1755,18 +1729,18 @@ function StatePath({
       height: i === idx ? 26 : 18,
       borderRadius: '50%',
       background: i < idx ? 'var(--clover-500)' : i === idx ? `var(--state-${s.toLowerCase().replace('-', '')})` : 'var(--surface-sunken)',
-      border: '2px solid ' + (i <= idx ? 'transparent' : 'var(--border-strong)'),
-      boxShadow: i === idx ? '0 3px 0 rgba(0,0,0,.18)' : 'none',
+      border: '1px solid ' + (i <= idx ? 'transparent' : 'var(--border-strong)'),
+      boxShadow: i === idx ? '0 2px 0 rgba(0,0,0,.18)' : 'none',
       display: 'grid',
       placeItems: 'center',
       color: '#fff',
       fontSize: 12
     }
   }, i < idx && /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-check"
+    className: "ph-bold ph-check"
   })), /*#__PURE__*/React.createElement("span", {
     style: {
-      font: '800 9px var(--font-body)',
+      font: '700 9px var(--font-body)',
       letterSpacing: '.05em',
       textTransform: 'uppercase',
       color: i === idx ? 'var(--text-body)' : 'var(--text-faint)',
@@ -1775,8 +1749,7 @@ function StatePath({
   }, s)))));
 }
 function TopBar({
-  streak,
-  xp
+  streak
 }) {
   return /*#__PURE__*/React.createElement("header", {
     style: {
@@ -1791,7 +1764,7 @@ function TopBar({
   }, /*#__PURE__*/React.createElement("a", {
     href: "#",
     style: {
-      font: '800 26px var(--font-display)',
+      font: '700 26px var(--font-display)',
       color: 'var(--text-body)',
       textDecoration: 'none',
       letterSpacing: '-.02em'
@@ -1806,24 +1779,7 @@ function TopBar({
       alignItems: 'center',
       gap: 12
     }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 6,
-      padding: '8px 14px',
-      borderRadius: 'var(--radius-pill)',
-      background: 'var(--sunny-100)',
-      border: '2px solid var(--sunny-500)',
-      color: 'var(--sunny-700)',
-      font: '800 14px var(--font-display)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-star",
-    style: {
-      color: 'var(--sunny-600)'
-    }
-  }), xp, " XP"), /*#__PURE__*/React.createElement(StreakBadge, {
+  }, /*#__PURE__*/React.createElement(StreakBadge, {
     count: streak
   }), /*#__PURE__*/React.createElement(IconButton, {
     icon: "gear",
@@ -1841,7 +1797,7 @@ function NoteCard({
       justifyContent: 'space-between',
       gap: 16,
       paddingBottom: 18,
-      borderBottom: '2px solid var(--border)'
+      borderBottom: '1px solid var(--border)'
     }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -1851,7 +1807,7 @@ function NoteCard({
   }, topic.id, " \xB7 ", topic.section), /*#__PURE__*/React.createElement("h2", {
     style: {
       margin: '6px 0 3px',
-      font: '700 28px var(--font-display)',
+      font: '600 28px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, topic.title), /*#__PURE__*/React.createElement("p", {
@@ -1890,7 +1846,7 @@ function NoteCard({
     key: p,
     style: {
       color: 'var(--text-body)',
-      font: '800 14px var(--font-body)'
+      font: '700 14px var(--font-body)'
     }
   }, p)))), /*#__PURE__*/React.createElement("h3", {
     style: {
@@ -1932,7 +1888,7 @@ function NoteCard({
       font: '600 13px/1.55 var(--font-body)'
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-arrow-fat-right",
+    className: "ph-bold ph-arrow-fat-right",
     style: {
       position: 'absolute',
       left: 0,
@@ -1952,7 +1908,6 @@ function App() {
   const [topicId, setTopicId] = React.useState(saved.topicId || 'T004');
   const [answers, setAnswers] = React.useState(saved.answers || {});
   const [results, setResults] = React.useState(saved.results || {});
-  const [xp, setXp] = React.useState(saved.xp || 40);
   const topic = window.TB_TOPICS.find(t => t.id === topicId);
   const answer = answers[topicId] || '';
   const result = results[topicId];
@@ -1963,7 +1918,6 @@ function App() {
         topicId,
         answers,
         results,
-        xp,
         ...patch
       }));
     } catch {}
@@ -1979,12 +1933,9 @@ function App() {
       ...results,
       [topicId]: r
     };
-    const nextXp = xp + r.xp;
     setResults(nextResults);
-    setXp(nextXp);
     persist({
-      results: nextResults,
-      xp: nextXp
+      results: nextResults
     });
   };
   const pick = id => {
@@ -2011,8 +1962,7 @@ function App() {
       background: 'var(--surface-page)'
     }
   }, /*#__PURE__*/React.createElement(TopBar, {
-    streak: 7,
-    xp: xp
+    streak: 7
   }), /*#__PURE__*/React.createElement("main", {
     style: {
       maxWidth: 'var(--page-max)',
@@ -2116,7 +2066,7 @@ function App() {
   }, "Your turn \xB7 ", topic.id), /*#__PURE__*/React.createElement("h2", {
     style: {
       margin: '6px 0 14px',
-      font: '700 24px var(--font-display)',
+      font: '600 24px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, "Explain it to a colleague."), /*#__PURE__*/React.createElement(TeachBackBox, {
@@ -2138,7 +2088,7 @@ function App() {
     style: {
       margin: '10px 0 0',
       color: 'var(--coral-700)',
-      font: '700 12px var(--font-body)'
+      font: '600 12px var(--font-body)'
     }
   }, err), /*#__PURE__*/React.createElement("p", {
     style: {
@@ -2147,13 +2097,12 @@ function App() {
       color: 'var(--text-faint)'
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-sparkle",
+    className: "ph-bold ph-sparkle",
     style: {
       color: 'var(--tangerine-500)'
     }
   }), " Local deterministic grader \xB7 no API key required")), result ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(ResultBanner, {
-    state: result.state,
-    xp: result.xp
+    state: result.state
   }), /*#__PURE__*/React.createElement(Card, {
     padding: "4px 22px"
   }, result.crits.map(c => /*#__PURE__*/React.createElement(CriterionRow, {
@@ -2165,10 +2114,10 @@ function App() {
     sunken: true,
     padding: 26,
     style: {
-      border: '2px dashed var(--border-strong)'
+      border: '1px dashed var(--border-strong)'
     }
   }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-fill ph-arrow-elbow-down-right",
+    className: "ph-bold ph-arrow-elbow-down-right",
     style: {
       fontSize: 26,
       color: 'var(--tangerine-500)'
@@ -2176,7 +2125,7 @@ function App() {
   }), /*#__PURE__*/React.createElement("h3", {
     style: {
       margin: '10px 0 6px',
-      font: '700 20px var(--font-display)',
+      font: '600 20px var(--font-display)',
       color: 'var(--text-body)'
     }
   }, "Your signal will appear here."), /*#__PURE__*/React.createElement("p", {

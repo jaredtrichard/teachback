@@ -1,7 +1,15 @@
 # Web app UI kit
 
-The redesigned (gamified) teach-back web app: topic chips → study note → teach-back box → graded result with state path, streak and XP. Interactive: pick a topic, type 20+ characters, grade it (simple keyword-based fake grader), progress persists in localStorage.
+Product-facing SIE study home: calendar + 181-bite readiness grid, same-page note / teach-back, QBank list plus a one-pane create-quiz flow.
 
-Files: `index.html` (mount), `screens.jsx` (TopBar, StatePath, NoteCard, App), `data.js` (the 3 real SIE demo topics + criteria, adapted from the repo).
+Serve from the repo root:
 
-This is a founder-directed redesign of `src/App.tsx` — same content, structure and honesty rules; new gamified chrome.
+```sh
+python3 -m http.server 8765
+```
+
+Open http://127.0.0.1:8765/ui_kits/web/
+
+Three demo bites have real notes (SIPC, investor categories, primary market). The other 178 are title stubs and stay visible on the grid and calendar.
+
+Files: `index.html`, `screens.jsx`, `data.js`.

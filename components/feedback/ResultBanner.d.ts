@@ -1,8 +1,6 @@
-/** Celebration/coaching banner for a graded teach-back; optional XP pill. */
+/** Result banner announcing the graded topic state with a coaching headline. */
 export interface ResultBannerProps {
   state: 'Unassessed' | 'Gap' | 'Misconception' | 'Rusty' | 'Exam-Ready' | 'Mastered';
-  /** XP earned this attempt — renders a gold pill */
-  xp?: number;
   /** Override the default coaching headline */
   message?: string;
   style?: React.CSSProperties;
