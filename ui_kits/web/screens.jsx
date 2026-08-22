@@ -80,14 +80,11 @@ function AuthScreen({mode,setMode,onEnter}){
 const fieldStyle={padding:'12px 14px',border:'2px solid var(--border-strong)',borderRadius:14,font:'600 15px var(--font-body)'};
 
 function SideNav({view,setView}){
-  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['leagues','Leagues','ph-trophy'],['profile','Profile','ph-user']];
+  const items=[['learn','Learn','ph-path'],['qbank','QBank','ph-cards'],['brush','Brush-up','ph-broom'],['leagues','Leagues','ph-trophy']];
   return <aside style={{display:'grid',gap:8,alignContent:'start',minWidth:160}}>
     {items.map(([id,label,icon])=>
       <button key={id} onClick={()=>setView(id)} style={{all:'unset',cursor:'pointer',display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:16,border:'2px solid',borderColor:view===id?'var(--clover-500)':'transparent',background:view===id?'var(--clover-100)':'transparent',font:'800 14px var(--font-body)',minHeight:44}}>
-        {id==='profile'
-          ? <span style={{width:28,height:28,borderRadius:'50%',background:view===id?'var(--clover-500)':'var(--tint)',border:'2px solid var(--border-strong)',display:'grid',placeItems:'center',color:view===id?'#fff':'var(--text-faint)'}}><i className="ph-fill ph-user" style={{fontSize:14}}></i></span>
-          : <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>}
-        {label}
+        <i className={`ph-fill ${icon}`} style={{color:view===id?'var(--clover-600)':'var(--text-faint)',fontSize:20}}></i>{label}
       </button>
     )}
     <Card padding={14} style={{marginTop:8,background:'linear-gradient(180deg,var(--sunny-100),var(--paper))'}}>
@@ -104,41 +101,85 @@ const SEC_COLOR={
   '3':{fill:'var(--splash-500)',edge:'var(--splash-700)',soft:'var(--splash-100)'},
   '4':{fill:'var(--grape-500)',edge:'var(--grape-700)',soft:'var(--grape-100)'},
 };
-function LearnPath({results,openLeaf}){
-  const nodes=leafNodes();
-  let lastSec='';
-  return <div style={{position:'relative',padding:'8px 0 40px'}}>
-    {nodes.map((n,i)=>{
-      const st=leafState(n,results);
-      const first=i===0;
-      const done=st==='done';
-      const open=first || st==='active' || done;
-      const c=SEC_COLOR[n.sec];
-      const zigzag=[0,56,56,0][i%4];
-      const banner=n.sec!==lastSec;
-      lastSec=n.sec;
-      const bg=done?c.fill:open?c.soft:'var(--paper)';
-      const edge=done||open?c.edge:'var(--border-strong)';
-      const fg=done?'#fff':open?c.edge:'var(--text-faint)';
-      return <React.Fragment key={n.leaf}>
-        {banner && <div style={{margin:'28px auto 18px',maxWidth:420,background:c.fill,color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:`0 4px 0 ${c.edge}`}}>
-          <div style={{font:'800 11px var(--font-body)',letterSpacing:'.08em',opacity:.85}}>SECTION {n.sec}</div>
-          <div style={{font:'800 20px var(--font-display)'}}>{n.sectionTitle}</div>
-        </div>}
-        <div style={{display:'flex',justifyContent:'center',margin:'18px 0',transform:`translateX(${zigzag}px)`}}>
-          <button onClick={()=>openLeaf(n)} title={n.title} style={{all:'unset',cursor:'pointer',width:70,height:70,borderRadius:'50%',display:'grid',placeItems:'center',background:bg,border:'4px solid',borderColor:edge,boxShadow:`0 5px 0 ${edge}`,color:fg}}>
-            <i className={`ph-fill ${done?'ph-check':open?'ph-play':'ph-lock-simple'}`} style={{fontSize:28}}></i>
-          </button>
+function pathChunks(){
+  const chunks=[];
+  Object.entries(window.TB_TREE).forEach(([sec,s])=>{
+    const ids=Object.values(s.leaves).flatMap(l=>l.ids);
+    for(let i=0;i<ids.length;i+=10){
+      chunks.push({sec,sectionTitle:s.title,part:Math.floor(i/10)+1,parts:Math.ceil(ids.length/10),ids:ids.slice(i,i+10)});
+    }
+  });
+  return chunks;
+}
+function CutePlay({color}){
+  return <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+    <circle cx="17" cy="17" r="16" fill="#fff" opacity=".25"/>
+    <path d="M13 9.5c0-.9 1-1.45 1.76-.98l12.2 7.5c.72.44.72 1.52 0 1.96l-12.2 7.5c-.76.47-1.76-.08-1.76-.98V9.5z" fill={color}/>
+    <circle cx="12" cy="12" r="2.2" fill="#fff" opacity=".55"/>
+  </svg>;
+}
+function Pad({kind,color,children}){
+  if(kind==='lily') return <div style={{position:'relative',width:108,height:92,display:'grid',placeItems:'center'}}>
+    <svg width="108" height="92" viewBox="0 0 108 92" style={{position:'absolute',inset:0}}><ellipse cx="54" cy="50" rx="48" ry="28" fill={color} opacity=".35"/><ellipse cx="54" cy="46" rx="40" ry="22" fill={color} opacity=".55"/><path d="M54 24v22" stroke={color} strokeWidth="4"/></svg>
+    {children}
+  </div>;
+  if(kind==='stone') return <div style={{position:'relative',width:96,height:84,display:'grid',placeItems:'center'}}>
+    <svg width="96" height="84" viewBox="0 0 96 84" style={{position:'absolute'}}><ellipse cx="48" cy="50" rx="40" ry="18" fill={color} opacity=".25"/><ellipse cx="48" cy="40" rx="36" ry="26" fill={color} opacity=".4"/></svg>
+    {children}
+  </div>;
+  if(kind==='star') return <div style={{position:'relative',width:100,height:100,display:'grid',placeItems:'center'}}>
+    <svg width="100" height="100" viewBox="0 0 100 100" style={{position:'absolute'}}><path d="M50 8 60 38h32L66 56l10 32-26-18-26 18 10-32L8 38h32z" fill={color} opacity=".28"/></svg>
+    {children}
+  </div>;
+  return <div style={{width:88,height:88,display:'grid',placeItems:'center'}}>{children}</div>;
+}
+function LearnPath({results,openModule}){
+  const [bubble,setBubble]=React.useState(null);
+  const chunks=pathChunks();
+  const kinds={1:'path',2:'lily',3:'stone',4:'star'};
+  let global=0;
+  return <div style={{padding:'8px 0 40px'}}>
+    <style>{`.tb-node{transition:transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s ease;transform:translateY(0)}
+.tb-node:hover{transform:translateY(3px);box-shadow:0 3px 0 var(--tb-edge) !important}
+.tb-node:active{transform:translateY(6px);box-shadow:0 0 0 var(--tb-edge) !important}`}</style>
+    {chunks.map((ch,ci)=>{
+      const c=SEC_COLOR[ch.sec];
+      return <div key={ch.sec+'-'+ch.part} style={{marginBottom:28}}>
+        <div style={{margin:'20px auto 14px',maxWidth:440,background:c.fill,color:'#fff',borderRadius:18,padding:'14px 18px',boxShadow:`0 4px 0 ${c.edge}`}}>
+          <div style={{font:'800 11px var(--font-body)',letterSpacing:'.08em',opacity:.85}}>SECTION {ch.sec}{ch.parts>1?` · PATH ${ch.part}/${ch.parts}`:''}</div>
+          <div style={{font:'800 20px var(--font-display)'}}>{ch.sectionTitle}</div>
         </div>
-      </React.Fragment>;
+        {ch.ids.map((id,i)=>{
+          const idx=global++;
+          const topic=window.TB_BITES.find(t=>t.id===id);
+          const scored=!!results[id];
+          const done=scored && ['Exam-Ready','Mastered'].includes(results[id].state);
+          const open=idx===0 || scored || (idx>0 && !!results[ch.ids[i-1]]);
+          const firstOpen=idx===0 && !scored;
+          const zigzag=[0,64,64,0, -20][i%5];
+          const ready=open||firstOpen;
+          return <div key={id} style={{display:'grid',justifyItems:'center',margin:'10px 0',transform:`translateX(${zigzag}px)`,position:'relative'}}>
+            <Pad kind={kinds[ch.sec]} color={c.fill}>
+              <button className="tb-node" onClick={()=>ready && setBubble(bubble===id?null:id)} title={topic.title} style={{all:'unset',cursor:ready?'pointer':'default',width:76,height:76,borderRadius:'50%',display:'grid',placeItems:'center',background:done?c.fill:ready?c.soft:'var(--paper)',border:'4px solid',borderColor:done||ready?c.edge:'var(--border-strong)',boxShadow:`0 6px 0 ${done||ready?c.edge:'var(--border-strong)'}`,color:done?'#fff':c.edge,'--tb-edge':done||ready?c.edge:'var(--border-strong)'}}>
+                {done?<i className="ph-fill ph-check" style={{fontSize:30}}></i>:ready?<CutePlay color={c.edge}/>:<i className="ph-fill ph-lock-simple" style={{fontSize:26,color:'var(--text-faint)'}}></i>}
+              </button>
+            </Pad>
+            {bubble===id && <div style={{marginTop:8,background:'#fff',border:'2px solid var(--border)',borderRadius:18,boxShadow:'0 4px 0 var(--border-strong)',padding:12,width:220,zIndex:2}}>
+              <div style={{font:'800 12px var(--font-body)',marginBottom:8,color:'var(--text-muted)'}}>{topic.title}</div>
+              <button type="button" onClick={()=>openModule(id,'legendary')} style={{width:'100%',marginBottom:8,padding:'10px 12px',borderRadius:14,border:'2px solid var(--grape-600)',background:'var(--grape-100)',color:'var(--grape-700)',font:'800 14px var(--font-display)',cursor:'pointer'}}>Legendary · mastery</button>
+              <button type="button" onClick={()=>openModule(id,'practice')} style={{width:'100%',padding:'10px 12px',borderRadius:14,border:'2px solid var(--clover-600)',background:'var(--clover-100)',color:'var(--clover-700)',font:'800 14px var(--font-display)',cursor:'pointer'}}>Practice · simpler</button>
+            </div>}
+          </div>;
+        })}
+      </div>;
     })}
   </div>;
 }
 
-function LearnView({results,openLeaf}){
+function LearnView({results,openModule}){
   return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 200px',gap:20,alignItems:'start'}}>
-    <LearnPath results={results} openLeaf={openLeaf}/>
-    <div style={{position:'sticky',top:16}}><Mascot size={110} say="Tap a circle. Teach that leaf."/></div>
+    <LearnPath results={results} openModule={openModule}/>
+    <div style={{position:'sticky',top:16}}><Mascot size={110} say="First pad is open. Hop on."/></div>
   </div>;
 }
 
@@ -262,7 +303,7 @@ function QBankView({openModule}){
   const items=window.TB_BITES.filter(t=>t.demo);
   return <section style={{display:'grid',gap:16}}>
     <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>QBank</h1>
-    <p style={{margin:0,color:'var(--text-muted)',maxWidth:520}}>Random practice. Does not write Gap / Rusty / Exam-ready / Mastered.</p>
+    <p style={{margin:0,color:'var(--text-muted)',maxWidth:560}}>Authored multiple-choice, written like the real exam. Not AI. Does not write Gap / Rusty / Exam-ready / Mastered. Bank is a stub until those items are written.</p>
     {items.map(t=><Card key={t.id} padding={20}>
       <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{t.id}</span>
       <h3 style={{margin:'6px 0',font:'700 20px var(--font-display)'}}>{t.title}</h3>
@@ -318,7 +359,7 @@ function App(){
     persist({results:nextResults,xp:nextXp,hearts:nextHearts});
   };
   const openLeaf=(n)=>{setLeaf(n);setView('leaf');persist({leaf:n,view:'leaf'});};
-  const openModule=(id)=>{setTopicId(id);setView('module');setErr('');persist({topicId:id,view:'module'});};
+  const openModule=(id,mode)=>{setTopicId(id);setView(mode==='practice'?'teach':'module');setErr('');persist({topicId:id,view:mode==='practice'?'teach':'module',mode:mode||'legendary'});};
   const goTeach=()=>{setView('teach');persist({view:'teach'});};
   const setAnswer=(v)=>{const na={...answers,[topicId]:v};setAnswers(na);persist({answers:na});};
   const changeView=(v)=>{setView(v);persist({view:v});};
@@ -331,17 +372,18 @@ function App(){
     <header style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,maxWidth:1100,margin:'auto',padding:'14px var(--page-pad)'}}>
       <span style={{font:'800 22px var(--font-display)'}}>teach<span style={{color:'var(--clover-500)'}}>back</span></span>
       <div style={{display:'flex',gap:8,flexWrap:'wrap',alignItems:'center'}}>
-        <Button size="sm" variant={view==='courses'?'primary':'ghost'} onClick={()=>changeView('courses')}>Courses</Button>
+        <button type="button" onClick={()=>changeView('courses')} style={{padding:'10px 18px',borderRadius:16,border:'2px solid var(--tangerine-700)',background:'var(--tangerine-500)',color:'#fff',font:'800 16px var(--font-display)',boxShadow:'0 4px 0 var(--tangerine-700)',cursor:'pointer'}}>Courses</button>
         <StatPill tone="streak" value={3}/>
         <StatPill tone="gem" value={gems}/>
         <StatPill tone="heart" value={hearts}/>
         <StatPill tone="xp" value={xp}/>
+        <button type="button" aria-label="Profile" onClick={()=>changeView('profile')} style={{width:44,height:44,borderRadius:'50%',border:'3px solid var(--border-strong)',background:'var(--clover-100)',cursor:'pointer',display:'grid',placeItems:'center'}}><i className="ph-fill ph-user" style={{fontSize:20,color:'var(--clover-700)'}}></i></button>
       </div>
     </header>
     <div style={{maxWidth:1100,margin:'auto',padding:'8px var(--page-pad) 60px',display:shell?'grid':'block',gridTemplateColumns:'180px minmax(0,1fr)',gap:24}}>
       {shell && <SideNav view={view} setView={changeView}/>}
       <main>
-        {view==='learn' && <LearnView results={results} openLeaf={openLeaf}/>}
+        {view==='learn' && <LearnView results={results} openModule={openModule}/>}
         {view==='leaf' && leaf && <LeafPicker node={leaf} results={results} openModule={openModule} back={()=>changeView('learn')}/>}
         {view==='module' && topic && <ModuleView topic={topic} state={result?result.state:'Unassessed'} goTeach={goTeach} back={()=>changeView('leaf')}/>}
         {view==='teach' && topic && <TeachView topic={topic} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={()=>changeView('module')}/>}
