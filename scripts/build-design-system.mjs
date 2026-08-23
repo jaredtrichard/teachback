@@ -105,7 +105,7 @@ const manifest={
   components:componentManifest,
   startingPoints:[
     {name:'Button',path:'components/core/Button.jsx',previewPath:'components/core/core.card.html',kind:'component',section:'Components',subtitle:'Restrained pressable button with hard edge',viewport:'700x260'},
-    {name:'web',path:'ui_kits/web/index.html',previewPath:'ui_kits/web/index.html',kind:'screen',section:'Screens',subtitle:'Home plan, same-page teach-back, and QBank',viewport:'1240x820'}
+    {name:'web',path:'ui_kits/web/index.html',previewPath:'ui_kits/web/index.html',kind:'screen',section:'Screens',subtitle:'Week calendar, same-page teach-back, and Brush-up flashcards',viewport:'1240x820'}
   ],
   cards:cardFiles.map(cardMetadata),
   templates:[],

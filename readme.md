@@ -8,7 +8,7 @@ Product-facing frontend kit on the frozen product grain:
 - Pace is remaining modules divided by remaining study days
 - Same-page note, teach-back, and readiness feedback (no read-gate)
 - Frontend-only email, Google, Facebook, and Apple login stubs
-- Left nav is Home / Outline / Brush-up. Brush-up is flashcards for spaced recall (Gap / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
+- Left nav is Home / Outline / Brush-up. Brush-up is flashcards for spaced recall (Gap / Misconception / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
 - v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
 
 ## Review the frontend
