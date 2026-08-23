@@ -296,7 +296,8 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
                 const t=biteOf(id);
                 const st=biteState(results,id);
                 const done=isReady(st);
-                return <span key={id} style={{display:'block',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',font:'500 10px var(--font-body)',padding:'2px 4px',borderRadius:4,background:isToday?'var(--sunny-500)':done?'var(--clover-100)':'var(--cream)',color:done?'var(--clover-700)':'var(--text-muted)',border:'1px solid var(--border)'}}>{t.title}</span>;
+                const overdueAuthored=!cell.outside&&key<todayStr&&!isStub(t)&&!done;
+                return <span key={id} style={{display:'block',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',font:'500 10px var(--font-body)',padding:'2px 4px',borderRadius:4,background:isToday?'var(--sunny-500)':overdueAuthored?'var(--coral-100)':done?'var(--clover-100)':'var(--cream)',color:overdueAuthored?'var(--coral-700)':done?'var(--clover-700)':'var(--text-muted)',border:'1px solid var(--border)'}}>{t.title}</span>;
               })}
               {extra>0&&<span style={{font:'600 10px var(--font-body)',color:'var(--text-faint)'}}>+{extra}</span>}
             </button>;
