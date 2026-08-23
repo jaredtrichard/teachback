@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"3757d831009b"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"7d78004806c9"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -403,7 +403,11 @@ function sectionStats(results) {
 }
 function readinessCounts(results) {
     const counts = Object.fromEntries(window.TB_STATES.map(s => [s, 0]));
-    window.TB_BITES.forEach(b => { counts[biteState(results, b.id)]++; });
+    const assessedStates = new Set(window.TB_STATES.filter(s => s !== 'Unassessed'));
+    Object.entries(results).forEach(([id, result]) => {
+        if (biteOf(id) && result && assessedStates.has(result.state))
+            counts[result.state]++;
+    });
     return counts;
 }
 function buildPlan(examDate, planStart) {
@@ -534,7 +538,7 @@ function StateKey() {
             s))),
         React.createElement("span", { style: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 'var(--radius-pill)', background: 'var(--state-unassessed-bg)', color: 'var(--text-faint)', font: '600 11px var(--font-body)', border: '1px dashed var(--border-strong)' } }, "Stub / outline only"));
 }
-function PlanChart({ ready, total, planStart, examDate }) {
+function PlanChart({ ready, total, planStart, examDate, plan }) {
     if (!examDate)
         return null;
     const today = startOfDay(new Date());
@@ -548,9 +552,19 @@ function PlanChart({ ready, total, planStart, examDate }) {
     const w = 280, h = 110, pad = 22;
     const x = t => pad + (t / domain) * (w - 2 * pad);
     const y = v => h - pad - (v / Math.max(1, total)) * (h - 2 * pad);
+    let planned = 0;
+    const planPoints = [{ t: 0, v: 0 }];
+    Object.entries(plan.byDay).sort((a, b) => a[0].localeCompare(b[0])).forEach(([day, ids]) => {
+        const scheduled = ids.filter(id => !isStub(biteOf(id))).length;
+        if (!scheduled)
+            return;
+        planned += scheduled;
+        const scheduledDay = duration === 0 ? domain : Math.max(0, Math.min(domain, daysBetween(start, parseYmd(day))));
+        planPoints.push({ t: scheduledDay, v: planned });
+    });
     return React.createElement("svg", { viewBox: '0 0 ' + w + ' ' + h, width: "100%", height: "110", role: "img", "aria-label": "Progress versus plan" },
         React.createElement("rect", { x: "0", y: "0", width: w, height: h, fill: "var(--cream)", rx: "8" }),
-        React.createElement("line", { x1: x(0), y1: y(0), x2: x(domain), y2: y(total), stroke: "var(--tangerine-500)", strokeDasharray: "4 4", strokeWidth: "1.5" }),
+        React.createElement("polyline", { points: planPoints.map(p => x(p.t) + ',' + y(p.v)).join(' '), fill: "none", stroke: "var(--tangerine-500)", strokeDasharray: "4 4", strokeWidth: "1.5" }),
         React.createElement("line", { x1: x(0), y1: y(0), x2: x(elapsed), y2: y(ready), stroke: "var(--clover-500)", strokeWidth: "2.2" }),
         React.createElement("circle", { cx: x(elapsed), cy: y(ready), r: "4", fill: "var(--clover-500)" }));
 }
@@ -668,7 +682,7 @@ function HomeView({ results, examDate, setExamDate, planStart, setPlanStart, ope
                     React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Progress vs plan"),
                     examDate
                         ? React.createElement(React.Fragment, null,
-                            React.createElement(PlanChart, { ready: authoredReady, total: authored.length, planStart: planStart, examDate: examDate }),
+                            React.createElement(PlanChart, { ready: authoredReady, total: authored.length, planStart: planStart, examDate: examDate, plan: plan }),
                             React.createElement("p", { style: { margin: '8px 0 0', font: '500 12px var(--font-body)', color: 'var(--text-muted)' } },
                                 React.createElement("strong", null,
                                     authored.length,

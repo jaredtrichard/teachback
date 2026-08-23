@@ -54,7 +54,10 @@ function sectionStats(results){
 
 function readinessCounts(results){
   const counts=Object.fromEntries(window.TB_STATES.map(s=>[s,0]));
-  window.TB_BITES.forEach(b=>{counts[biteState(results,b.id)]++;});
+  const assessedStates=new Set(window.TB_STATES.filter(s=>s!=='Unassessed'));
+  Object.entries(results).forEach(([id,result])=>{
+    if(biteOf(id)&&result&&assessedStates.has(result.state)) counts[result.state]++;
+  });
   return counts;
 }
 
@@ -191,7 +194,7 @@ function StateKey(){
   </div>;
 }
 
-function PlanChart({ready,total,planStart,examDate}){
+function PlanChart({ready,total,planStart,examDate,plan}){
   if(!examDate) return null;
   const today=startOfDay(new Date());
   const start=startOfDay(parseYmd(planStart||ymd(today)));
@@ -203,9 +206,18 @@ function PlanChart({ready,total,planStart,examDate}){
   const w=280,h=110,pad=22;
   const x=t=>pad+(t/domain)*(w-2*pad);
   const y=v=>h-pad-(v/Math.max(1,total))*(h-2*pad);
+  let planned=0;
+  const planPoints=[{t:0,v:0}];
+  Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([day,ids])=>{
+    const scheduled=ids.filter(id=>!isStub(biteOf(id))).length;
+    if(!scheduled) return;
+    planned+=scheduled;
+    const scheduledDay=duration===0?domain:Math.max(0,Math.min(domain,daysBetween(start,parseYmd(day))));
+    planPoints.push({t:scheduledDay,v:planned});
+  });
   return <svg viewBox={'0 0 '+w+' '+h} width="100%" height="110" role="img" aria-label="Progress versus plan">
     <rect x="0" y="0" width={w} height={h} fill="var(--cream)" rx="8"/>
-    <line x1={x(0)} y1={y(0)} x2={x(domain)} y2={y(total)} stroke="var(--tangerine-500)" strokeDasharray="4 4" strokeWidth="1.5"/>
+    <polyline points={planPoints.map(p=>x(p.t)+','+y(p.v)).join(' ')} fill="none" stroke="var(--tangerine-500)" strokeDasharray="4 4" strokeWidth="1.5"/>
     <line x1={x(0)} y1={y(0)} x2={x(elapsed)} y2={y(ready)} stroke="var(--clover-500)" strokeWidth="2.2"/>
     <circle cx={x(elapsed)} cy={y(ready)} r="4" fill="var(--clover-500)"/>
   </svg>;
@@ -326,7 +338,7 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Progress vs plan</span>
           {examDate
             ? <>
-                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate}/>
+                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate} plan={plan}/>
                 <p style={{margin:'8px 0 0',font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authored.length} authored notes</strong> — {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
                 <p style={{margin:'4px 0 0',font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs stay on the calendar.</p>
               </>
