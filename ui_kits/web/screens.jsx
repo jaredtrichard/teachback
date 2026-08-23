@@ -13,6 +13,7 @@ function biteState(results,id){return (results[id]&&results[id].state)||'Unasses
 function isReady(state){return READY.has(state);}
 function isStub(topic){return !topic.demo;}
 function firstAuthoredBite(bites,predicate=()=>true){return bites.find(b=>!isStub(b)&&predicate(b));}
+function qbankStatus(log,id){const value=log[id];return typeof value==='string'?{latest:value,everIncorrect:value==='wrong'}:value||{latest:null,everIncorrect:false};}
 function ymd(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day;}
 function parseYmd(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
 function startOfDay(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
@@ -241,12 +242,13 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
   const plan=buildPlan(examDate,planStart);
   const remaining=window.TB_BITES.filter(b=>!isReady(biteState(results,b.id))).length;
   const exam=examDate?startOfDay(parseYmd(examDate)):null;
-  const daysLeft=exam?Math.max(0,daysBetween(today,exam)+1):null;
+  const countdown=exam?Math.max(0,daysBetween(today,exam)):null;
+  const studyDaysLeft=exam?countdown+1:null;
   const past=exam&&daysBetween(today,exam)<0;
-  const pace=(!exam||past||daysLeft===0)?null:remaining/Math.max(1,daysLeft);
-  const ready=window.TB_BITES.filter(b=>isReady(biteState(results,b.id))).length;
+  const pace=(!exam||past||studyDaysLeft===0)?null:remaining/Math.max(1,studyDaysLeft);
   const counts=readinessCounts(results);
   const authored=window.TB_BITES.filter(b=>b.demo);
+  const authoredReady=authored.filter(b=>isReady(biteState(results,b.id))).length;
   const authoredLine=authored.map(b=>biteState(results,b.id)).reduce((acc,st)=>{acc[st]=(acc[st]||0)+1;return acc;},{});
   const selectedIds=plan.byDay[selected]||[];
   const todayIds=plan.byDay[todayStr]||[];
@@ -312,18 +314,18 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
         </Card>
         <Card padding={18}>
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
-          <div style={{font:'700 32px var(--font-display)'}}>{examDate&&!past?daysLeft:'—'}</div>
+          <div style={{font:'700 32px var(--font-display)'}}>{examDate&&!past?countdown:'—'}</div>
         </Card>
         <Card padding={18}>
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Pace</span>
           <div style={{font:'700 28px var(--font-display)'}}>{pace==null?'—':(pace.toFixed(1)+' / day')}</div>
-          <p style={{margin:'6px 0 0',color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules ÷ remaining days.':'Remaining '+remaining+' modules ÷ '+daysLeft+' days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
+          <p style={{margin:'6px 0 0',color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules ÷ remaining days.':'Remaining '+remaining+' modules ÷ '+studyDaysLeft+' study days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
         </Card>
         <Card padding={18}>
           <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Progress vs plan</span>
           {examDate
             ? <>
-                <PlanChart ready={ready} total={window.TB_BITE_COUNT} planStart={planStart} examDate={examDate}/>
+                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate}/>
                 <p style={{margin:'8px 0 0',font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authored.length} authored notes</strong> — {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
                 <p style={{margin:'4px 0 0',font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs stay on the calendar.</p>
               </>
@@ -571,7 +573,7 @@ function QBankView({results,openModule,quizzes,setQuizzes,qbankLog,setQbankLog})
   const selectedBites=window.TB_BITES.filter(b=>picked.includes(b.leaf));
   const struggleBites=selectedBites.filter(b=>STRUGGLE.has(biteState(results,b.id)));
   const sourceBites=pool==='struggle'?struggleBites:selectedBites;
-  const availableBites=sourceBites.filter(b=>include==='unused'?!qbankLog[b.id]:include==='incorrect'?qbankLog[b.id]==='wrong':true);
+  const availableBites=sourceBites.filter(b=>include==='unused'?!qbankLog[b.id]:include==='incorrect'?qbankStatus(qbankLog,b.id).everIncorrect:true);
   const requestedCount=Math.max(1,Number.parseInt(count,10)||1);
   const quizCount=Math.min(requestedCount,availableBites.length);
 
@@ -659,7 +661,7 @@ function QBankView({results,openModule,quizzes,setQuizzes,qbankLog,setQbankLog})
     const item=quiz.items[run.index];
     const done=run.index>=quiz.items.length;
     const rights=Object.values(run.answers).filter(a=>a.ok).length;
-    const tick=quiz.prefs.timer?Math.floor((now-(run.started||now))/1000):null;
+    const tick=quiz.prefs.timer?Math.max(0,Math.floor((now-(run.started||now))/1000)):null;
     if(done){
       return <section style={{display:'grid',gap:16}}>
         <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>{quiz.name}</h1>
@@ -674,7 +676,8 @@ function QBankView({results,openModule,quizzes,setQuizzes,qbankLog,setQbankLog})
       if(run.picked==null) return;
       const ok=run.picked===item.correct;
       const answers={...run.answers,[item.id]:{pick:run.picked,ok}};
-      setQbankLog({...qbankLog,[item.biteId]:ok?'right':'wrong'});
+      const prior=qbankStatus(qbankLog,item.biteId);
+      setQbankLog({...qbankLog,[item.biteId]:{latest:ok?'right':'wrong',everIncorrect:prior.everIncorrect||!ok}});
       setRun({...run,graded:{ok},answers});
     };
     const next=()=>setRun({...run,index:run.index+1,picked:null,graded:null});
