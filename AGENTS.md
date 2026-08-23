@@ -15,6 +15,6 @@ When updating this file, preserve this bar for all agents and keep entries conci
 
 Product-facing frontend lives in `ui_kits/web/`. Serve from the repo root: `python3 -m http.server` then open `/ui_kits/web/`.
 
-Visual tokens are v3 (`tokens/`): cream `#FAF8F2`, desaturated clover `#2F8F5B`, teal Mastered, Sora / DM Sans, 1px / 3px hard edges, no XP. Components in `components/` are bundled as `_ds_bundle.js`.
+Visual tokens are v3 (`tokens/`): cream `#FAF8F2`, desaturated clover `#2F8F5B`, teal Mastered, Sora / DM Sans, 1px / 3px hard edges, no XP. After changing components, tokens, cards, or web screens, run `node scripts/build-design-system.mjs` to regenerate `_ds_bundle.js` and `_ds_manifest.json`.
 
 Captain locks: 181 bite cells colored by that bite's readiness; learner-set exam date; even-spread calendar including stubs; pace is remaining modules ÷ remaining days; left nav; Course switcher; circular profile after login; same-page teach-back; QBank is right/wrong only.

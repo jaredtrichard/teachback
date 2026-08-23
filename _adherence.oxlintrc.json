@@ -19,7 +19,6 @@
               "components/core/**",
               "components/feedback/**",
               "components/forms/**",
-              "ui_kits/app/**",
               "ui_kits/web/**"
             ],
             "message": "Import design-system components from 'index.js', not component internals."
@@ -38,16 +37,16 @@
         "message": "Raw px value — use a design-system spacing token via var()."
       },
       {
-        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Baloo 2|Nunito|DM Mono))/i]",
-        "message": "Font not provided by the design system. Available: Baloo 2, Nunito, DM Mono."
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Sora|DM Sans|DM Mono))/i]",
+        "message": "Font not provided by the design system. Available: Sora, DM Sans, DM Mono."
       },
       {
         "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute > JSXIdentifier[name!=/^(?:variant|size|ghost|fullWidth|disabled|children|onClick|style|key|ref|className|style|children)$/]",
         "message": "<Button> doesn't accept that prop. Declared props: variant, size, ghost, fullWidth, disabled, children, onClick, style."
       },
       {
-        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:primary|accent|info|danger|star)$/]",
-        "message": "<Button> variant must be one of 'primary' | 'accent' | 'info' | 'danger' | 'star'."
+        "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='variant'] > Literal[value!=/^(?:primary|accent|info|danger|star|ghost)$/]",
+        "message": "<Button> variant must be one of 'primary' | 'accent' | 'info' | 'danger' | 'star' | 'ghost'."
       },
       {
         "selector": "JSXOpeningElement[name.name='Button'] > JSXAttribute[name.name='size'] > Literal[value!=/^(?:sm|md|lg)$/]",
@@ -86,8 +85,8 @@
         "message": "<ProgressBar> color must be one of 'primary' | 'accent' | 'star' | 'info' | 'mastered'."
       },
       {
-        "selector": "JSXOpeningElement[name.name='ResultBanner'] > JSXAttribute > JSXIdentifier[name!=/^(?:state|xp|message|style|key|ref|className|style|children)$/]",
-        "message": "<ResultBanner> doesn't accept that prop. Declared props: state, xp, message, style."
+        "selector": "JSXOpeningElement[name.name='ResultBanner'] > JSXAttribute > JSXIdentifier[name!=/^(?:state|message|style|key|ref|className|style|children)$/]",
+        "message": "<ResultBanner> doesn't accept that prop. Declared props: state, message, style."
       },
       {
         "selector": "JSXOpeningElement[name.name='ResultBanner'] > JSXAttribute[name.name='state'] > Literal[value!=/^(?:Unassessed|Gap|Misconception|Rusty|Exam-Ready|Mastered)$/]",
@@ -201,10 +200,10 @@
       "--font-body",
       "--font-display",
       "--font-mono",
-      "--grape-100",
-      "--grape-500",
-      "--grape-600",
-      "--grape-700",
+      "--teal-100",
+      "--teal-500",
+      "--teal-600",
+      "--teal-700",
       "--ink",
       "--ink-faint",
       "--ink-muted",
@@ -284,10 +283,10 @@
       "--splash-500": "color",
       "--splash-600": "color",
       "--splash-700": "color",
-      "--grape-100": "color",
-      "--grape-500": "color",
-      "--grape-600": "color",
-      "--grape-700": "color",
+      "--teal-100": "color",
+      "--teal-500": "color",
+      "--teal-600": "color",
+      "--teal-700": "color",
       "--sunny-100": "color",
       "--sunny-500": "color",
       "--sunny-600": "color",
@@ -377,9 +376,9 @@
       "--dur-slide": "other"
     },
     "fontFamilies": [
-      "Baloo 2",
+      "DM Sans",
       "DM Mono",
-      "Nunito"
+      "Sora"
     ]
   }
 }

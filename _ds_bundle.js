@@ -1,246 +1,61 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"dffd2a9af157","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/app/ios-frame.jsx":"24642b887be3","ui_kits/app/screens.jsx":"4d5fb1b87f81","ui_kits/web/data.js":"7e189bdb9a90","ui_kits/web/screens.jsx":"9107e1db2411"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"fc441d5bcb2b"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
-
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
-
 const __ds_scope = {};
-
 (__ds_ns.__errors = __ds_ns.__errors || []);
 
 // components/core/Button.jsx
 try { (() => {
-const {
-  useState
-} = React;
-const FILLS = {
-  primary: ['var(--clover-500)', 'var(--clover-600)', 'var(--clover-700)', '#fff'],
-  accent: ['var(--tangerine-500)', 'var(--tangerine-600)', 'var(--tangerine-700)', '#fff'],
-  info: ['var(--splash-500)', 'var(--splash-600)', 'var(--splash-700)', '#fff'],
-  danger: ['var(--coral-500)', 'var(--coral-600)', 'var(--coral-700)', '#fff'],
-  star: ['var(--sunny-500)', 'var(--sunny-600)', 'var(--sunny-700)', '#6B5200']
-};
-const SIZES = {
-  sm: {
-    pad: '9px 14px',
-    font: '600 13px var(--font-display)',
-    edge: 2,
-    rad: 'var(--radius-sm)'
-  },
-  md: {
-    pad: '13px 20px',
-    font: '600 15px var(--font-display)',
-    edge: 3,
-    rad: 'var(--radius-md)'
-  },
-  lg: {
-    pad: '16px 26px',
-    font: '600 18px var(--font-display)',
-    edge: 3,
-    rad: 'var(--radius-md)'
-  }
-};
-function Button({
-  variant = 'primary',
-  size = 'md',
-  ghost = false,
-  fullWidth = false,
-  disabled = false,
-  children,
-  onClick,
-  style
-}) {
-  const [hover, setHover] = useState(false),
-    [press, setPress] = useState(false);
-  const f = FILLS[variant] || FILLS.primary,
-    s = SIZES[size] || SIZES.md;
-  const isGhost = ghost || variant === 'ghost';
-  const base = {
-    display: fullWidth ? 'flex' : 'inline-flex',
-    width: fullWidth ? '100%' : undefined,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    border: 0,
-    borderRadius: s.rad,
-    padding: s.pad,
-    font: s.font,
-    letterSpacing: '.01em',
-    cursor: disabled ? 'default' : 'pointer',
-    userSelect: 'none',
-    minHeight: 44,
-    transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear, background var(--dur-press) linear'
-  };
-  const sty = isGhost ? {
-    ...base,
-    background: hover && !disabled ? 'var(--tint)' : 'transparent',
-    color: disabled ? 'var(--text-faint)' : f[0],
-    border: '1px solid ' + (disabled ? 'var(--border)' : f[0]),
-    boxShadow: press ? 'none' : `0 ${s.edge - 1}px 0 ${disabled ? 'var(--border)' : f[2]}`,
-    transform: press ? `translateY(${s.edge - 1}px)` : 'none'
-  } : {
-    ...base,
-    background: disabled ? 'var(--border)' : hover ? f[1] : f[0],
-    color: disabled ? 'var(--text-faint)' : f[3],
-    boxShadow: disabled || press ? 'none' : `0 ${s.edge}px 0 ${f[2]}`,
-    transform: press && !disabled ? `translateY(${s.edge}px)` : 'none'
-  };
-  return /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    disabled: disabled,
-    onClick: onClick,
-    style: {
-      ...sty,
-      ...style
-    },
-    onMouseEnter: () => setHover(true),
-    onMouseLeave: () => {
-      setHover(false);
-      setPress(false);
-    },
-    onMouseDown: () => setPress(true),
-    onMouseUp: () => setPress(false)
-  }, children);
+const { useState } = React;
+const FILLS = { primary: ['var(--clover-500)', 'var(--clover-600)', 'var(--clover-700)', '#fff'], accent: ['var(--tangerine-500)', 'var(--tangerine-600)', 'var(--tangerine-700)', '#fff'], info: ['var(--splash-500)', 'var(--splash-600)', 'var(--splash-700)', '#fff'], danger: ['var(--coral-500)', 'var(--coral-600)', 'var(--coral-700)', '#fff'], star: ['var(--sunny-500)', 'var(--sunny-600)', 'var(--sunny-700)', '#6B5200'] };
+const SIZES = { sm: { pad: '9px 14px', font: '600 13px var(--font-display)', edge: 2, rad: 'var(--radius-sm)' }, md: { pad: '13px 20px', font: '600 15px var(--font-display)', edge: 3, rad: 'var(--radius-md)' }, lg: { pad: '16px 26px', font: '600 18px var(--font-display)', edge: 3, rad: 'var(--radius-md)' } };
+function Button({ variant = 'primary', size = 'md', ghost = false, fullWidth = false, disabled = false, children, onClick, style }) {
+    const [hover, setHover] = useState(false), [press, setPress] = useState(false);
+    const f = FILLS[variant] || FILLS.primary, s = SIZES[size] || SIZES.md;
+    const isGhost = ghost || variant === 'ghost';
+    const base = { display: fullWidth ? 'flex' : 'inline-flex', width: fullWidth ? '100%' : undefined, alignItems: 'center', justifyContent: 'center', gap: 8, border: 0, borderRadius: s.rad, padding: s.pad, font: s.font, letterSpacing: '.01em', cursor: disabled ? 'default' : 'pointer', userSelect: 'none', minHeight: 44, transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear, background var(--dur-press) linear' };
+    const sty = isGhost
+        ? { ...base, background: hover && !disabled ? 'var(--tint)' : 'transparent', color: disabled ? 'var(--text-faint)' : f[0], border: '1px solid ' + (disabled ? 'var(--border)' : f[0]), boxShadow: press ? 'none' : `0 ${s.edge - 1}px 0 ${disabled ? 'var(--border)' : f[2]}`, transform: press ? `translateY(${s.edge - 1}px)` : 'none' }
+        : { ...base, background: disabled ? 'var(--border)' : hover ? f[1] : f[0], color: disabled ? 'var(--text-faint)' : f[3], boxShadow: disabled || press ? 'none' : `0 ${s.edge}px 0 ${f[2]}`, transform: press && !disabled ? `translateY(${s.edge}px)` : 'none' };
+    return React.createElement("button", { type: "button", disabled: disabled, onClick: onClick, style: { ...sty, ...style }, onMouseEnter: () => setHover(true), onMouseLeave: () => { setHover(false); setPress(false); }, onMouseDown: () => setPress(true), onMouseUp: () => setPress(false) }, children);
 }
 Object.assign(__ds_scope, { Button });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Button.jsx", error: String((e && e.message) || e) }); }
 
 // components/core/Card.jsx
 try { (() => {
-const ACCENTS = {
-  primary: 'var(--clover-500)',
-  accent: 'var(--tangerine-500)',
-  info: 'var(--splash-500)',
-  star: 'var(--sunny-500)',
-  danger: 'var(--coral-500)',
-  mastered: 'var(--teal-500)'
-};
-function Card({
-  sunken = false,
-  accent,
-  padding = 24,
-  children,
-  style
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: sunken ? 'var(--surface-sunken)' : 'var(--surface-card)',
-      border: '1px solid ' + (accent ? ACCENTS[accent] || 'var(--border)' : 'var(--border)'),
-      borderRadius: 'var(--radius-lg)',
-      boxShadow: sunken ? 'none' : 'var(--edge-card)',
-      padding,
-      ...style
-    }
-  }, children);
+const ACCENTS = { primary: 'var(--clover-500)', accent: 'var(--tangerine-500)', info: 'var(--splash-500)', star: 'var(--sunny-500)', danger: 'var(--coral-500)', mastered: 'var(--teal-500)' };
+function Card({ sunken = false, accent, padding = 24, children, style }) {
+    return React.createElement("div", { style: { background: sunken ? 'var(--surface-sunken)' : 'var(--surface-card)', border: '1px solid ' + (accent ? ACCENTS[accent] || 'var(--border)' : 'var(--border)'), borderRadius: 'var(--radius-lg)', boxShadow: sunken ? 'none' : 'var(--edge-card)', padding, ...style } }, children);
 }
 Object.assign(__ds_scope, { Card });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Card.jsx", error: String((e && e.message) || e) }); }
 
 // components/core/IconButton.jsx
 try { (() => {
-const {
-  useState
-} = React;
-function IconButton({
-  icon,
-  label,
-  variant = 'ghost',
-  size = 44,
-  onClick,
-  style
-}) {
-  const [hover, setHover] = useState(false),
-    [press, setPress] = useState(false);
-  const filled = variant === 'primary';
-  return /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    "aria-label": label,
-    onClick: onClick,
-    onMouseEnter: () => setHover(true),
-    onMouseLeave: () => {
-      setHover(false);
-      setPress(false);
-    },
-    onMouseDown: () => setPress(true),
-    onMouseUp: () => setPress(false),
-    style: {
-      width: size,
-      height: size,
-      display: 'inline-grid',
-      placeItems: 'center',
-      border: '1px solid ' + (filled ? 'transparent' : 'var(--border)'),
-      borderRadius: 'var(--radius-md)',
-      background: filled ? hover ? 'var(--clover-600)' : 'var(--clover-500)' : hover ? 'var(--tint)' : 'var(--paper)',
-      color: filled ? '#fff' : 'var(--text-muted)',
-      fontSize: Math.round(size * .45),
-      cursor: 'pointer',
-      boxShadow: press ? 'none' : `0 3px 0 ${filled ? 'var(--clover-700)' : 'var(--border-strong)'}`,
-      transform: press ? 'translateY(2px)' : 'none',
-      transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear',
-      ...style
-    }
-  }, typeof icon === 'string' ? /*#__PURE__*/React.createElement("i", {
-    className: `ph-bold ph-${icon}`,
-    "aria-hidden": "true"
-  }) : icon);
+const { useState } = React;
+function IconButton({ icon, label, variant = 'ghost', size = 44, onClick, style }) {
+    const [hover, setHover] = useState(false), [press, setPress] = useState(false);
+    const filled = variant === 'primary';
+    return React.createElement("button", { type: "button", "aria-label": label, onClick: onClick, onMouseEnter: () => setHover(true), onMouseLeave: () => { setHover(false); setPress(false); }, onMouseDown: () => setPress(true), onMouseUp: () => setPress(false), style: { width: size, height: size, display: 'inline-grid', placeItems: 'center', border: '1px solid ' + (filled ? 'transparent' : 'var(--border)'), borderRadius: 'var(--radius-md)', background: filled ? (hover ? 'var(--clover-600)' : 'var(--clover-500)') : (hover ? 'var(--tint)' : 'var(--paper)'), color: filled ? '#fff' : 'var(--text-muted)', fontSize: Math.round(size * .45), cursor: 'pointer', boxShadow: press ? 'none' : `0 3px 0 ${filled ? 'var(--clover-700)' : 'var(--border-strong)'}`, transform: press ? 'translateY(2px)' : 'none', transition: 'transform var(--dur-press) linear, box-shadow var(--dur-press) linear', ...style } }, typeof icon === 'string' ? React.createElement("i", { className: `ph-bold ph-${icon}`, "aria-hidden": "true" }) : icon);
 }
 Object.assign(__ds_scope, { IconButton });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/IconButton.jsx", error: String((e && e.message) || e) }); }
 
 // components/core/ProgressBar.jsx
 try { (() => {
-const FILLS = {
-  primary: 'var(--clover-500)',
-  accent: 'var(--tangerine-500)',
-  star: 'var(--sunny-500)',
-  info: 'var(--splash-500)',
-  mastered: 'var(--teal-500)'
-};
-function ProgressBar({
-  value,
-  max = 100,
-  color = 'primary',
-  height = 16,
-  label,
-  style
-}) {
-  const pct = Math.max(0, Math.min(100, value / max * 100));
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 6,
-      ...style
-    }
-  }, label && /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      font: '700 11px var(--font-body)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--text-muted)'
-    }
-  }, /*#__PURE__*/React.createElement("span", null, label), /*#__PURE__*/React.createElement("span", null, Math.round(pct), "%")), /*#__PURE__*/React.createElement("div", {
-    role: "progressbar",
-    "aria-valuenow": value,
-    "aria-valuemax": max,
-    style: {
-      height,
-      borderRadius: 'var(--radius-pill)',
-      background: 'var(--surface-sunken)',
-      border: '1px solid var(--border)',
-      overflow: 'hidden'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: pct + '%',
-      height: '100%',
-      borderRadius: 'var(--radius-pill)',
-      background: FILLS[color] || FILLS.primary,
-      transition: 'width var(--dur-slide) var(--ease-out)',
-      boxShadow: 'inset 0 -4px 0 rgba(0,0,0,.12)'
-    }
-  })));
+const FILLS = { primary: 'var(--clover-500)', accent: 'var(--tangerine-500)', star: 'var(--sunny-500)', info: 'var(--splash-500)', mastered: 'var(--teal-500)' };
+function ProgressBar({ value, max = 100, color = 'primary', height = 16, label, style }) {
+    const pct = Math.max(0, Math.min(100, (value / max) * 100));
+    return React.createElement("div", { style: { display: 'grid', gap: 6, ...style } },
+        label && React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', font: '700 11px var(--font-body)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-muted)' } },
+            React.createElement("span", null, label),
+            React.createElement("span", null,
+                Math.round(pct),
+                "%")),
+        React.createElement("div", { role: "progressbar", "aria-valuenow": value, "aria-valuemax": max, style: { height, borderRadius: 'var(--radius-pill)', background: 'var(--surface-sunken)', border: '1px solid var(--border)', overflow: 'hidden' } },
+            React.createElement("div", { style: { width: pct + '%', height: '100%', borderRadius: 'var(--radius-pill)', background: FILLS[color] || FILLS.primary, transition: 'width var(--dur-slide) var(--ease-out)', boxShadow: 'inset 0 -4px 0 rgba(0,0,0,.12)' } })));
 }
 Object.assign(__ds_scope, { ProgressBar });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/ProgressBar.jsx", error: String((e && e.message) || e) }); }
@@ -248,146 +63,39 @@ Object.assign(__ds_scope, { ProgressBar });
 // components/core/StateBadge.jsx
 try { (() => {
 const KEY = s => s.toLowerCase().replace('-', '');
-function StateBadge({
-  state,
-  size = 'md',
-  style
-}) {
-  const k = KEY(state);
-  const pad = size === 'lg' ? '10px 18px' : size === 'sm' ? '4px 10px' : '6px 13px';
-  const fs = size === 'lg' ? 15 : size === 'sm' ? 11 : 13;
-  return /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: 'inline-block',
-      padding: pad,
-      borderRadius: 'var(--radius-pill)',
-      background: `var(--state-${k}-bg)`,
-      color: `var(--state-${k})`,
-      font: `700 ${fs}px var(--font-body)`,
-      whiteSpace: 'nowrap',
-      ...style
-    }
-  }, state);
+function StateBadge({ state, size = 'md', style }) {
+    const k = KEY(state);
+    const pad = size === 'lg' ? '10px 18px' : size === 'sm' ? '4px 10px' : '6px 13px';
+    const fs = size === 'lg' ? 15 : size === 'sm' ? 11 : 13;
+    return React.createElement("span", { style: { display: 'inline-block', padding: pad, borderRadius: 'var(--radius-pill)', background: `var(--state-${k}-bg)`, color: `var(--state-${k})`, font: `700 ${fs}px var(--font-body)`, whiteSpace: 'nowrap', ...style } }, state);
 }
 Object.assign(__ds_scope, { StateBadge });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/StateBadge.jsx", error: String((e && e.message) || e) }); }
 
 // components/core/StreakBadge.jsx
 try { (() => {
-function StreakBadge({
-  count,
-  active = true,
-  style
-}) {
-  return /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 7,
-      padding: '8px 14px',
-      borderRadius: 'var(--radius-pill)',
-      background: active ? 'var(--tangerine-100)' : 'var(--surface-sunken)',
-      border: '1px solid ' + (active ? 'var(--tangerine-500)' : 'var(--border)'),
-      color: active ? 'var(--tangerine-700)' : 'var(--text-faint)',
-      font: '700 15px var(--font-display)',
-      ...style
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-flame",
-    "aria-hidden": "true",
-    style: {
-      fontSize: 18,
-      color: active ? 'var(--tangerine-500)' : 'var(--text-faint)'
-    }
-  }), count, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '700 11px var(--font-body)',
-      letterSpacing: '.06em'
-    }
-  }, "DAY", count === 1 ? '' : 'S'));
+function StreakBadge({ count, active = true, style }) {
+    return React.createElement("span", { style: { display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 14px', borderRadius: 'var(--radius-pill)', background: active ? 'var(--tangerine-100)' : 'var(--surface-sunken)', border: '1px solid ' + (active ? 'var(--tangerine-500)' : 'var(--border)'), color: active ? 'var(--tangerine-700)' : 'var(--text-faint)', font: '700 15px var(--font-display)', ...style } },
+        React.createElement("i", { className: "ph-bold ph-flame", "aria-hidden": "true", style: { fontSize: 18, color: active ? 'var(--tangerine-500)' : 'var(--text-faint)' } }),
+        count,
+        React.createElement("span", { style: { font: '700 11px var(--font-body)', letterSpacing: '.06em' } },
+            "DAY",
+            count === 1 ? '' : 'S'));
 }
 Object.assign(__ds_scope, { StreakBadge });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/StreakBadge.jsx", error: String((e && e.message) || e) }); }
 
 // components/feedback/CriterionRow.jsx
 try { (() => {
-const OUT = {
-  hit: {
-    mark: '✓',
-    fill: 'var(--clover-100)',
-    fg: 'var(--clover-700)'
-  },
-  partial: {
-    mark: '·',
-    fill: 'var(--sunny-100)',
-    fg: 'var(--sunny-700)'
-  },
-  missing: {
-    mark: '·',
-    fill: 'var(--surface-sunken)',
-    fg: 'var(--text-faint)'
-  },
-  wrong: {
-    mark: '!',
-    fill: 'var(--coral-100)',
-    fg: 'var(--coral-700)'
-  },
-  hedged: {
-    mark: '~',
-    fill: 'var(--splash-100)',
-    fg: 'var(--splash-700)'
-  }
-};
-function CriterionRow({
-  label,
-  feedback,
-  outcome = 'missing',
-  style
-}) {
-  const o = OUT[outcome] || OUT.missing;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gridTemplateColumns: '26px minmax(0,1fr) auto',
-      gap: 11,
-      alignItems: 'start',
-      padding: '12px 0',
-      ...style
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    "aria-hidden": "true",
-    style: {
-      width: 24,
-      height: 24,
-      borderRadius: '50%',
-      background: o.fill,
-      color: o.fg,
-      font: '700 13px/24px var(--font-body)',
-      textAlign: 'center',
-      border: '1px solid ' + o.fg
-    }
-  }, o.mark), /*#__PURE__*/React.createElement("span", null, /*#__PURE__*/React.createElement("strong", {
-    style: {
-      display: 'block',
-      color: 'var(--text-body)',
-      font: '700 13px/1.35 var(--font-body)'
-    }
-  }, label), feedback && /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: 'block',
-      marginTop: 3,
-      color: 'var(--text-muted)',
-      font: '600 12px/1.5 var(--font-body)'
-    }
-  }, feedback)), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: o.fg,
-      font: '700 10px var(--font-body)',
-      letterSpacing: '.08em',
-      textTransform: 'uppercase',
-      paddingTop: 5
-    }
-  }, outcome));
+const OUT = { hit: { mark: '✓', fill: 'var(--clover-100)', fg: 'var(--clover-700)' }, partial: { mark: '·', fill: 'var(--sunny-100)', fg: 'var(--sunny-700)' }, missing: { mark: '·', fill: 'var(--surface-sunken)', fg: 'var(--text-faint)' }, wrong: { mark: '!', fill: 'var(--coral-100)', fg: 'var(--coral-700)' }, hedged: { mark: '~', fill: 'var(--splash-100)', fg: 'var(--splash-700)' } };
+function CriterionRow({ label, feedback, outcome = 'missing', style }) {
+    const o = OUT[outcome] || OUT.missing;
+    return React.createElement("div", { style: { display: 'grid', gridTemplateColumns: '26px minmax(0,1fr) auto', gap: 11, alignItems: 'start', padding: '12px 0', ...style } },
+        React.createElement("span", { "aria-hidden": "true", style: { width: 24, height: 24, borderRadius: '50%', background: o.fill, color: o.fg, font: '700 13px/24px var(--font-body)', textAlign: 'center', border: '1px solid ' + o.fg } }, o.mark),
+        React.createElement("span", null,
+            React.createElement("strong", { style: { display: 'block', color: 'var(--text-body)', font: '700 13px/1.35 var(--font-body)' } }, label),
+            feedback && React.createElement("span", { style: { display: 'block', marginTop: 3, color: 'var(--text-muted)', font: '600 12px/1.5 var(--font-body)' } }, feedback)),
+        React.createElement("span", { style: { color: o.fg, font: '700 10px var(--font-body)', letterSpacing: '.08em', textTransform: 'uppercase', paddingTop: 5 } }, outcome));
 }
 Object.assign(__ds_scope, { CriterionRow });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/CriterionRow.jsx", error: String((e && e.message) || e) }); }
@@ -395,1782 +103,1094 @@ Object.assign(__ds_scope, { CriterionRow });
 // components/feedback/ResultBanner.jsx
 try { (() => {
 const KEY = s => s.toLowerCase().replace('-', '');
-const HEADS = {
-  Gap: 'Not yet — the core mechanism was absent.',
-  Misconception: 'Careful — a rule was stated incorrectly.',
-  Rusty: 'Getting there — right pieces, not enough coverage.',
-  'Exam-Ready': 'Nice — that explanation is exam-ready!',
-  Mastered: 'Mastered. Confirmed across separate days.',
-  Unassessed: 'No teach-back graded yet.'
-};
-function ResultBanner({
-  state,
-  message,
-  style
-}) {
-  const k = KEY(state);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 16,
-      padding: '18px 22px',
-      borderRadius: 'var(--radius-lg)',
-      background: `var(--state-${k}-bg)`,
-      border: `1px solid var(--state-${k})`,
-      ...style
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    "aria-hidden": "true",
-    style: {
-      width: 44,
-      height: 44,
-      flex: '0 0 44px',
-      borderRadius: '50%',
-      background: `var(--state-${k})`,
-      color: '#fff',
-      display: 'grid',
-      placeItems: 'center',
-      fontSize: 22
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: 'ph-bold ' + (k === 'examready' || k === 'mastered' ? 'ph-check-fat' : k === 'gap' ? 'ph-arrow-counter-clockwise' : k === 'misconception' ? 'ph-warning' : 'ph-arrows-clockwise')
-  })), /*#__PURE__*/React.createElement("span", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("strong", {
-    style: {
-      display: 'block',
-      color: `var(--state-${k})`,
-      font: '600 19px var(--font-display)'
-    }
-  }, message || HEADS[state]), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--text-muted)',
-      font: '600 13px var(--font-body)'
-    }
-  }, "Topic state: ", state)));
+const HEADS = { Gap: 'Not yet — the core mechanism was absent.', Misconception: 'Careful — a rule was stated incorrectly.', Rusty: 'Getting there — right pieces, not enough coverage.', 'Exam-Ready': 'Nice — that explanation is exam-ready!', Mastered: 'Mastered. Confirmed across separate days.', Unassessed: 'No teach-back graded yet.' };
+function ResultBanner({ state, message, style }) {
+    const k = KEY(state);
+    return React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 16, padding: '18px 22px', borderRadius: 'var(--radius-lg)', background: `var(--state-${k}-bg)`, border: `1px solid var(--state-${k})`, ...style } },
+        React.createElement("span", { "aria-hidden": "true", style: { width: 44, height: 44, flex: '0 0 44px', borderRadius: '50%', background: `var(--state-${k})`, color: '#fff', display: 'grid', placeItems: 'center', fontSize: 22 } },
+            React.createElement("i", { className: 'ph-bold ' + (k === 'examready' || k === 'mastered' ? 'ph-check-fat' : k === 'gap' ? 'ph-arrow-counter-clockwise' : k === 'misconception' ? 'ph-warning' : 'ph-arrows-clockwise') })),
+        React.createElement("span", { style: { flex: 1 } },
+            React.createElement("strong", { style: { display: 'block', color: `var(--state-${k})`, font: '600 19px var(--font-display)' } }, message || HEADS[state]),
+            React.createElement("span", { style: { color: 'var(--text-muted)', font: '600 13px var(--font-body)' } },
+                "Topic state: ",
+                state)));
 }
 Object.assign(__ds_scope, { ResultBanner });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/feedback/ResultBanner.jsx", error: String((e && e.message) || e) }); }
 
 // components/forms/TeachBackBox.jsx
 try { (() => {
-const {
-  useState
-} = React;
-function TeachBackBox({
-  value,
-  onChange,
-  prompt,
-  placeholder,
-  minChars = 20,
-  rows = 8,
-  style
-}) {
-  const [focus, setFocus] = useState(false);
-  const n = (value || '').length;
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 10,
-      ...style
-    }
-  }, prompt && /*#__PURE__*/React.createElement("label", {
-    style: {
-      font: '600 15px var(--font-body)',
-      color: 'var(--text-body)',
-      lineHeight: 1.5
-    }
-  }, prompt), /*#__PURE__*/React.createElement("textarea", {
-    rows: rows,
-    value: value,
-    placeholder: placeholder,
-    onChange: e => onChange && onChange(e.target.value),
-    onFocus: () => setFocus(true),
-    onBlur: () => setFocus(false),
-    style: {
-      display: 'block',
-      width: '100%',
-      boxSizing: 'border-box',
-      resize: 'vertical',
-      padding: 16,
-      border: '1px solid ' + (focus ? 'var(--clover-500)' : 'var(--border)'),
-      borderRadius: 'var(--radius-md)',
-      outline: 'none',
-      background: focus ? 'var(--paper)' : 'var(--surface-sunken)',
-      color: 'var(--text-body)',
-      font: '600 15px/1.65 var(--font-body)',
-      boxShadow: focus ? '0 2px 0 var(--clover-700)' : 'none',
-      transition: 'border-color var(--dur-press) linear, box-shadow var(--dur-press) linear'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      font: '500 11px var(--font-mono)',
-      color: n >= minChars ? 'var(--clover-600)' : 'var(--text-faint)'
-    }
-  }, n, " characters", n < minChars ? ` · write at least a couple of sentences` : ''));
+const { useState } = React;
+function TeachBackBox({ value, onChange, prompt, placeholder, minChars = 20, rows = 8, style }) {
+    const [focus, setFocus] = useState(false);
+    const n = (value || '').length;
+    return React.createElement("div", { style: { display: 'grid', gap: 10, ...style } },
+        prompt && React.createElement("label", { style: { font: '600 15px var(--font-body)', color: 'var(--text-body)', lineHeight: 1.5 } }, prompt),
+        React.createElement("textarea", { rows: rows, value: value, placeholder: placeholder, onChange: e => onChange && onChange(e.target.value), onFocus: () => setFocus(true), onBlur: () => setFocus(false), style: { display: 'block', width: '100%', boxSizing: 'border-box', resize: 'vertical', padding: 16, border: '1px solid ' + (focus ? 'var(--clover-500)' : 'var(--border)'), borderRadius: 'var(--radius-md)', outline: 'none', background: focus ? 'var(--paper)' : 'var(--surface-sunken)', color: 'var(--text-body)', font: '600 15px/1.65 var(--font-body)', boxShadow: focus ? '0 2px 0 var(--clover-700)' : 'none', transition: 'border-color var(--dur-press) linear, box-shadow var(--dur-press) linear' } }),
+        React.createElement("div", { style: { font: '500 11px var(--font-mono)', color: n >= minChars ? 'var(--clover-600)' : 'var(--text-faint)' } },
+            n,
+            " characters",
+            n < minChars ? ` · write at least a couple of sentences` : ''));
 }
 Object.assign(__ds_scope, { TeachBackBox });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/TeachBackBox.jsx", error: String((e && e.message) || e) }); }
 
 // components/forms/TopicChip.jsx
 try { (() => {
-const {
-  useState
-} = React;
-function TopicChip({
-  id,
-  title,
-  state = 'Unassessed',
-  selected = false,
-  onClick,
-  style
-}) {
-  const [hover, setHover] = useState(false),
-    [press, setPress] = useState(false);
-  const on = selected || hover;
-  return /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    onClick: onClick,
-    "aria-pressed": selected,
-    onMouseEnter: () => setHover(true),
-    onMouseLeave: () => {
-      setHover(false);
-      setPress(false);
-    },
-    onMouseDown: () => setPress(true),
-    onMouseUp: () => setPress(false),
-    style: {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: 9,
-      padding: '11px 16px',
-      minHeight: 44,
-      border: '1px solid ' + (on ? 'var(--clover-500)' : 'var(--border)'),
-      borderRadius: 'var(--radius-pill)',
-      background: selected ? 'var(--clover-100)' : 'var(--paper)',
-      color: selected ? 'var(--clover-700)' : 'var(--text-muted)',
-      font: '600 13px var(--font-body)',
-      cursor: 'pointer',
-      boxShadow: press ? 'none' : '0 2px 0 ' + (on ? 'var(--clover-700)' : 'var(--border-strong)'),
-      transform: press ? 'translateY(2px)' : 'none',
-      transition: 'all var(--dur-press) linear',
-      ...style
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '500 11px var(--font-mono)',
-      color: 'var(--tangerine-600)'
-    }
-  }, id), title, state !== 'Unassessed' && /*#__PURE__*/React.createElement("span", {
-    "aria-hidden": "true",
-    style: {
-      width: 10,
-      height: 10,
-      borderRadius: '50%',
-      background: `var(--state-${state.toLowerCase().replace('-', '')})`
-    }
-  }));
+const { useState } = React;
+function TopicChip({ id, title, state = 'Unassessed', selected = false, onClick, style }) {
+    const [hover, setHover] = useState(false), [press, setPress] = useState(false);
+    const on = selected || hover;
+    return React.createElement("button", { type: "button", onClick: onClick, "aria-pressed": selected, onMouseEnter: () => setHover(true), onMouseLeave: () => { setHover(false); setPress(false); }, onMouseDown: () => setPress(true), onMouseUp: () => setPress(false), style: { display: 'inline-flex', alignItems: 'center', gap: 9, padding: '11px 16px', minHeight: 44, border: '1px solid ' + (on ? 'var(--clover-500)' : 'var(--border)'), borderRadius: 'var(--radius-pill)', background: selected ? 'var(--clover-100)' : 'var(--paper)', color: selected ? 'var(--clover-700)' : 'var(--text-muted)', font: '600 13px var(--font-body)', cursor: 'pointer', boxShadow: press ? 'none' : '0 2px 0 ' + (on ? 'var(--clover-700)' : 'var(--border-strong)'), transform: press ? 'translateY(2px)' : 'none', transition: 'all var(--dur-press) linear', ...style } },
+        React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, id),
+        title,
+        state !== 'Unassessed' && React.createElement("span", { "aria-hidden": "true", style: { width: 10, height: 10, borderRadius: '50%', background: `var(--state-${state.toLowerCase().replace('-', '')})` } }));
 }
 Object.assign(__ds_scope, { TopicChip });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/forms/TopicChip.jsx", error: String((e && e.message) || e) }); }
 
-// ui_kits/app/ios-frame.jsx
-try { (() => {
-// @ds-adherence-ignore -- omelette starter scaffold (raw elements/hex/px by design)
-// Copied omelette starter. Re-running copy_starter_component with this kind overwrites this file with the latest version (page content is unaffected).
-
-/* BEGIN USAGE */
-// iOS.jsx — Simplified iOS 26 (Liquid Glass) device frame
-// Based on the iOS 26 UI Kit + Figma status bar spec. No assets, no deps.
-// Exports (to window): IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard
-//
-// Usage — wrap your screen content in <IOSDevice> to get the bezel, status bar
-// and home indicator (props: title, dark, keyboard):
-//
-//   <IOSDevice title="Settings">
-//     ...your screen content...
-//   </IOSDevice>
-//   <IOSDevice dark title="Search" keyboard>…</IOSDevice>
-/* END USAGE */
-
-// ─────────────────────────────────────────────────────────────
-// Status bar
-// ─────────────────────────────────────────────────────────────
-function IOSStatusBar({
-  dark = false,
-  time = '9:41'
-}) {
-  const c = dark ? '#fff' : '#000';
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 154,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '21px 24px 19px',
-      boxSizing: 'border-box',
-      position: 'relative',
-      zIndex: 20,
-      width: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      height: 22,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 1.5
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontFamily: '-apple-system, "SF Pro", system-ui',
-      fontWeight: 590,
-      fontSize: 17,
-      lineHeight: '22px',
-      color: c
-    }
-  }, time)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      height: 22,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 7,
-      paddingTop: 1,
-      paddingRight: 1
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "19",
-    height: "12",
-    viewBox: "0 0 19 12"
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "0",
-    y: "7.5",
-    width: "3.2",
-    height: "4.5",
-    rx: "0.7",
-    fill: c
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "4.8",
-    y: "5",
-    width: "3.2",
-    height: "7",
-    rx: "0.7",
-    fill: c
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "9.6",
-    y: "2.5",
-    width: "3.2",
-    height: "9.5",
-    rx: "0.7",
-    fill: c
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "14.4",
-    y: "0",
-    width: "3.2",
-    height: "12",
-    rx: "0.7",
-    fill: c
-  })), /*#__PURE__*/React.createElement("svg", {
-    width: "17",
-    height: "12",
-    viewBox: "0 0 17 12"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z",
-    fill: c
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z",
-    fill: c
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "8.5",
-    cy: "10.5",
-    r: "1.5",
-    fill: c
-  })), /*#__PURE__*/React.createElement("svg", {
-    width: "27",
-    height: "13",
-    viewBox: "0 0 27 13"
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "0.5",
-    y: "0.5",
-    width: "23",
-    height: "12",
-    rx: "3.5",
-    stroke: c,
-    strokeOpacity: "0.35",
-    fill: "none"
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "2",
-    y: "2",
-    width: "20",
-    height: "9",
-    rx: "2",
-    fill: c
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z",
-    fill: c,
-    fillOpacity: "0.4"
-  }))));
-}
-
-// ─────────────────────────────────────────────────────────────
-// Liquid glass pill — blur + tint + shine
-// ─────────────────────────────────────────────────────────────
-function IOSGlassPill({
-  children,
-  dark = false,
-  style = {}
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: 44,
-      minWidth: 44,
-      borderRadius: 9999,
-      position: 'relative',
-      overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxShadow: dark ? '0 2px 6px rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.2)' : '0 1px 3px rgba(0,0,0,0.07), 0 3px 10px rgba(0,0,0,0.06)',
-      ...style
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      inset: 0,
-      borderRadius: 9999,
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      background: dark ? 'rgba(120,120,128,0.28)' : 'rgba(255,255,255,0.5)'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      inset: 0,
-      borderRadius: 9999,
-      boxShadow: dark ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15), inset -1px -1px 1px rgba(255,255,255,0.08)' : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
-      border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      zIndex: 1,
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 4px'
-    }
-  }, children));
-}
-
-// ─────────────────────────────────────────────────────────────
-// Navigation bar — glass pills + large title
-// ─────────────────────────────────────────────────────────────
-function IOSNavBar({
-  title = 'Title',
-  dark = false,
-  trailingIcon = true
-}) {
-  const muted = dark ? 'rgba(255,255,255,0.6)' : '#404040';
-  const text = dark ? '#fff' : '#000';
-  const pillIcon = content => /*#__PURE__*/React.createElement(IOSGlassPill, {
-    dark: dark
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 36,
-      height: 36,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }
-  }, content));
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 10,
-      paddingTop: 62,
-      paddingBottom: 10,
-      position: 'relative',
-      zIndex: 5
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 16px'
-    }
-  }, pillIcon(/*#__PURE__*/React.createElement("svg", {
-    width: "12",
-    height: "20",
-    viewBox: "0 0 12 20",
-    fill: "none",
-    style: {
-      marginLeft: -1
-    }
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M10 2L2 10l8 8",
-    stroke: muted,
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }))), trailingIcon && pillIcon(/*#__PURE__*/React.createElement("svg", {
-    width: "22",
-    height: "6",
-    viewBox: "0 0 22 6"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "3",
-    cy: "3",
-    r: "2.5",
-    fill: muted
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "11",
-    cy: "3",
-    r: "2.5",
-    fill: muted
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "19",
-    cy: "3",
-    r: "2.5",
-    fill: muted
-  })))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '0 16px',
-      fontFamily: '-apple-system, system-ui',
-      fontSize: 34,
-      fontWeight: 700,
-      lineHeight: '41px',
-      color: text,
-      letterSpacing: 0.4
-    }
-  }, title));
-}
-
-// ─────────────────────────────────────────────────────────────
-// Grouped list (inset card, r:26) + row (52px)
-// ─────────────────────────────────────────────────────────────
-function IOSListRow({
-  title,
-  detail,
-  icon,
-  chevron = true,
-  isLast = false,
-  dark = false
-}) {
-  const text = dark ? '#fff' : '#000';
-  const sec = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
-  const ter = dark ? 'rgba(235,235,245,0.3)' : 'rgba(60,60,67,0.3)';
-  const sep = dark ? 'rgba(84,84,88,0.65)' : 'rgba(60,60,67,0.12)';
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      minHeight: 52,
-      padding: '0 16px',
-      position: 'relative',
-      fontFamily: '-apple-system, system-ui',
-      fontSize: 17,
-      letterSpacing: -0.43
-    }
-  }, icon && /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 30,
-      height: 30,
-      borderRadius: 7,
-      background: icon,
-      marginRight: 12,
-      flexShrink: 0
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      color: text
-    }
-  }, title), detail && /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: sec,
-      marginRight: 6
-    }
-  }, detail), chevron && /*#__PURE__*/React.createElement("svg", {
-    width: "8",
-    height: "14",
-    viewBox: "0 0 8 14",
-    style: {
-      flexShrink: 0
-    }
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M1 1l6 6-6 6",
-    stroke: ter,
-    strokeWidth: "2",
-    fill: "none",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  })), !isLast && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      bottom: 0,
-      right: 0,
-      left: icon ? 58 : 16,
-      height: 0.5,
-      background: sep
-    }
-  }));
-}
-function IOSList({
-  header,
-  children,
-  dark = false
-}) {
-  const hc = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
-  const bg = dark ? '#1C1C1E' : '#fff';
-  return /*#__PURE__*/React.createElement("div", null, header && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontFamily: '-apple-system, system-ui',
-      fontSize: 13,
-      color: hc,
-      textTransform: 'uppercase',
-      padding: '8px 36px 6px',
-      letterSpacing: -0.08
-    }
-  }, header), /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: bg,
-      borderRadius: 26,
-      margin: '0 16px',
-      overflow: 'hidden'
-    }
-  }, children));
-}
-
-// ─────────────────────────────────────────────────────────────
-// Device frame
-// ─────────────────────────────────────────────────────────────
-function IOSDevice({
-  children,
-  width = 402,
-  height = 874,
-  dark = false,
-  title,
-  keyboard = false
-}) {
-  return (
-    /*#__PURE__*/
-    // data-om-starter: inert presence marker — Claude Design's starter-usage
-    // probe reads it; it renders nothing. Keep it on this root element.
-    React.createElement("div", {
-      "data-om-starter": "ios-frame",
-      style: {
-        width,
-        height,
-        borderRadius: 48,
-        overflow: 'hidden',
-        position: 'relative',
-        background: dark ? '#000' : '#F2F2F7',
-        boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
-        fontFamily: '-apple-system, system-ui, sans-serif',
-        WebkitFontSmoothing: 'antialiased'
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        position: 'absolute',
-        top: 11,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: 126,
-        height: 37,
-        borderRadius: 24,
-        background: '#000',
-        zIndex: 50
-      }
-    }), /*#__PURE__*/React.createElement("div", {
-      style: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10
-      }
-    }, /*#__PURE__*/React.createElement(IOSStatusBar, {
-      dark: dark
-    })), /*#__PURE__*/React.createElement("div", {
-      style: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
-      }
-    }, title !== undefined && /*#__PURE__*/React.createElement(IOSNavBar, {
-      title: title,
-      dark: dark
-    }), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1,
-        overflow: 'auto'
-      }
-    }, children), keyboard && /*#__PURE__*/React.createElement(IOSKeyboard, {
-      dark: dark
-    })), /*#__PURE__*/React.createElement("div", {
-      style: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 60,
-        height: 34,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        paddingBottom: 8,
-        pointerEvents: 'none'
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      style: {
-        width: 139,
-        height: 5,
-        borderRadius: 100,
-        background: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.25)'
-      }
-    })))
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// Keyboard — iOS 26 liquid glass
-// ─────────────────────────────────────────────────────────────
-function IOSKeyboard({
-  dark = false
-}) {
-  const glyph = dark ? 'rgba(255,255,255,0.7)' : '#595959';
-  const sugg = dark ? 'rgba(255,255,255,0.6)' : '#333';
-  const keyBg = dark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.85)';
-
-  // special-key icons
-  const icons = {
-    shift: /*#__PURE__*/React.createElement("svg", {
-      width: "19",
-      height: "17",
-      viewBox: "0 0 19 17"
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M9.5 1L1 9.5h4.5V16h8V9.5H18L9.5 1z",
-      fill: glyph
-    })),
-    del: /*#__PURE__*/React.createElement("svg", {
-      width: "23",
-      height: "17",
-      viewBox: "0 0 23 17"
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M7 1h13a2 2 0 012 2v11a2 2 0 01-2 2H7l-6-7.5L7 1z",
-      fill: "none",
-      stroke: glyph,
-      strokeWidth: "1.6",
-      strokeLinejoin: "round"
-    }), /*#__PURE__*/React.createElement("path", {
-      d: "M10 5l7 7M17 5l-7 7",
-      stroke: glyph,
-      strokeWidth: "1.6",
-      strokeLinecap: "round"
-    })),
-    ret: /*#__PURE__*/React.createElement("svg", {
-      width: "20",
-      height: "14",
-      viewBox: "0 0 20 14"
-    }, /*#__PURE__*/React.createElement("path", {
-      d: "M18 1v6H4m0 0l4-4M4 7l4 4",
-      fill: "none",
-      stroke: "#fff",
-      strokeWidth: "1.8",
-      strokeLinecap: "round",
-      strokeLinejoin: "round"
-    }))
-  };
-  const key = (content, {
-    w,
-    flex,
-    ret,
-    fs = 25,
-    k
-  } = {}) => /*#__PURE__*/React.createElement("div", {
-    key: k,
-    style: {
-      height: 42,
-      borderRadius: 8.5,
-      flex: flex ? 1 : undefined,
-      width: w,
-      minWidth: 0,
-      background: ret ? '#08f' : keyBg,
-      boxShadow: '0 1px 0 rgba(0,0,0,0.075)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: '-apple-system, "SF Compact", system-ui',
-      fontSize: fs,
-      fontWeight: 458,
-      color: ret ? '#fff' : glyph
-    }
-  }, content);
-  const row = (keys, pad = 0) => /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 6.5,
-      justifyContent: 'center',
-      padding: `0 ${pad}px`
-    }
-  }, keys.map(l => key(l, {
-    flex: true,
-    k: l
-  })));
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'relative',
-      zIndex: 15,
-      borderRadius: 27,
-      overflow: 'hidden',
-      padding: '11px 0 2px',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      boxShadow: dark ? '0 -2px 20px rgba(0,0,0,0.09)' : '0 -1px 6px rgba(0,0,0,0.018), 0 -3px 20px rgba(0,0,0,0.012)'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      inset: 0,
-      borderRadius: 27,
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      background: dark ? 'rgba(120,120,128,0.14)' : 'rgba(255,255,255,0.25)'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: 'absolute',
-      inset: 0,
-      borderRadius: 27,
-      boxShadow: dark ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15)' : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
-      border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
-      pointerEvents: 'none'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 20,
-      alignItems: 'center',
-      padding: '8px 22px 13px',
-      width: '100%',
-      boxSizing: 'border-box',
-      position: 'relative'
-    }
-  }, ['"The"', 'the', 'to'].map((w, i) => /*#__PURE__*/React.createElement(React.Fragment, {
-    key: i
-  }, i > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 1,
-      height: 25,
-      background: '#ccc',
-      opacity: 0.3
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      textAlign: 'center',
-      fontFamily: '-apple-system, system-ui',
-      fontSize: 17,
-      color: sugg,
-      letterSpacing: -0.43,
-      lineHeight: '22px'
-    }
-  }, w)))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 13,
-      padding: '0 6.5px',
-      width: '100%',
-      boxSizing: 'border-box',
-      position: 'relative'
-    }
-  }, row(['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p']), row(['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'], 20), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 14.25,
-      alignItems: 'center'
-    }
-  }, key(icons.shift, {
-    w: 45,
-    k: 'shift'
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 6.5,
-      flex: 1
-    }
-  }, ['z', 'x', 'c', 'v', 'b', 'n', 'm'].map(l => key(l, {
-    flex: true,
-    k: l
-  }))), key(icons.del, {
-    w: 45,
-    k: 'del'
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 6,
-      alignItems: 'center'
-    }
-  }, key('ABC', {
-    w: 92.25,
-    fs: 18,
-    k: 'abc'
-  }), key('', {
-    flex: true,
-    k: 'space'
-  }), key(icons.ret, {
-    w: 92.25,
-    ret: true,
-    k: 'ret'
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: 56,
-      width: '100%',
-      position: 'relative'
-    }
-  }));
-}
-Object.assign(window, {
-  IOSDevice,
-  IOSStatusBar,
-  IOSNavBar,
-  IOSGlassPill,
-  IOSList,
-  IOSListRow,
-  IOSKeyboard
-});
-})(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/ios-frame.jsx", error: String((e && e.message) || e) }); }
-
-// ui_kits/app/screens.jsx
-try { (() => {
-const {
-  Button,
-  Card,
-  StateBadge,
-  ProgressBar,
-  StreakBadge,
-  TeachBackBox,
-  CriterionRow,
-  ResultBanner,
-  IconButton
-} = window.TeachbackDesignSystem_417209;
-const pathTopics = [{
-  id: 'T001',
-  title: 'SEC, FINRA & SROs',
-  state: 'Exam-Ready'
-}, {
-  id: 'T004',
-  title: 'SIPC vs FDIC',
-  state: 'Rusty'
-}, {
-  id: 'T005',
-  title: 'Investor categories',
-  state: 'Exam-Ready'
-}, {
-  id: 'T010',
-  title: 'Primary vs secondary market',
-  state: 'Unassessed'
-}, {
-  id: 'T011',
-  title: 'Offerings & dilution',
-  state: 'Unassessed',
-  locked: true
-}];
-const stateColor = s => `var(--state-${s.toLowerCase().replace('-', '')})`;
-function PathNode({
-  t,
-  i
-}) {
-  const done = t.state === 'Exam-Ready' || t.state === 'Mastered';
-  const off = [0, 44, 0, -44, 0][i % 5];
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      justifyItems: 'center',
-      gap: 6,
-      transform: `translateX(${off}px)`
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    "aria-label": t.title,
-    style: {
-      width: 74,
-      height: 74,
-      borderRadius: '50%',
-      border: 0,
-      cursor: 'pointer',
-      background: t.locked ? 'var(--surface-sunken)' : done ? 'var(--clover-500)' : t.state === 'Unassessed' ? 'var(--splash-500)' : stateColor(t.state),
-      boxShadow: t.locked ? '0 3px 0 var(--border-strong)' : '0 4px 0 ' + (t.locked ? 'var(--border-strong)' : done ? 'var(--clover-700)' : t.state === 'Unassessed' ? 'var(--splash-700)' : 'var(--sunny-700)'),
-      display: 'grid',
-      placeItems: 'center',
-      color: t.locked ? 'var(--text-faint)' : '#fff',
-      fontSize: 30
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: 'ph-bold ' + (t.locked ? 'ph-lock-simple' : done ? 'ph-check-fat' : 'ph-chat-circle-text')
-  })), /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '700 11px var(--font-body)',
-      color: t.locked ? 'var(--text-faint)' : 'var(--text-body)',
-      maxWidth: 120,
-      textAlign: 'center',
-      lineHeight: 1.25
-    }
-  }, t.title));
-}
-function HomeScreen() {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '8px 20px 30px',
-      display: 'grid',
-      gap: 18,
-      background: 'var(--surface-page)',
-      minHeight: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '700 24px var(--font-display)',
-      color: 'var(--text-body)'
-    }
-  }, "teach", /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--clover-500)'
-    }
-  }, "back")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8,
-      alignItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement(StreakBadge, {
-    count: 7,
-    style: {
-      padding: '5px 11px'
-    }
-  }))), /*#__PURE__*/React.createElement(Card, {
-    padding: 16
-  }, /*#__PURE__*/React.createElement(ProgressBar, {
-    value: 12,
-    max: 28,
-    label: "Section 1 \xB7 Capital markets"
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: '10px 0 0',
-      color: 'var(--text-muted)',
-      font: '600 12px var(--font-body)'
-    }
-  }, "12 of 28 topics exam-ready. We'll tell you when to book.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 26,
-      justifyItems: 'center',
-      paddingTop: 8
-    }
-  }, pathTopics.map((t, i) => /*#__PURE__*/React.createElement(PathNode, {
-    key: t.id,
-    t: t,
-    i: i
-  }))));
-}
-function LessonScreen() {
-  const [v, setV] = React.useState('SIPC steps in when a brokerage fails and customer property is short…');
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '8px 20px 30px',
-      display: 'grid',
-      gap: 14,
-      alignContent: 'start',
-      background: 'var(--surface-page)',
-      minHeight: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement(IconButton, {
-    icon: "x",
-    label: "Close",
-    size: 40
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement(ProgressBar, {
-    value: 2,
-    max: 3,
-    height: 14
-  })), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--tangerine-600)',
-      font: '700 14px var(--font-display)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-flame"
-  }), " 7")), /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--tangerine-600)'
-    }
-  }, "Your turn \xB7 T004"), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      margin: 0,
-      font: '600 24px var(--font-display)',
-      color: 'var(--text-body)'
-    }
-  }, "Explain it to a colleague."), /*#__PURE__*/React.createElement(Card, {
-    sunken: true,
-    padding: 14
-  }, /*#__PURE__*/React.createElement("strong", {
-    style: {
-      color: 'var(--text-body)',
-      font: '700 13px var(--font-body)'
-    }
-  }, "In short:"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--text-muted)',
-      font: '600 13px var(--font-body)'
-    }
-  }, " SIPC is for brokerage-firm shortfalls; FDIC is for bank deposits; neither covers market loss.")), /*#__PURE__*/React.createElement(TeachBackBox, {
-    value: v,
-    onChange: setV,
-    rows: 6,
-    prompt: "In your own words, explain SIPC vs FDIC\u2014what each protects, the coverage limits, and the important exclusions.",
-    placeholder: "Start with the institution each one protects\u2026"
-  }), /*#__PURE__*/React.createElement(Button, {
-    fullWidth: true,
-    size: "lg"
-  }, "Grade my teach-back"));
-}
-function ResultScreen() {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '8px 20px 30px',
-      display: 'grid',
-      gap: 14,
-      alignContent: 'start',
-      background: 'var(--surface-page)',
-      minHeight: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      justifyItems: 'center',
-      gap: 10,
-      padding: '18px 0 4px'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 92,
-      height: 92,
-      borderRadius: '50%',
-      background: 'var(--clover-500)',
-      boxShadow: '0 5px 0 var(--clover-700)',
-      display: 'grid',
-      placeItems: 'center',
-      color: '#fff',
-      fontSize: 46
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-check-fat"
-  })), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      margin: 0,
-      font: '700 28px var(--font-display)',
-      color: 'var(--text-body)'
-    }
-  }, "Exam-Ready!"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      color: 'var(--text-muted)',
-      font: '600 14px var(--font-body)',
-      textAlign: 'center'
-    }
-  }, "Come back tomorrow to push T004 toward Mastered.")), /*#__PURE__*/React.createElement(ResultBanner, {
-    state: "Exam-Ready",
-    message: "That explanation is exam-ready!"
-  }), /*#__PURE__*/React.createElement(Card, {
-    padding: "2px 18px"
-  }, /*#__PURE__*/React.createElement(CriterionRow, {
-    outcome: "hit",
-    label: "SIPC covers brokerage failure",
-    feedback: "Clearly stated with the shortfall mechanics."
-  }), /*#__PURE__*/React.createElement(CriterionRow, {
-    outcome: "hit",
-    label: "Coverage limits",
-    feedback: "Both figures landed."
-  }), /*#__PURE__*/React.createElement(CriterionRow, {
-    outcome: "partial",
-    label: "Market losses excluded",
-    feedback: "Implied, but say it outright next time."
-  })), /*#__PURE__*/React.createElement(Button, {
-    fullWidth: true,
-    size: "lg",
-    variant: "accent"
-  }, "Continue"));
-}
-window.TBAppScreens = {
-  HomeScreen,
-  LessonScreen,
-  ResultScreen
-};
-})(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/screens.jsx", error: String((e && e.message) || e) }); }
-
 // ui_kits/web/data.js
 try { (() => {
-window.TB_TOPICS = [{
-  id: 'T004',
-  title: 'SIPC vs FDIC',
-  subtitle: 'What each protects, coverage limits and exclusions',
-  section: '1.1 Regulatory entities',
-  read: '4 min',
-  inShort: ['SIPC is for brokerage-firm shortfalls', 'FDIC is for bank deposits', 'Neither covers market loss'],
-  core: ['SIPC and FDIC are backstops for different financial-institution failures. SIPC applies to brokerage firms; FDIC applies to insured banks. Neither one protects you when an investment loses value in the market.'],
-  precision: ['SIPC: $500,000 per customer, including no more than $250,000 for cash claims — limits on a shortfall advance.', 'FDIC: $250,000 per depositor, per insured bank, per ownership category.', 'SIPC protects net equity; a margin debit reduces the claim.'],
-  prompt: 'In your own words, explain SIPC vs FDIC—what each protects, the coverage limits, and the important exclusions.',
-  placeholder: 'Start with the institution each one protects…',
-  criteria: [{
-    id: 'c1',
-    label: 'SIPC covers brokerage failure',
-    keys: ['sipc', 'broker'],
-    fb: {
-      hit: 'Clearly stated with the shortfall mechanics.',
-      miss: 'Say which institution SIPC backstops.'
-    }
-  }, {
-    id: 'c2',
-    label: 'FDIC covers bank deposits',
-    keys: ['fdic', 'bank'],
-    fb: {
-      hit: 'Right layer — insured bank deposits.',
-      miss: 'FDIC protects deposits at insured banks.'
-    }
-  }, {
-    id: 'c3',
-    label: 'Coverage limits',
-    keys: ['500', '250'],
-    fb: {
-      hit: 'Both figures landed.',
-      miss: 'Give the $500,000 / $250,000 figures.'
-    }
-  }, {
-    id: 'c4',
-    label: 'Market losses excluded',
-    keys: ['market', 'loss'],
-    fb: {
-      hit: 'Neither backstop covers market loss — exactly.',
-      miss: 'Neither one covers an investment losing value.'
-    }
-  }]
-}, {
-  id: 'T005',
-  title: 'Investor categories',
-  subtitle: 'Retail, accredited and institutional',
-  section: '1.4 Market participants',
-  read: '5 min',
-  inShort: ['Protection scales down as sophistication scales up', 'Accredited: income or net-worth thresholds', 'Institutional: entities, not individuals'],
-  core: ['Retail, accredited and institutional investors differ in the protection the rules assume they need. Access to private placements is gated by category.'],
-  precision: ['Accredited: $200k income ($300k joint) for two years, or $1M net worth excluding primary residence.', 'Institutional investors are entities — banks, funds, plans.', 'Category changes disclosure, not the quality of the deal.'],
-  prompt: 'In your own words, compare retail, accredited, and institutional investors, including the key dollar thresholds and private-placement gates.',
-  placeholder: 'Start with how protection and access change by investor category…',
-  criteria: [{
-    id: 'c1',
-    label: 'Three categories distinguished',
-    keys: ['retail', 'accredited'],
-    fb: {
-      hit: 'All three categories placed.',
-      miss: 'Name and separate the three categories.'
-    }
-  }, {
-    id: 'c2',
-    label: 'Accredited thresholds',
-    keys: ['200', '1m|million|net worth'],
-    fb: {
-      hit: 'Thresholds stated.',
-      miss: 'Give the income / net-worth thresholds.'
-    }
-  }, {
-    id: 'c3',
-    label: 'Private-placement gate',
-    keys: ['private'],
-    fb: {
-      hit: 'Access gating explained.',
-      miss: 'Say what accreditation unlocks.'
-    }
-  }]
-}, {
-  id: 'T010',
-  title: 'Primary vs secondary market',
-  subtitle: 'Follow the money',
-  section: '1.2 Market structure',
-  read: '4 min',
-  inShort: ['Primary: proceeds go to the issuer', 'Secondary: investors trade among themselves', 'Dilution only when new shares are created'],
-  core: ['Primary-market transactions send proceeds to the issuer; secondary-market trades move existing shares between investors. IPOs and follow-ons are primary; a secondary offering sells existing holders\u2019 shares.'],
-  precision: ['Follow the money: issuer receives proceeds → primary.', 'Follow-on offerings create new shares and dilute.', 'Secondary offerings do not raise capital for the issuer.'],
-  prompt: 'In your own words, distinguish primary from secondary markets by following the money, then explain IPOs, follow-ons, secondary offerings, and dilution.',
-  placeholder: 'Start with who receives the proceeds…',
-  criteria: [{
-    id: 'c1',
-    label: 'Proceeds define the market',
-    keys: ['issuer', 'proceeds'],
-    fb: {
-      hit: 'Followed the money correctly.',
-      miss: 'Say who receives the proceeds in each market.'
-    }
-  }, {
-    id: 'c2',
-    label: 'IPO vs follow-on',
-    keys: ['ipo'],
-    fb: {
-      hit: 'Offering types placed.',
-      miss: 'Place IPOs and follow-ons on the primary side.'
-    }
-  }, {
-    id: 'c3',
-    label: 'Dilution mechanics',
-    keys: ['dilut'],
-    fb: {
-      hit: 'Dilution tied to new shares.',
-      miss: 'Dilution happens only when new shares are created.'
-    }
-  }]
-}];
+window.TB_BITES = [
+    { "id": "B001", "leaf": "1.1.1", "leafTitle": "The Securities and Exchange Commission (SEC)", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The high-level purpose and mission of securities regulation", "subtitle": "The high-level purpose and mission of securities regulation", "read": "3 min", "inShort": ["The high-level purpose and mission of securities regulation", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: The high-level purpose and mission of securities regulation Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: The high-level purpose and mission of securities regulation", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["high", "level", "purpose"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["level"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B002", "leaf": "1.1.1", "leafTitle": "The Securities and Exchange Commission (SEC)", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Definition, jurisdiction and authority of the SEC", "subtitle": "Definition, jurisdiction and authority of the SEC", "read": "3 min", "inShort": ["Definition, jurisdiction and authority of the SEC", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition, jurisdiction and authority of the SEC Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition, jurisdiction and authority of the SEC", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "jurisdiction", "authority"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B003", "leaf": "1.1.2", "leafTitle": "Self-regulatory Organizations (SROs)", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Purpose and mission of an SRO", "subtitle": "Purpose and mission of an SRO", "read": "3 min", "inShort": ["Purpose and mission of an SRO", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Purpose and mission of an SRO Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Purpose and mission of an SRO", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["purpose", "mission"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["purpose"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B004", "leaf": "1.1.2", "leafTitle": "Self-regulatory Organizations (SROs)", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Jurisdiction and authority of SROs", "subtitle": "Jurisdiction and authority of SROs (e.g., CBOE, FINRA, MSRB)", "read": "3 min", "inShort": ["Jurisdiction and authority of SROs (e.g., CBOE, FINRA, MSRB)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Jurisdiction and authority of SROs (e.g., CBOE, FINRA, MSRB) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Jurisdiction and authority of SROs (e.g., CBOE, FINRA, MSRB)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["jurisdiction", "authority", "sros"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["jurisdiction"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B005", "leaf": "1.1.3", "leafTitle": "Other Regulators and Agencies", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Department of the Treasury/IRS", "subtitle": "Department of the Treasury/IRS", "read": "3 min", "inShort": ["Department of the Treasury/IRS", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Department of the Treasury/IRS Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Department of the Treasury/IRS", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["department", "treasury"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["department"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B006", "leaf": "1.1.3", "leafTitle": "Other Regulators and Agencies", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "State regulators", "subtitle": "State regulators (e.g., NASAA)", "read": "3 min", "inShort": ["State regulators (e.g., NASAA)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: State regulators (e.g., NASAA) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: State regulators (e.g., NASAA)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["state", "regulators", "nasaa"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["state"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B007", "leaf": "1.1.3", "leafTitle": "Other Regulators and Agencies", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The Federal Reserve", "subtitle": "The Federal Reserve", "read": "3 min", "inShort": ["The Federal Reserve", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: The Federal Reserve Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: The Federal Reserve", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["federal", "reserve"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["federal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B008", "leaf": "1.1.3", "leafTitle": "Other Regulators and Agencies", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Securities Investor Protection Corporation", "subtitle": "Securities Investor Protection Corporation (SIPC)", "read": "3 min", "inShort": ["SIPC is for brokerage-firm shortfalls", "FDIC is for bank deposits", "Neither covers market loss"], "core": ["SIPC and FDIC are backstops for different financial-institution failures. SIPC applies to brokerage firms; FDIC applies to insured banks. Neither one protects you when an investment loses value in the market."], "precision": ["SIPC: $500,000 per customer, including no more than $250,000 for cash claims.", "FDIC: $250,000 per depositor, per insured bank, per ownership category.", "SIPC protects net equity; a margin debit reduces the claim."], "prompt": "In your own words, explain SIPC — what it protects, the coverage limits, and what it does not cover.", "placeholder": "Start with the institution SIPC backstops…", "criteria": [{ "id": "c1", "label": "SIPC covers brokerage failure", "keys": ["sipc", "broker"], "fb": { "hit": "Clearly stated with the shortfall mechanics.", "miss": "Say which institution SIPC backstops." } }, { "id": "c2", "label": "Coverage limits", "keys": ["500", "250"], "fb": { "hit": "Both figures landed.", "miss": "Give the $500,000 / $250,000 figures." } }, { "id": "c3", "label": "Market losses excluded", "keys": ["market", "loss"], "fb": { "hit": "Neither backstop covers market loss — exactly.", "miss": "Neither one covers an investment losing value." } }], "demo": true },
+    { "id": "B009", "leaf": "1.1.3", "leafTitle": "Other Regulators and Agencies", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Federal Deposit Insurance Corporation", "subtitle": "Federal Deposit Insurance Corporation (FDIC)", "read": "3 min", "inShort": ["Federal Deposit Insurance Corporation (FDIC)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Federal Deposit Insurance Corporation (FDIC) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Federal Deposit Insurance Corporation (FDIC)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["federal", "deposit", "insurance"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["federal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B010", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Investors", "subtitle": "Investors (e.g., accredited, institutional, retail)", "read": "3 min", "inShort": ["Protection scales down as sophistication scales up", "Accredited: income or net-worth thresholds", "Institutional: entities, not individuals"], "core": ["Retail, accredited and institutional investors differ in the protection the rules assume they need. Access to private placements is gated by category."], "precision": ["Accredited: $200k income ($300k joint) for two years, or $1M net worth excluding primary residence.", "Institutional investors are entities — banks, funds, plans.", "Category changes disclosure, not the quality of the deal."], "prompt": "In your own words, compare retail, accredited, and institutional investors, including the key dollar thresholds.", "placeholder": "Start with how protection and access change by investor category…", "criteria": [{ "id": "c1", "label": "Three categories distinguished", "keys": ["retail", "accredited"], "fb": { "hit": "All three categories placed.", "miss": "Name and separate the three categories." } }, { "id": "c2", "label": "Accredited thresholds", "keys": ["200", "1m|million|net worth"], "fb": { "hit": "Thresholds stated.", "miss": "Give the income / net-worth thresholds." } }, { "id": "c3", "label": "Private-placement gate", "keys": ["private"], "fb": { "hit": "Access gating explained.", "miss": "Say what accreditation unlocks." } }], "demo": true },
+    { "id": "B011", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Broker-Dealers", "subtitle": "Broker-Dealers (e.g., introducing, clearing, prime brokers)", "read": "3 min", "inShort": ["Broker-Dealers (e.g., introducing, clearing, prime brokers)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Broker-Dealers (e.g., introducing, clearing, prime brokers) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Broker-Dealers (e.g., introducing, clearing, prime brokers)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["broker", "dealers", "introducing"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["broker"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B012", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Investment advisers", "subtitle": "Investment advisers", "read": "3 min", "inShort": ["Investment advisers", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Investment advisers Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Investment advisers", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["investment", "advisers"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["investment"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B013", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Municipal advisors", "subtitle": "Municipal advisors", "read": "3 min", "inShort": ["Municipal advisors", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Municipal advisors Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Municipal advisors", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["municipal", "advisors"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["municipal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B014", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Issuers and underwriters", "subtitle": "Issuers and underwriters", "read": "3 min", "inShort": ["Issuers and underwriters", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Issuers and underwriters Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Issuers and underwriters", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["issuers", "underwriters"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["issuers"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B015", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Traders and market makers", "subtitle": "Traders and market makers", "read": "3 min", "inShort": ["Traders and market makers", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Traders and market makers Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Traders and market makers", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["traders", "market", "makers"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["traders"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B016", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Custodians and trustees", "subtitle": "Custodians and trustees", "read": "3 min", "inShort": ["Custodians and trustees", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Custodians and trustees Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Custodians and trustees", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["custodians", "trustees"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["custodians"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B017", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Transfer agents", "subtitle": "Transfer agents", "read": "3 min", "inShort": ["Transfer agents", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Transfer agents Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Transfer agents", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["transfer", "agents"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["transfer"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B018", "leaf": "1.1.4", "leafTitle": "Market Participants and their Roles", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Depositories and clearing corporations", "subtitle": "Depositories and clearing corporations (e.g., Depository Trust & Clearing Corporation (DTCC), Options Clearing Corporation (OCC))", "read": "3 min", "inShort": ["Depositories and clearing corporations (e.g., Depository Trust & Clearing Corporation (DTCC), Options Clearing Corporation (OCC))", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Depositories and clearing corporations (e.g., Depository Trust & Clearing Corporation (DTCC), Options Clearing Corporation (OCC)) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Depositories and clearing corporations (e.g., Depository Trust & Clearing Corporation (DTCC), Options Clearing Corporation (OCC))", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["depositories", "clearing", "corporations"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["depositories"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B019", "leaf": "1.2.1", "leafTitle": "Types of Markets", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The primary market", "subtitle": "The primary market", "read": "3 min", "inShort": ["Primary: proceeds go to the issuer", "Secondary: investors trade among themselves", "Dilution only when new shares are created"], "core": ["Primary-market transactions send proceeds to the issuer; secondary-market trades move existing shares between investors."], "precision": ["Follow the money: issuer receives proceeds → primary.", "Follow-on offerings create new shares and dilute.", "Secondary offerings do not raise capital for the issuer."], "prompt": "In your own words, distinguish the primary market by following the money, then explain IPOs, follow-ons, and dilution.", "placeholder": "Start with who receives the proceeds…", "criteria": [{ "id": "c1", "label": "Proceeds define the market", "keys": ["issuer", "proceeds"], "fb": { "hit": "Followed the money correctly.", "miss": "Say who receives the proceeds." } }, { "id": "c2", "label": "IPO vs follow-on", "keys": ["ipo"], "fb": { "hit": "Offering types placed.", "miss": "Place IPOs and follow-ons on the primary side." } }, { "id": "c3", "label": "Dilution mechanics", "keys": ["dilut"], "fb": { "hit": "Dilution tied to new shares.", "miss": "Dilution happens only when new shares are created." } }], "demo": true },
+    { "id": "B020", "leaf": "1.2.1", "leafTitle": "Types of Markets", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The secondary market", "subtitle": "The secondary market (e.g., electronic, over-the-counter (OTC), physical)", "read": "3 min", "inShort": ["The secondary market (e.g., electronic, over-the-counter (OTC), physical)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: The secondary market (e.g., electronic, over-the-counter (OTC), physical) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: The secondary market (e.g., electronic, over-the-counter (OTC), physical)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["secondary", "market", "electronic"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["secondary"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B021", "leaf": "1.2.1", "leafTitle": "Types of Markets", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The third market", "subtitle": "The third market", "read": "3 min", "inShort": ["The third market", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: The third market Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: The third market", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["third", "market"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["third"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B022", "leaf": "1.2.1", "leafTitle": "Types of Markets", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "The fourth market", "subtitle": "The fourth market", "read": "3 min", "inShort": ["The fourth market", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: The fourth market Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: The fourth market", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["fourth", "market"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["fourth"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B023", "leaf": "1.3.1", "leafTitle": "The Federal Reserve Board’s Impact on Business Activity and Market Stability", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Monetary vs. fiscal policy", "subtitle": "Monetary vs. fiscal policy", "read": "3 min", "inShort": ["Monetary vs. fiscal policy", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Monetary vs. fiscal policy Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Monetary vs. fiscal policy", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["monetary", "fiscal", "policy"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["monetary"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B024", "leaf": "1.3.1", "leafTitle": "The Federal Reserve Board’s Impact on Business Activity and Market Stability", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Open market activities and impact on economy", "subtitle": "Open market activities and impact on economy", "read": "3 min", "inShort": ["Open market activities and impact on economy", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Open market activities and impact on economy Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Open market activities and impact on economy", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["open", "market", "activities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["market"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B025", "leaf": "1.3.1", "leafTitle": "The Federal Reserve Board’s Impact on Business Activity and Market Stability", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Different rates", "subtitle": "Different rates (e.g., interest rate, discount rate, federal funds rate)", "read": "3 min", "inShort": ["Different rates (e.g., interest rate, discount rate, federal funds rate)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Different rates (e.g., interest rate, discount rate, federal funds rate) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Different rates (e.g., interest rate, discount rate, federal funds rate)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["different", "rates", "interest"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["different"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B026", "leaf": "1.3.2", "leafTitle": "Business Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Purpose of financial statements", "subtitle": "Purpose of financial statements (e.g., balance sheet, income statement)", "read": "3 min", "inShort": ["Purpose of financial statements (e.g., balance sheet, income statement)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Purpose of financial statements (e.g., balance sheet, income statement) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Purpose of financial statements (e.g., balance sheet, income statement)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["purpose", "financial", "statements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["purpose"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B027", "leaf": "1.3.2", "leafTitle": "Business Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Business cycle", "subtitle": "Business cycle (e.g., contraction, trough, expansion, peak)", "read": "3 min", "inShort": ["Business cycle (e.g., contraction, trough, expansion, peak)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Business cycle (e.g., contraction, trough, expansion, peak) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Business cycle (e.g., contraction, trough, expansion, peak)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["business", "cycle", "contraction"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["business"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B028", "leaf": "1.3.2", "leafTitle": "Business Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Indicators", "subtitle": "Indicators (e.g., leading, lagging, coincident, inflation)", "read": "3 min", "inShort": ["Indicators (e.g., leading, lagging, coincident, inflation)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Indicators (e.g., leading, lagging, coincident, inflation) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Indicators (e.g., leading, lagging, coincident, inflation)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["indicators", "leading", "lagging"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["indicators"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B029", "leaf": "1.3.2", "leafTitle": "Business Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Basic effects on bond and equity markets", "subtitle": "Basic effects on bond and equity markets (e.g., cyclical, defensive, growth)", "read": "3 min", "inShort": ["Basic effects on bond and equity markets (e.g., cyclical, defensive, growth)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Basic effects on bond and equity markets (e.g., cyclical, defensive, growth) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Basic effects on bond and equity markets (e.g., cyclical, defensive, growth)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["basic", "effects", "bond"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["basic"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B030", "leaf": "1.3.2", "leafTitle": "Business Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Principal economic theories", "subtitle": "Principal economic theories (e.g., Keynesian, Monetarist)", "read": "3 min", "inShort": ["Principal economic theories (e.g., Keynesian, Monetarist)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Principal economic theories (e.g., Keynesian, Monetarist) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Principal economic theories (e.g., Keynesian, Monetarist)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["principal", "economic", "theories"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["principal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B031", "leaf": "1.3.3", "leafTitle": "International Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "U.S. balance of payments", "subtitle": "U.S. balance of payments", "read": "3 min", "inShort": ["U.S. balance of payments", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: U.S. balance of payments Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: U.S. balance of payments", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["balance", "payments"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["balance"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B032", "leaf": "1.3.3", "leafTitle": "International Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Gross domestic product", "subtitle": "Gross domestic product (GDP), gross national product (GNP)", "read": "3 min", "inShort": ["Gross domestic product (GDP), gross national product (GNP)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Gross domestic product (GDP), gross national product (GNP) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Gross domestic product (GDP), gross national product (GNP)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["gross", "domestic", "product"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["gross"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B033", "leaf": "1.3.3", "leafTitle": "International Economic Factors", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Exchange rates", "subtitle": "Exchange rates", "read": "3 min", "inShort": ["Exchange rates", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Exchange rates Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Exchange rates", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["exchange", "rates"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["exchange"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B034", "leaf": "1.4", "leafTitle": "Offerings", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Roles of participants", "subtitle": "Roles of participants (e.g., investment bankers, underwriting syndicate, municipal advisors)", "read": "3 min", "inShort": ["Roles of participants (e.g., investment bankers, underwriting syndicate, municipal advisors)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Roles of participants (e.g., investment bankers, underwriting syndicate, municipal advisors) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Roles of participants (e.g., investment bankers, underwriting syndicate, municipal advisors)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["roles", "participants", "investment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["roles"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B035", "leaf": "1.4", "leafTitle": "Offerings", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Types of offerings", "subtitle": "Types of offerings", "read": "3 min", "inShort": ["Types of offerings", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of offerings Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of offerings", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "offerings"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B036", "leaf": "1.4", "leafTitle": "Offerings", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Shelf registrations and distributions", "subtitle": "Shelf registrations and distributions (e.g., definition, purpose)", "read": "3 min", "inShort": ["Shelf registrations and distributions (e.g., definition, purpose)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Shelf registrations and distributions (e.g., definition, purpose) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Shelf registrations and distributions (e.g., definition, purpose)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["shelf", "registrations", "distributions"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["shelf"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B037", "leaf": "1.4", "leafTitle": "Offerings", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Types and purpose of offering documents and delivery requirements", "subtitle": "Types and purpose of offering documents and delivery requirements (e.g., official statement, program disclosure document, prospectus)", "read": "3 min", "inShort": ["Types and purpose of offering documents and delivery requirements (e.g., official statement, program disclosure document, prospectus)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types and purpose of offering documents and delivery requirements (e.g., official statement, program disclosure document, prospectus) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types and purpose of offering documents and delivery requirements (e.g., official statement, program disclosure document, prospectus)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "purpose", "offering"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B038", "leaf": "1.4", "leafTitle": "Offerings", "section": "1", "sectionTitle": "Knowledge of Capital Markets", "title": "Regulatory filing requirements and exemptions", "subtitle": "Regulatory filing requirements and exemptions (e.g., SEC, blue-sky laws)", "read": "3 min", "inShort": ["Regulatory filing requirements and exemptions (e.g., SEC, blue-sky laws)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Regulatory filing requirements and exemptions (e.g., SEC, blue-sky laws) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Regulatory filing requirements and exemptions (e.g., SEC, blue-sky laws)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["regulatory", "filing", "requirements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["regulatory"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B039", "leaf": "2.1.1", "leafTitle": "Equity Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Types of equities", "subtitle": "Types of equities", "read": "3 min", "inShort": ["Types of equities", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of equities Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of equities", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "equities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B040", "leaf": "2.1.1", "leafTitle": "Equity Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Ownership", "subtitle": "Ownership (e.g., order of liquidation, limited liability)", "read": "3 min", "inShort": ["Ownership (e.g., order of liquidation, limited liability)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Ownership (e.g., order of liquidation, limited liability) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Ownership (e.g., order of liquidation, limited liability)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["ownership", "order", "liquidation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["ownership"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B041", "leaf": "2.1.1", "leafTitle": "Equity Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Voting rights", "subtitle": "Voting rights", "read": "3 min", "inShort": ["Voting rights", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Voting rights Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Voting rights", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["voting", "rights"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["voting"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B042", "leaf": "2.1.1", "leafTitle": "Equity Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Convertible", "subtitle": "Convertible", "read": "3 min", "inShort": ["Convertible", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Convertible Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Convertible", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["convertible"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["convertible"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B043", "leaf": "2.1.1", "leafTitle": "Equity Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Control and restrictions", "subtitle": "Control and restrictions (e.g., SEC Rule 144)", "read": "3 min", "inShort": ["Control and restrictions (e.g., SEC Rule 144)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Control and restrictions (e.g., SEC Rule 144) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Control and restrictions (e.g., SEC Rule 144)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["control", "restrictions", "rule"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["control"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B044", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Treasury securities", "subtitle": "Treasury securities (e.g., bills, notes, receipts, bonds)", "read": "3 min", "inShort": ["Treasury securities (e.g., bills, notes, receipts, bonds)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Treasury securities (e.g., bills, notes, receipts, bonds) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Treasury securities (e.g., bills, notes, receipts, bonds)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["treasury", "securities", "bills"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["treasury"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B045", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Agency", "subtitle": "Agency (e.g., asset-backed and mortgage-backed securities)", "read": "3 min", "inShort": ["Agency (e.g., asset-backed and mortgage-backed securities)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Agency (e.g., asset-backed and mortgage-backed securities) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Agency (e.g., asset-backed and mortgage-backed securities)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["agency", "asset", "backed"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["agency"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B046", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Corporate bonds", "subtitle": "Corporate bonds", "read": "3 min", "inShort": ["Corporate bonds", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Corporate bonds Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Corporate bonds", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["corporate", "bonds"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["corporate"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B047", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Municipal securities", "subtitle": "Municipal securities", "read": "3 min", "inShort": ["Municipal securities", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Municipal securities Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Municipal securities", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["municipal", "securities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["municipal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B048", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Others", "subtitle": "Others (e.g., money market instruments, certificate of deposit (CD), bankers’ acceptance, commercial paper)", "read": "3 min", "inShort": ["Others (e.g., money market instruments, certificate of deposit (CD), bankers’ acceptance, commercial paper)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Others (e.g., money market instruments, certificate of deposit (CD), bankers’ acceptance, commercial paper) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Others (e.g., money market instruments, certificate of deposit (CD), bankers’ acceptance, commercial paper)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["others", "money", "market"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["others"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B049", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Varying maturities", "subtitle": "Varying maturities", "read": "3 min", "inShort": ["Varying maturities", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Varying maturities Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Varying maturities", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["varying", "maturities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["varying"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B050", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Generate income", "subtitle": "Generate income (e.g., interest)", "read": "3 min", "inShort": ["Generate income (e.g., interest)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Generate income (e.g., interest) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Generate income (e.g., interest)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["generate", "income", "interest"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["generate"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B051", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Coupon value", "subtitle": "Coupon value", "read": "3 min", "inShort": ["Coupon value", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Coupon value Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Coupon value", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["coupon", "value"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["coupon"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B052", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Par value", "subtitle": "Par value", "read": "3 min", "inShort": ["Par value", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Par value Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Par value", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["value"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["value"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B053", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Yield", "subtitle": "Yield", "read": "3 min", "inShort": ["Yield", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Yield Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Yield", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["yield"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["yield"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B054", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Ratings and rating agencies", "subtitle": "Ratings and rating agencies", "read": "3 min", "inShort": ["Ratings and rating agencies", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Ratings and rating agencies Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Ratings and rating agencies", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["ratings", "rating", "agencies"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["ratings"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B055", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Callable and convertible features", "subtitle": "Callable and convertible features", "read": "3 min", "inShort": ["Callable and convertible features", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Callable and convertible features Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Callable and convertible features", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["callable", "convertible", "features"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["callable"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B056", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Short-term vs. long-term characteristics", "subtitle": "Short-term vs. long-term characteristics", "read": "3 min", "inShort": ["Short-term vs. long-term characteristics", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Short-term vs. long-term characteristics Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Short-term vs. long-term characteristics", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["short", "term", "long"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["short"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B057", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Relationship between price and interest rate", "subtitle": "Relationship between price and interest rate", "read": "3 min", "inShort": ["Relationship between price and interest rate", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Relationship between price and interest rate Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Relationship between price and interest rate", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["relationship", "between", "price"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["relationship"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B058", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Negotiated vs. competitive offerings via underwriters and syndicates", "subtitle": "Negotiated vs. competitive offerings via underwriters and syndicates", "read": "3 min", "inShort": ["Negotiated vs. competitive offerings via underwriters and syndicates", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Negotiated vs. competitive offerings via underwriters and syndicates Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Negotiated vs. competitive offerings via underwriters and syndicates", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["negotiated", "competitive", "offerings"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["negotiated"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B059", "leaf": "2.1.2", "leafTitle": "Debt Instruments", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Auction", "subtitle": "Auction", "read": "3 min", "inShort": ["Auction", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Auction Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Auction", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["auction"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["auction"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B060", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Types of options", "subtitle": "Types of options", "read": "3 min", "inShort": ["Types of options", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of options Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of options", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "options"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B061", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Hedging or speculation", "subtitle": "Hedging or speculation", "read": "3 min", "inShort": ["Hedging or speculation", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Hedging or speculation Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Hedging or speculation", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["hedging", "speculation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["hedging"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B062", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Expiration date", "subtitle": "Expiration date", "read": "3 min", "inShort": ["Expiration date", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Expiration date Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Expiration date", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["expiration", "date"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["expiration"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B063", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Strike price", "subtitle": "Strike price", "read": "3 min", "inShort": ["Strike price", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Strike price Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Strike price", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["strike", "price"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["strike"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B064", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Premium", "subtitle": "Premium", "read": "3 min", "inShort": ["Premium", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Premium Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Premium", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["premium"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["premium"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B065", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Underlying or cash settlement", "subtitle": "Underlying or cash settlement", "read": "3 min", "inShort": ["Underlying or cash settlement", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Underlying or cash settlement Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Underlying or cash settlement", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["underlying", "cash", "settlement"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["underlying"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B066", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "In-the-money, out-of-the money", "subtitle": "In-the-money, out-of-the money", "read": "3 min", "inShort": ["In-the-money, out-of-the money", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: In-the-money, out-of-the money Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: In-the-money, out-of-the money", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["money", "money"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["money"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B067", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Covered vs. uncovered", "subtitle": "Covered vs. uncovered", "read": "3 min", "inShort": ["Covered vs. uncovered", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Covered vs. uncovered Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Covered vs. uncovered", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["covered", "uncovered"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["covered"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B068", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "American vs. European", "subtitle": "American vs. European", "read": "3 min", "inShort": ["American vs. European", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: American vs. European Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: American vs. European", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["american", "european"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["american"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B069", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Exercise and assignment", "subtitle": "Exercise and assignment", "read": "3 min", "inShort": ["Exercise and assignment", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Exercise and assignment Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Exercise and assignment", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["exercise", "assignment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["exercise"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B070", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Varying strategies", "subtitle": "Varying strategies (e.g., long, short)", "read": "3 min", "inShort": ["Varying strategies (e.g., long, short)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Varying strategies (e.g., long, short) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Varying strategies (e.g., long, short)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["varying", "strategies", "long"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["varying"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B071", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Special disclosures", "subtitle": "Special disclosures (e.g., Options Disclosure Document (ODD))", "read": "3 min", "inShort": ["Special disclosures (e.g., Options Disclosure Document (ODD))", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Special disclosures (e.g., Options Disclosure Document (ODD)) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Special disclosures (e.g., Options Disclosure Document (ODD))", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["special", "disclosures", "options"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["special"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B072", "leaf": "2.1.3", "leafTitle": "Options", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Options Clearing Corporation", "subtitle": "Options Clearing Corporation (OCC) for listed options", "read": "3 min", "inShort": ["Options Clearing Corporation (OCC) for listed options", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Options Clearing Corporation (OCC) for listed options Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Options Clearing Corporation (OCC) for listed options", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["options", "clearing", "corporation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["options"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B073", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Investment companies", "subtitle": "Investment companies", "read": "3 min", "inShort": ["Investment companies", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Investment companies Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Investment companies", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["investment", "companies"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["investment"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B074", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Loads", "subtitle": "Loads", "read": "3 min", "inShort": ["Loads", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Loads Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Loads", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["loads"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["loads"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B075", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Share classes", "subtitle": "Share classes", "read": "3 min", "inShort": ["Share classes", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Share classes Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Share classes", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["share", "classes"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["share"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B076", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Net asset value", "subtitle": "Net asset value (NAV)", "read": "3 min", "inShort": ["Net asset value (NAV)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Net asset value (NAV) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Net asset value (NAV)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["asset", "value"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["asset"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B077", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Disclosures", "subtitle": "Disclosures", "read": "3 min", "inShort": ["Disclosures", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Disclosures Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Disclosures", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["disclosures"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["disclosures"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B078", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Costs and fees", "subtitle": "Costs and fees", "read": "3 min", "inShort": ["Costs and fees", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Costs and fees Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Costs and fees", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["costs", "fees"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["costs"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B079", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Breakpoints", "subtitle": "Breakpoints", "read": "3 min", "inShort": ["Breakpoints", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Breakpoints Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Breakpoints", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["breakpoints"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["breakpoints"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B080", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Right of accumulation", "subtitle": "Right of accumulation (ROA)", "read": "3 min", "inShort": ["Right of accumulation (ROA)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Right of accumulation (ROA) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Right of accumulation (ROA)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["right", "accumulation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["right"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B081", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Letter of intent", "subtitle": "Letter of intent (LOI)", "read": "3 min", "inShort": ["Letter of intent (LOI)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Letter of intent (LOI) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Letter of intent (LOI)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["letter", "intent"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["letter"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B082", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Net transactions", "subtitle": "Net transactions", "read": "3 min", "inShort": ["Net transactions", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Net transactions Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Net transactions", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["transactions"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["transactions"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B083", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Surrender charges", "subtitle": "Surrender charges", "read": "3 min", "inShort": ["Surrender charges", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Surrender charges Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Surrender charges", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["surrender", "charges"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["surrender"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B084", "leaf": "2.1.4", "leafTitle": "Packaged Products", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Sales charges", "subtitle": "Sales charges", "read": "3 min", "inShort": ["Sales charges", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Sales charges Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Sales charges", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["sales", "charges"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["sales"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B085", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "529 Plans", "subtitle": "529 Plans", "read": "3 min", "inShort": ["529 Plans", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: 529 Plans Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: 529 Plans", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["plans"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["plans"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B086", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Local government investment pools", "subtitle": "Local government investment pools (LGIPs)", "read": "3 min", "inShort": ["Local government investment pools (LGIPs)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Local government investment pools (LGIPs) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Local government investment pools (LGIPs)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["local", "government", "investment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["local"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B087", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "ABLE accounts", "subtitle": "ABLE accounts", "read": "3 min", "inShort": ["ABLE accounts", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: ABLE accounts Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: ABLE accounts", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["able", "accounts"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["accounts"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B088", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Municipal fund securities", "subtitle": "Municipal fund securities", "read": "3 min", "inShort": ["Municipal fund securities", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Municipal fund securities Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Municipal fund securities", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["municipal", "fund", "securities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["municipal"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B089", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Owner vs. beneficiary", "subtitle": "Owner vs. beneficiary", "read": "3 min", "inShort": ["Owner vs. beneficiary", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Owner vs. beneficiary Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Owner vs. beneficiary", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["owner", "beneficiary"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["owner"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B090", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Restricted use of plan assets", "subtitle": "Restricted use of plan assets", "read": "3 min", "inShort": ["Restricted use of plan assets", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Restricted use of plan assets Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Restricted use of plan assets", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["restricted", "plan", "assets"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["restricted"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B091", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Tax advantages", "subtitle": "Tax advantages", "read": "3 min", "inShort": ["Tax advantages", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Tax advantages Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Tax advantages", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["advantages"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["advantages"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B092", "leaf": "2.1.5", "leafTitle": "Municipal Fund Securities", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Direct or adviser sold", "subtitle": "Direct or adviser sold", "read": "3 min", "inShort": ["Direct or adviser sold", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Direct or adviser sold Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Direct or adviser sold", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["direct", "adviser", "sold"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["direct"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B093", "leaf": "2.1.6", "leafTitle": "Direct Participation Programs (DPPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Types of DPPs", "subtitle": "Types of DPPs", "read": "3 min", "inShort": ["Types of DPPs", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of DPPs Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of DPPs", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "dpps"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B094", "leaf": "2.1.6", "leafTitle": "Direct Participation Programs (DPPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Pass-through tax treatment", "subtitle": "Pass-through tax treatment", "read": "3 min", "inShort": ["Pass-through tax treatment", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Pass-through tax treatment Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Pass-through tax treatment", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["pass", "through", "treatment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["through"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B095", "leaf": "2.1.6", "leafTitle": "Direct Participation Programs (DPPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Unlisted", "subtitle": "Unlisted", "read": "3 min", "inShort": ["Unlisted", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Unlisted Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Unlisted", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["unlisted"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["unlisted"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B096", "leaf": "2.1.6", "leafTitle": "Direct Participation Programs (DPPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Generally illiquid", "subtitle": "Generally illiquid", "read": "3 min", "inShort": ["Generally illiquid", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Generally illiquid Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Generally illiquid", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["generally", "illiquid"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["generally"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B097", "leaf": "2.1.7", "leafTitle": "Real Estate Investment Trusts (REITs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Types of REITs", "subtitle": "Types of REITs", "read": "3 min", "inShort": ["Types of REITs", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of REITs Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of REITs", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "reits"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B098", "leaf": "2.1.7", "leafTitle": "Real Estate Investment Trusts (REITs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Real estate equity or debt", "subtitle": "Real estate equity or debt", "read": "3 min", "inShort": ["Real estate equity or debt", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Real estate equity or debt Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Real estate equity or debt", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["real", "estate", "equity"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["estate"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B099", "leaf": "2.1.7", "leafTitle": "Real Estate Investment Trusts (REITs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Tax-advantaged income without double taxation", "subtitle": "Tax-advantaged income without double taxation", "read": "3 min", "inShort": ["Tax-advantaged income without double taxation", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Tax-advantaged income without double taxation Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Tax-advantaged income without double taxation", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["advantaged", "income", "without"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["advantaged"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B100", "leaf": "2.1.8", "leafTitle": "Hedge Funds", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Minimum investment", "subtitle": "Minimum investment", "read": "3 min", "inShort": ["Minimum investment", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Minimum investment Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Minimum investment", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["minimum", "investment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["minimum"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B101", "leaf": "2.1.8", "leafTitle": "Hedge Funds", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Partnership structure", "subtitle": "Partnership structure", "read": "3 min", "inShort": ["Partnership structure", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Partnership structure Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Partnership structure", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["partnership", "structure"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["partnership"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B102", "leaf": "2.1.8", "leafTitle": "Hedge Funds", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Private equity", "subtitle": "Private equity", "read": "3 min", "inShort": ["Private equity", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Private equity Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Private equity", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["private", "equity"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["private"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B103", "leaf": "2.1.8", "leafTitle": "Hedge Funds", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Generally illiquid", "subtitle": "Generally illiquid", "read": "3 min", "inShort": ["Generally illiquid", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Generally illiquid Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Generally illiquid", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["generally", "illiquid"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["generally"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B104", "leaf": "2.1.9", "leafTitle": "Exchange-traded Products (ETPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Types of ETPs", "subtitle": "Types of ETPs", "read": "3 min", "inShort": ["Types of ETPs", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of ETPs Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of ETPs", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "etps"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B105", "leaf": "2.1.9", "leafTitle": "Exchange-traded Products (ETPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Alternative investments to mutual funds", "subtitle": "Alternative investments to mutual funds", "read": "3 min", "inShort": ["Alternative investments to mutual funds", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Alternative investments to mutual funds Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Alternative investments to mutual funds", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["alternative", "investments", "mutual"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["alternative"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B106", "leaf": "2.1.9", "leafTitle": "Exchange-traded Products (ETPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Fee considerations", "subtitle": "Fee considerations", "read": "3 min", "inShort": ["Fee considerations", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Fee considerations Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Fee considerations", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["considerations"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["considerations"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B107", "leaf": "2.1.9", "leafTitle": "Exchange-traded Products (ETPs)", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Active vs. passive", "subtitle": "Active vs. passive", "read": "3 min", "inShort": ["Active vs. passive", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Active vs. passive Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Active vs. passive", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["active", "passive"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["active"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B108", "leaf": "2.2", "leafTitle": "Investment Risks", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Definition and Identification of Risk Types", "subtitle": "Definition and Identification of Risk Types", "read": "3 min", "inShort": ["Definition and Identification of Risk Types", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition and Identification of Risk Types Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition and Identification of Risk Types", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "identification", "risk"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B109", "leaf": "2.2", "leafTitle": "Investment Risks", "section": "2", "sectionTitle": "Understanding Products and Their Risks", "title": "Strategies for Mitigation of Risk", "subtitle": "Strategies for Mitigation of Risk", "read": "3 min", "inShort": ["Strategies for Mitigation of Risk", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Strategies for Mitigation of Risk Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Strategies for Mitigation of Risk", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["strategies", "mitigation", "risk"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["strategies"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B110", "leaf": "3.1.1", "leafTitle": "Orders and Strategies", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Types of orders", "subtitle": "Types of orders (e.g., market, stop, limit, good-til-canceled (GTC), discretionary vs. non-discretionary, solicited vs. unsolicited)", "read": "3 min", "inShort": ["Types of orders (e.g., market, stop, limit, good-til-canceled (GTC), discretionary vs. non-discretionary, solicited vs. unsolicited)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of orders (e.g., market, stop, limit, good-til-canceled (GTC), discretionary vs. non-discretionary, solicited vs. unsolicited) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of orders (e.g., market, stop, limit, good-til-canceled (GTC), discretionary vs. non-discretionary, solicited vs. unsolicited)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "orders", "market"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B111", "leaf": "3.1.1", "leafTitle": "Orders and Strategies", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Buy and sell, bid-ask", "subtitle": "Buy and sell, bid-ask", "read": "3 min", "inShort": ["Buy and sell, bid-ask", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Buy and sell, bid-ask Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Buy and sell, bid-ask", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["sell"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["idea"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B112", "leaf": "3.1.1", "leafTitle": "Orders and Strategies", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Trade capacity", "subtitle": "Trade capacity (e.g., principal, agency)", "read": "3 min", "inShort": ["Trade capacity (e.g., principal, agency)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Trade capacity (e.g., principal, agency) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Trade capacity (e.g., principal, agency)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["trade", "capacity", "principal"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["trade"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B113", "leaf": "3.1.1", "leafTitle": "Orders and Strategies", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Long and short, naked and covered", "subtitle": "Long and short, naked and covered", "read": "3 min", "inShort": ["Long and short, naked and covered", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Long and short, naked and covered Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Long and short, naked and covered", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["long", "short", "naked"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["short"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B114", "leaf": "3.1.1", "leafTitle": "Orders and Strategies", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Bearish and bullish", "subtitle": "Bearish and bullish", "read": "3 min", "inShort": ["Bearish and bullish", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Bearish and bullish Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Bearish and bullish", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["bearish", "bullish"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["bearish"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B115", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Components of return", "subtitle": "Components of return (e.g., interest, dividends, realized/unrealized gains, return on capital)", "read": "3 min", "inShort": ["Components of return (e.g., interest, dividends, realized/unrealized gains, return on capital)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Components of return (e.g., interest, dividends, realized/unrealized gains, return on capital) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Components of return (e.g., interest, dividends, realized/unrealized gains, return on capital)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["components", "return", "interest"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["components"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B116", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Different types of dividends", "subtitle": "Different types of dividends (e.g., cash, stock)", "read": "3 min", "inShort": ["Different types of dividends (e.g., cash, stock)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Different types of dividends (e.g., cash, stock) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Different types of dividends (e.g., cash, stock)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["different", "types", "dividends"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["different"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B117", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Dividend payment dates", "subtitle": "Dividend payment dates (e.g., record date, ex-dividend date, payable date)", "read": "3 min", "inShort": ["Dividend payment dates (e.g., record date, ex-dividend date, payable date)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Dividend payment dates (e.g., record date, ex-dividend date, payable date) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Dividend payment dates (e.g., record date, ex-dividend date, payable date)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["dividend", "payment", "dates"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["dividend"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B118", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Concepts of measurement", "subtitle": "Concepts of measurement (e.g., yield, yield to maturity (YTM), yield to call (YTC), total return, basis points)", "read": "3 min", "inShort": ["Concepts of measurement (e.g., yield, yield to maturity (YTM), yield to call (YTC), total return, basis points)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Concepts of measurement (e.g., yield, yield to maturity (YTM), yield to call (YTC), total return, basis points) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Concepts of measurement (e.g., yield, yield to maturity (YTM), yield to call (YTC), total return, basis points)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["concepts", "measurement", "yield"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["concepts"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B119", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Cost basis requirements", "subtitle": "Cost basis requirements", "read": "3 min", "inShort": ["Cost basis requirements", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Cost basis requirements Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Cost basis requirements", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["cost", "basis", "requirements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["basis"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B120", "leaf": "3.1.2", "leafTitle": "Investment Returns", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Benchmarks and indices", "subtitle": "Benchmarks and indices", "read": "3 min", "inShort": ["Benchmarks and indices", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Benchmarks and indices Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Benchmarks and indices", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["benchmarks", "indices"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["benchmarks"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B121", "leaf": "3.1.3", "leafTitle": "Trade Settlement", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Settlement time frames for various products", "subtitle": "Settlement time frames for various products (e.g., T, T + 1)", "read": "3 min", "inShort": ["Settlement time frames for various products (e.g., T, T + 1)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Settlement time frames for various products (e.g., T, T + 1) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Settlement time frames for various products (e.g., T, T + 1)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["settlement", "time", "frames"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["settlement"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B122", "leaf": "3.1.3", "leafTitle": "Trade Settlement", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Physical vs. book entry", "subtitle": "Physical vs. book entry (e.g., delivery and settlement)", "read": "3 min", "inShort": ["Physical vs. book entry (e.g., delivery and settlement)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Physical vs. book entry (e.g., delivery and settlement) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Physical vs. book entry (e.g., delivery and settlement)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["physical", "book", "entry"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["physical"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B123", "leaf": "3.1.4", "leafTitle": "Corporate Actions", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Types of corporate actions", "subtitle": "Types of corporate actions (e.g., splits, reverse splits, buybacks, tender offers, exchange offers, rights offerings, mergers and acquisitions (M&A))", "read": "3 min", "inShort": ["Types of corporate actions (e.g., splits, reverse splits, buybacks, tender offers, exchange offers, rights offerings, mergers and acquisitions (M&A))", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of corporate actions (e.g., splits, reverse splits, buybacks, tender offers, exchange offers, rights offerings, mergers and acquisitions (M&A)) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of corporate actions (e.g., splits, reverse splits, buybacks, tender offers, exchange offers, rights offerings, mergers and acquisitions (M&A))", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "corporate", "actions"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B124", "leaf": "3.1.4", "leafTitle": "Corporate Actions", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Impact of stock splits and reverse stock splits on market price and cost basis", "subtitle": "Impact of stock splits and reverse stock splits on market price and cost basis", "read": "3 min", "inShort": ["Impact of stock splits and reverse stock splits on market price and cost basis", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Impact of stock splits and reverse stock splits on market price and cost basis Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Impact of stock splits and reverse stock splits on market price and cost basis", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["impact", "stock", "splits"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["impact"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B125", "leaf": "3.1.4", "leafTitle": "Corporate Actions", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Adjustments to securities subject to corporate actions", "subtitle": "Adjustments to securities subject to corporate actions", "read": "3 min", "inShort": ["Adjustments to securities subject to corporate actions", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Adjustments to securities subject to corporate actions Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Adjustments to securities subject to corporate actions", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["adjustments", "securities", "subject"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["adjustments"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B126", "leaf": "3.1.4", "leafTitle": "Corporate Actions", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Delivery of notices and corporate action deadlines", "subtitle": "Delivery of notices and corporate action deadlines", "read": "3 min", "inShort": ["Delivery of notices and corporate action deadlines", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Delivery of notices and corporate action deadlines Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Delivery of notices and corporate action deadlines", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["delivery", "notices", "corporate"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["delivery"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B127", "leaf": "3.1.4", "leafTitle": "Corporate Actions", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Proxies and proxy voting", "subtitle": "Proxies and proxy voting", "read": "3 min", "inShort": ["Proxies and proxy voting", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Proxies and proxy voting Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Proxies and proxy voting", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["proxies", "proxy", "voting"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["proxies"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B128", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Cash", "subtitle": "Cash", "read": "3 min", "inShort": ["Cash", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Cash Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Cash", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["cash"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["idea"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B129", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Margin", "subtitle": "Margin", "read": "3 min", "inShort": ["Margin", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Margin Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Margin", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["margin"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["margin"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B130", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Options", "subtitle": "Options", "read": "3 min", "inShort": ["Options", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Options Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Options", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["options"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["options"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B131", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Discretionary vs. non-discretionary", "subtitle": "Discretionary vs. non-discretionary", "read": "3 min", "inShort": ["Discretionary vs. non-discretionary", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Discretionary vs. non-discretionary Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Discretionary vs. non-discretionary", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["discretionary", "discretionary"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["discretionary"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B132", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Fee-based vs. commission", "subtitle": "Fee-based vs. commission", "read": "3 min", "inShort": ["Fee-based vs. commission", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Fee-based vs. commission Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Fee-based vs. commission", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["based", "commission"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["based"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B133", "leaf": "3.2.1", "leafTitle": "Account Types and Characteristics", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Educational accounts", "subtitle": "Educational accounts", "read": "3 min", "inShort": ["Educational accounts", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Educational accounts Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Educational accounts", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["educational", "accounts"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["educational"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B134", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Individual", "subtitle": "Individual", "read": "3 min", "inShort": ["Individual", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Individual Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Individual", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["individual"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["individual"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B135", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Joint", "subtitle": "Joint", "read": "3 min", "inShort": ["Joint", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Joint Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Joint", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["joint"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["joint"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B136", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Corporate/institutional", "subtitle": "Corporate/institutional", "read": "3 min", "inShort": ["Corporate/institutional", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Corporate/institutional Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Corporate/institutional", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["corporate", "institutional"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["corporate"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B137", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Trust", "subtitle": "Trust (e.g., revocable, irrevocable)", "read": "3 min", "inShort": ["Trust (e.g., revocable, irrevocable)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Trust (e.g., revocable, irrevocable) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Trust (e.g., revocable, irrevocable)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["trust", "revocable", "irrevocable"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["trust"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B138", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Custodial", "subtitle": "Custodial (e.g., UTMA)", "read": "3 min", "inShort": ["Custodial (e.g., UTMA)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Custodial (e.g., UTMA) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Custodial (e.g., UTMA)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["custodial", "utma"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["custodial"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B139", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Partnerships", "subtitle": "Partnerships", "read": "3 min", "inShort": ["Partnerships", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Partnerships Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Partnerships", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["partnerships"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["partnerships"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B140", "leaf": "3.2.2", "leafTitle": "Customer Account Registrations", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Retirement", "subtitle": "Retirement (e.g., individual retirement account (IRA), qualified plans)", "read": "3 min", "inShort": ["Retirement (e.g., individual retirement account (IRA), qualified plans)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Retirement (e.g., individual retirement account (IRA), qualified plans) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Retirement (e.g., individual retirement account (IRA), qualified plans)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["retirement", "individual", "retirement"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["retirement"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B141", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Definition of money laundering", "subtitle": "Definition of money laundering", "read": "3 min", "inShort": ["Definition of money laundering", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition of money laundering Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition of money laundering", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "money", "laundering"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B142", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Stages of money laundering", "subtitle": "Stages of money laundering (e.g., structuring, layering, placement)", "read": "3 min", "inShort": ["Stages of money laundering (e.g., structuring, layering, placement)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Stages of money laundering (e.g., structuring, layering, placement) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Stages of money laundering (e.g., structuring, layering, placement)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["stages", "money", "laundering"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["stages"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B143", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "AML compliance program", "subtitle": "AML compliance program", "read": "3 min", "inShort": ["AML compliance program", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: AML compliance program Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: AML compliance program", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["compliance", "program"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["compliance"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B144", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Suspicious Activity Report", "subtitle": "Suspicious Activity Report (SAR)", "read": "3 min", "inShort": ["Suspicious Activity Report (SAR)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Suspicious Activity Report (SAR) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Suspicious Activity Report (SAR)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["suspicious", "activity", "report"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["suspicious"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B145", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Currency Transaction Report", "subtitle": "Currency Transaction Report (CTR)", "read": "3 min", "inShort": ["Currency Transaction Report (CTR)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Currency Transaction Report (CTR) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Currency Transaction Report (CTR)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["currency", "transaction", "report"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["currency"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B146", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "FinCEN", "subtitle": "FinCEN", "read": "3 min", "inShort": ["FinCEN", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: FinCEN Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: FinCEN", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["fincen"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["fincen"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B147", "leaf": "3.2.3", "leafTitle": "Anti-money Laundering (AML)", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Office of Foreign Asset Control", "subtitle": "Office of Foreign Asset Control (OFAC) and the Specially Designated Nationals and Blocked Persons (SDNs) List", "read": "3 min", "inShort": ["Office of Foreign Asset Control (OFAC) and the Specially Designated Nationals and Blocked Persons (SDNs) List", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Office of Foreign Asset Control (OFAC) and the Specially Designated Nationals and Blocked Persons (SDNs) List Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Office of Foreign Asset Control (OFAC) and the Specially Designated Nationals and Blocked Persons (SDNs) List", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["office", "foreign", "asset"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["office"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B148", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Books and records retention requirements", "subtitle": "Books and records retention requirements", "read": "3 min", "inShort": ["Books and records retention requirements", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Books and records retention requirements Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Books and records retention requirements", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["books", "records", "retention"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["books"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B149", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Confirmations and account statements", "subtitle": "Confirmations and account statements", "read": "3 min", "inShort": ["Confirmations and account statements", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Confirmations and account statements Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Confirmations and account statements", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["confirmations", "account", "statements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["confirmations"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B150", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Holding of customer mail", "subtitle": "Holding of customer mail", "read": "3 min", "inShort": ["Holding of customer mail", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Holding of customer mail Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Holding of customer mail", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["holding", "customer", "mail"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["holding"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B151", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Business continuity plans", "subtitle": "Business continuity plans (BCP)", "read": "3 min", "inShort": ["Business continuity plans (BCP)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Business continuity plans (BCP) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Business continuity plans (BCP)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["business", "continuity", "plans"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["business"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B152", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Customer protection and custody of assets", "subtitle": "Customer protection and custody of assets", "read": "3 min", "inShort": ["Customer protection and custody of assets", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Customer protection and custody of assets Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Customer protection and custody of assets", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["customer", "protection", "custody"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["customer"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B153", "leaf": "3.2.4", "leafTitle": "Books and Records and Privacy Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Privacy requirements", "subtitle": "Privacy requirements (e.g., Regulation S-P)", "read": "3 min", "inShort": ["Privacy requirements (e.g., Regulation S-P)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Privacy requirements (e.g., Regulation S-P) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Privacy requirements (e.g., Regulation S-P)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["privacy", "requirements", "regulation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["privacy"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B154", "leaf": "3.2.5", "leafTitle": "Communications with the Public and General Best Interest Obligations and Suitability Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Communications with the public and telemarketing", "subtitle": "Communications with the public and telemarketing", "read": "3 min", "inShort": ["Communications with the public and telemarketing", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Communications with the public and telemarketing Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Communications with the public and telemarketing", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["communications", "with", "public"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["communications"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B155", "leaf": "3.2.5", "leafTitle": "Communications with the Public and General Best Interest Obligations and Suitability Requirements", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Best interest obligations and suitability requirements", "subtitle": "Best interest obligations and suitability requirements", "read": "3 min", "inShort": ["Best interest obligations and suitability requirements", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Best interest obligations and suitability requirements Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Best interest obligations and suitability requirements", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["best", "interest", "obligations"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["interest"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B156", "leaf": "3.3.1", "leafTitle": "Market Manipulation", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Definition of market manipulation", "subtitle": "Definition of market manipulation", "read": "3 min", "inShort": ["Definition of market manipulation", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition of market manipulation Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition of market manipulation", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "market", "manipulation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B157", "leaf": "3.3.1", "leafTitle": "Market Manipulation", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Types of market manipulation", "subtitle": "Types of market manipulation (e.g., market rumors, pump and dump, front running, excessive trading, marking the close, marking the open, backing away, freeriding)", "read": "3 min", "inShort": ["Types of market manipulation (e.g., market rumors, pump and dump, front running, excessive trading, marking the close, marking the open, backing away, freeriding)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Types of market manipulation (e.g., market rumors, pump and dump, front running, excessive trading, marking the close, marking the open, backing away, freeriding) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Types of market manipulation (e.g., market rumors, pump and dump, front running, excessive trading, marking the close, marking the open, backing away, freeriding)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["types", "market", "manipulation"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["types"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B158", "leaf": "3.3.2", "leafTitle": "Insider Trading", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Definition of insider trading", "subtitle": "Definition of insider trading", "read": "3 min", "inShort": ["Definition of insider trading", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition of insider trading Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition of insider trading", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "insider", "trading"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B159", "leaf": "3.3.2", "leafTitle": "Insider Trading", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Definition of material nonpublic information", "subtitle": "Definition of material nonpublic information", "read": "3 min", "inShort": ["Definition of material nonpublic information", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Definition of material nonpublic information Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Definition of material nonpublic information", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["definition", "material", "nonpublic"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["definition"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B160", "leaf": "3.3.2", "leafTitle": "Insider Trading", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Identifying involved parties", "subtitle": "Identifying involved parties", "read": "3 min", "inShort": ["Identifying involved parties", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Identifying involved parties Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Identifying involved parties", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["identifying", "involved", "parties"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["identifying"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B161", "leaf": "3.3.2", "leafTitle": "Insider Trading", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Penalties", "subtitle": "Penalties (e.g., fines, expulsion, incarceration)", "read": "3 min", "inShort": ["Penalties (e.g., fines, expulsion, incarceration)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Penalties (e.g., fines, expulsion, incarceration) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Penalties (e.g., fines, expulsion, incarceration)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["penalties", "fines", "expulsion"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["penalties"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B162", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Restrictions preventing associated persons from purchasing initial public offerings", "subtitle": "Restrictions preventing associated persons from purchasing initial public offerings (IPOs)", "read": "3 min", "inShort": ["Restrictions preventing associated persons from purchasing initial public offerings (IPOs)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Restrictions preventing associated persons from purchasing initial public offerings (IPOs) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Restrictions preventing associated persons from purchasing initial public offerings (IPOs)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["restrictions", "preventing", "associated"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["restrictions"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B163", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Use of manipulative, deceptive or other fraudulent devices", "subtitle": "Use of manipulative, deceptive or other fraudulent devices", "read": "3 min", "inShort": ["Use of manipulative, deceptive or other fraudulent devices", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Use of manipulative, deceptive or other fraudulent devices Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Use of manipulative, deceptive or other fraudulent devices", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["manipulative", "deceptive", "other"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["manipulative"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B164", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Improper use of customers’ securities or funds", "subtitle": "Improper use of customers’ securities or funds", "read": "3 min", "inShort": ["Improper use of customers’ securities or funds", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Improper use of customers’ securities or funds Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Improper use of customers’ securities or funds", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["improper", "customers", "securities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["improper"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B165", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Financial exploitation of seniors", "subtitle": "Financial exploitation of seniors", "read": "3 min", "inShort": ["Financial exploitation of seniors", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Financial exploitation of seniors Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Financial exploitation of seniors", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["financial", "exploitation", "seniors"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["financial"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B166", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Activities of unregistered persons", "subtitle": "Activities of unregistered persons", "read": "3 min", "inShort": ["Activities of unregistered persons", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Activities of unregistered persons Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Activities of unregistered persons", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["activities", "unregistered", "persons"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["activities"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B167", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Falsifying or withholding documents", "subtitle": "Falsifying or withholding documents", "read": "3 min", "inShort": ["Falsifying or withholding documents", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Falsifying or withholding documents Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Falsifying or withholding documents", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["falsifying", "withholding", "documents"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["falsifying"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B168", "leaf": "3.3.3", "leafTitle": "Other Prohibited Activities", "section": "3", "sectionTitle": "Understanding Trading, Customer Accounts and Prohibited Activities", "title": "Prohibited activities related to maintenance of books and records", "subtitle": "Prohibited activities related to maintenance of books and records (e.g., falsifying records and improper maintenance/retention of records)", "read": "3 min", "inShort": ["Prohibited activities related to maintenance of books and records (e.g., falsifying records and improper maintenance/retention of records)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Prohibited activities related to maintenance of books and records (e.g., falsifying records and improper maintenance/retention of records) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Prohibited activities related to maintenance of books and records (e.g., falsifying records and improper maintenance/retention of records)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["prohibited", "activities", "related"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["prohibited"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B169", "leaf": "4.1.1", "leafTitle": "Registration and Continuing Education", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "SRO qualification and registration requirements", "subtitle": "SRO qualification and registration requirements", "read": "3 min", "inShort": ["SRO qualification and registration requirements", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: SRO qualification and registration requirements Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: SRO qualification and registration requirements", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["qualification", "registration", "requirements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["qualification"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B170", "leaf": "4.1.1", "leafTitle": "Registration and Continuing Education", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "State registration requirements", "subtitle": "State registration requirements (e.g., blue-sky laws)", "read": "3 min", "inShort": ["State registration requirements (e.g., blue-sky laws)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: State registration requirements (e.g., blue-sky laws) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: State registration requirements (e.g., blue-sky laws)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["state", "registration", "requirements"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["state"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B171", "leaf": "4.1.1", "leafTitle": "Registration and Continuing Education", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Continuing Education", "subtitle": "Continuing Education (CE) requirement", "read": "3 min", "inShort": ["Continuing Education (CE) requirement", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Continuing Education (CE) requirement Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Continuing Education (CE) requirement", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["continuing", "education", "requirement"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["continuing"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B172", "leaf": "4.2.1", "leafTitle": "Employee Conduct", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Form U4 and Form U5", "subtitle": "Form U4 and Form U5 (e.g., purpose, when to update forms)", "read": "3 min", "inShort": ["Form U4 and Form U5 (e.g., purpose, when to update forms)", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Form U4 and Form U5 (e.g., purpose, when to update forms) Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Form U4 and Form U5 (e.g., purpose, when to update forms)", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["form", "form", "purpose"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["purpose"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B173", "leaf": "4.2.1", "leafTitle": "Employee Conduct", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Consequences of filing misleading information or omitting information", "subtitle": "Consequences of filing misleading information or omitting information", "read": "3 min", "inShort": ["Consequences of filing misleading information or omitting information", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Consequences of filing misleading information or omitting information Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Consequences of filing misleading information or omitting information", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["consequences", "filing", "misleading"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["consequences"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B174", "leaf": "4.2.1", "leafTitle": "Employee Conduct", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Customer complaints", "subtitle": "Customer complaints", "read": "3 min", "inShort": ["Customer complaints", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Customer complaints Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Customer complaints", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["customer", "complaints"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["customer"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B175", "leaf": "4.2.1", "leafTitle": "Employee Conduct", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Potential red flags", "subtitle": "Potential red flags", "read": "3 min", "inShort": ["Potential red flags", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Potential red flags Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Potential red flags", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["potential", "flags"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["potential"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B176", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Outside business activities", "subtitle": "Outside business activities", "read": "3 min", "inShort": ["Outside business activities", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Outside business activities Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Outside business activities", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["outside", "business", "activities"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["outside"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B177", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Private securities transactions", "subtitle": "Private securities transactions", "read": "3 min", "inShort": ["Private securities transactions", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Private securities transactions Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Private securities transactions", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["private", "securities", "transactions"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["private"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B178", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Reporting of political contributions and consequences for exceeding dollar contribution thresholds", "subtitle": "Reporting of political contributions and consequences for exceeding dollar contribution thresholds", "read": "3 min", "inShort": ["Reporting of political contributions and consequences for exceeding dollar contribution thresholds", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Reporting of political contributions and consequences for exceeding dollar contribution thresholds Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Reporting of political contributions and consequences for exceeding dollar contribution thresholds", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["reporting", "political", "contributions"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["reporting"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B179", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Dollar and value limits for gifts and gratuities and non-cash compensation", "subtitle": "Dollar and value limits for gifts and gratuities and non-cash compensation", "read": "3 min", "inShort": ["Dollar and value limits for gifts and gratuities and non-cash compensation", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Dollar and value limits for gifts and gratuities and non-cash compensation Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Dollar and value limits for gifts and gratuities and non-cash compensation", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["dollar", "value", "limits"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["dollar"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B180", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Business entertainment", "subtitle": "Business entertainment", "read": "3 min", "inShort": ["Business entertainment", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Business entertainment Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Business entertainment", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["business", "entertainment"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["business"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+    { "id": "B181", "leaf": "4.2.2", "leafTitle": "Reportable Events", "section": "4", "sectionTitle": "Overview of the Regulatory Framework", "title": "Felony, financial-related misdemeanors, liens, bankruptcy", "subtitle": "Felony, financial-related misdemeanors, liens, bankruptcy", "read": "3 min", "inShort": ["Felony, financial-related misdemeanors, liens, bankruptcy", "This bite is a title stub for frontend review.", "Full prose ships in the content pass."], "core": ["This module is the official outline bullet: Felony, financial-related misdemeanors, liens, bankruptcy Write the note from that bullet. The tutor still runs so you can click the loop."], "precision": ["Official source: SIE Content Outline.", "Nested examples under this bullet stay inside this bite.", "Score is tutor-only."], "prompt": "In your own words, explain: Felony, financial-related misdemeanors, liens, bankruptcy", "placeholder": "Start with the core principle…", "criteria": [{ "id": "c1", "label": "States the principle", "keys": ["felony", "financial", "related"], "fb": { "hit": "Principle landed.", "miss": "Name the core idea of this bite." } }, { "id": "c2", "label": "Uses outline language", "keys": ["felony"], "fb": { "hit": "Tied to the outline.", "miss": "Use the outline’s own terms." } }], "demo": false },
+];
 window.TB_STATES = ['Unassessed', 'Gap', 'Misconception', 'Rusty', 'Exam-Ready', 'Mastered'];
-window.TB_STATE_DESC = {
-  Unassessed: 'No teach-back graded yet',
-  Gap: 'The core mechanism was absent',
-  Misconception: 'A rule was stated incorrectly',
-  Rusty: 'Some correct pieces, but not enough coverage',
-  'Exam-Ready': 'The explanation meets the current tier',
-  Mastered: 'Confirmed across separate days — come back tomorrow'
-};
+window.TB_STATE_DESC = { Unassessed: 'Not taught back yet', Gap: 'The core principle was absent', Misconception: 'A rule was stated incorrectly', Rusty: 'Has the idea, mixes details', "Exam-Ready": 'States the principle and applies it', Mastered: 'Exam-ready again on a later day' };
+window.TB_TREE = { "1": { "title": "Knowledge of Capital Markets", "leaves": { "1.1.1": { "title": "The Securities and Exchange Commission (SEC)", "ids": ["B001", "B002"] }, "1.1.2": { "title": "Self-regulatory Organizations (SROs)", "ids": ["B003", "B004"] }, "1.1.3": { "title": "Other Regulators and Agencies", "ids": ["B005", "B006", "B007", "B008", "B009"] }, "1.1.4": { "title": "Market Participants and their Roles", "ids": ["B010", "B011", "B012", "B013", "B014", "B015", "B016", "B017", "B018"] }, "1.2.1": { "title": "Types of Markets", "ids": ["B019", "B020", "B021", "B022"] }, "1.3.1": { "title": "The Federal Reserve Board’s Impact on Business Activity and Market Stability", "ids": ["B023", "B024", "B025"] }, "1.3.2": { "title": "Business Economic Factors", "ids": ["B026", "B027", "B028", "B029", "B030"] }, "1.3.3": { "title": "International Economic Factors", "ids": ["B031", "B032", "B033"] }, "1.4": { "title": "Offerings", "ids": ["B034", "B035", "B036", "B037", "B038"] } } }, "2": { "title": "Understanding Products and Their Risks", "leaves": { "2.1.1": { "title": "Equity Securities", "ids": ["B039", "B040", "B041", "B042", "B043"] }, "2.1.2": { "title": "Debt Instruments", "ids": ["B044", "B045", "B046", "B047", "B048", "B049", "B050", "B051", "B052", "B053", "B054", "B055", "B056", "B057", "B058", "B059"] }, "2.1.3": { "title": "Options", "ids": ["B060", "B061", "B062", "B063", "B064", "B065", "B066", "B067", "B068", "B069", "B070", "B071", "B072"] }, "2.1.4": { "title": "Packaged Products", "ids": ["B073", "B074", "B075", "B076", "B077", "B078", "B079", "B080", "B081", "B082", "B083", "B084"] }, "2.1.5": { "title": "Municipal Fund Securities", "ids": ["B085", "B086", "B087", "B088", "B089", "B090", "B091", "B092"] }, "2.1.6": { "title": "Direct Participation Programs (DPPs)", "ids": ["B093", "B094", "B095", "B096"] }, "2.1.7": { "title": "Real Estate Investment Trusts (REITs)", "ids": ["B097", "B098", "B099"] }, "2.1.8": { "title": "Hedge Funds", "ids": ["B100", "B101", "B102", "B103"] }, "2.1.9": { "title": "Exchange-traded Products (ETPs)", "ids": ["B104", "B105", "B106", "B107"] }, "2.2": { "title": "Investment Risks", "ids": ["B108", "B109"] } } }, "3": { "title": "Understanding Trading, Customer Accounts and Prohibited Activities", "leaves": { "3.1.1": { "title": "Orders and Strategies", "ids": ["B110", "B111", "B112", "B113", "B114"] }, "3.1.2": { "title": "Investment Returns", "ids": ["B115", "B116", "B117", "B118", "B119", "B120"] }, "3.1.3": { "title": "Trade Settlement", "ids": ["B121", "B122"] }, "3.1.4": { "title": "Corporate Actions", "ids": ["B123", "B124", "B125", "B126", "B127"] }, "3.2.1": { "title": "Account Types and Characteristics", "ids": ["B128", "B129", "B130", "B131", "B132", "B133"] }, "3.2.2": { "title": "Customer Account Registrations", "ids": ["B134", "B135", "B136", "B137", "B138", "B139", "B140"] }, "3.2.3": { "title": "Anti-money Laundering (AML)", "ids": ["B141", "B142", "B143", "B144", "B145", "B146", "B147"] }, "3.2.4": { "title": "Books and Records and Privacy Requirements", "ids": ["B148", "B149", "B150", "B151", "B152", "B153"] }, "3.2.5": { "title": "Communications with the Public and General Best Interest Obligations and Suitability Requirements", "ids": ["B154", "B155"] }, "3.3.1": { "title": "Market Manipulation", "ids": ["B156", "B157"] }, "3.3.2": { "title": "Insider Trading", "ids": ["B158", "B159", "B160", "B161"] }, "3.3.3": { "title": "Other Prohibited Activities", "ids": ["B162", "B163", "B164", "B165", "B166", "B167", "B168"] } } }, "4": { "title": "Overview of the Regulatory Framework", "leaves": { "4.1.1": { "title": "Registration and Continuing Education", "ids": ["B169", "B170", "B171"] }, "4.2.1": { "title": "Employee Conduct", "ids": ["B172", "B173", "B174", "B175"] }, "4.2.2": { "title": "Reportable Events", "ids": ["B176", "B177", "B178", "B179", "B180", "B181"] } } } };
+window.TB_BITE_COUNT = 181;
 })(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/web/data.js", error: String((e && e.message) || e) }); }
 
 // ui_kits/web/screens.jsx
 try { (() => {
-const {
-  Button,
-  IconButton,
-  Card,
-  StateBadge,
-  ProgressBar,
-  StreakBadge,
-  TeachBackBox,
-  TopicChip,
-  CriterionRow,
-  ResultBanner
-} = window.TeachbackDesignSystem_417209;
-const STORE = 'tb-ds-web-kit:v1';
+const { Button, IconButton, Card, StateBadge, ProgressBar, StreakBadge, TeachBackBox, TopicChip, CriterionRow, ResultBanner } = __ds_scope;
+const STORE = 'tb-frontend-review:v3';
+const STORE_LEGACY = 'tb-frontend-review:v2';
+const READY = new Set(['Exam-Ready', 'Mastered']);
+const STRUGGLE = new Set(['Gap', 'Rusty', 'Misconception']);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const COURSES = [{ id: 'SIE', label: 'SIE', detail: 'Securities Industry Essentials', enabled: true }, { id: 'S7', label: 'Series 7', detail: 'Coming later', enabled: false }];
+function stateKey(s) { return String(s || 'Unassessed').toLowerCase().replace('-', ''); }
+function biteOf(id) { return window.TB_BITES.find(t => t.id === id); }
+function biteState(results, id) { return (results[id] && results[id].state) || 'Unassessed'; }
+function isReady(state) { return READY.has(state); }
+function isStub(topic) { return !topic.demo; }
+function firstAuthoredBite(bites, predicate = () => true) { return bites.find(b => !isStub(b) && predicate(b)); }
+function qbankStatus(log, id) { const value = log[id]; return typeof value === 'string' ? { latest: value, everIncorrect: value === 'wrong' } : value || { latest: null, everIncorrect: false }; }
+function ymd(d) { const y = d.getFullYear(); const m = String(d.getMonth() + 1).padStart(2, '0'); const day = String(d.getDate()).padStart(2, '0'); return y + '-' + m + '-' + day; }
+function parseYmd(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function startOfDay(d) { return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function addDays(d, n) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); return x; }
+function daysBetween(a, b) { return Math.round((startOfDay(b) - startOfDay(a)) / 86400000); }
+function fmtLong(s) { if (!s)
+    return ''; const d = parseYmd(s); return WEEKDAYS[d.getDay()].slice(0, 3) + ' ' + MONTHS[d.getMonth()].slice(0, 3) + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+function shuffle(arr) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+} return a; }
+function loadStore() {
+    try {
+        const raw = JSON.parse(localStorage.getItem(STORE) || localStorage.getItem(STORE_LEGACY) || '{}') || {};
+        if (raw.view === 'teach' || raw.view === 'module')
+            raw.view = 'work';
+        if (raw.view === 'login')
+            raw.view = 'home';
+        delete raw.xp;
+        return raw;
+    }
+    catch {
+        return {};
+    }
+}
 function grade(topic, answer) {
-  const a = answer.toLowerCase();
-  const crits = topic.criteria.map(c => {
-    const hits = c.keys.filter(k => k.split('|').some(alt => a.includes(alt))).length;
-    const outcome = hits === c.keys.length ? 'hit' : hits > 0 ? 'partial' : 'missing';
-    return {
-      ...c,
-      outcome,
-      feedback: outcome === 'hit' ? c.fb.hit : c.fb.miss
+    const a = answer.toLowerCase();
+    const crits = topic.criteria.map(c => {
+        const hits = c.keys.filter(k => k.split('|').some(alt => alt && a.includes(alt))).length;
+        const outcome = hits === c.keys.length ? 'hit' : hits > 0 ? 'partial' : 'missing';
+        return { ...c, outcome, feedback: outcome === 'hit' ? c.fb.hit : c.fb.miss };
+    });
+    const n = crits.filter(c => c.outcome === 'hit').length;
+    const state = n === crits.length ? 'Exam-Ready' : n >= Math.ceil(crits.length / 2) ? 'Rusty' : 'Gap';
+    return { crits, state, misses: crits.filter(c => c.outcome !== 'hit').map(c => c.label) };
+}
+function sectionStats(results) {
+    return Object.entries(window.TB_TREE).map(([sec, s]) => {
+        const ids = Object.values(s.leaves).flatMap(l => l.ids);
+        const assessed = ids.filter(id => results[id]).length;
+        const ready = ids.filter(id => isReady(biteState(results, id))).length;
+        return { sec, title: s.title, assessed, ready, total: ids.length, ids };
+    });
+}
+function readinessCounts(results) {
+    const counts = Object.fromEntries(window.TB_STATES.map(s => [s, 0]));
+    window.TB_BITES.forEach(b => { counts[biteState(results, b.id)]++; });
+    return counts;
+}
+function buildPlan(examDate, planStart) {
+    if (!examDate)
+        return { byDay: {}, days: 0 };
+    const start = startOfDay(parseYmd(planStart || ymd(new Date())));
+    const exam = startOfDay(parseYmd(examDate));
+    if (exam < start)
+        return { byDay: {}, days: 0 };
+    const span = Math.max(1, daysBetween(start, exam) + 1);
+    const byDay = {};
+    window.TB_BITES.forEach((b, i) => {
+        const idx = Math.min(span - 1, Math.floor(i * span / window.TB_BITES.length));
+        const day = ymd(addDays(start, idx));
+        (byDay[day] || (byDay[day] = [])).push(b.id);
+    });
+    return { byDay, days: span };
+}
+function monthCells(year, month) {
+    const first = new Date(year, month, 1);
+    const lead = first.getDay();
+    const daysIn = new Date(year, month + 1, 0).getDate();
+    const prevIn = new Date(year, month, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < lead; i++)
+        cells.push({ date: new Date(year, month - 1, prevIn - lead + 1 + i), outside: true });
+    for (let d = 1; d <= daysIn; d++)
+        cells.push({ date: new Date(year, month, d), outside: false });
+    while (cells.length % 7)
+        cells.push({ date: new Date(year, month + 1, cells.length - (lead + daysIn) + 1), outside: true });
+    return cells;
+}
+function GoogleMark() {
+    return React.createElement("svg", { width: "18", height: "18", viewBox: "0 0 18 18", "aria-hidden": "true" },
+        React.createElement("path", { fill: "#4285F4", d: "M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" }),
+        React.createElement("path", { fill: "#34A853", d: "M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" }),
+        React.createElement("path", { fill: "#FBBC05", d: "M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" }),
+        React.createElement("path", { fill: "#EA4335", d: "M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.163 6.656 3.58 9 3.58z" }));
+}
+function FacebookMark() {
+    return React.createElement("svg", { width: "18", height: "18", viewBox: "0 0 24 24", "aria-hidden": "true" },
+        React.createElement("path", { fill: "#fff", d: "M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" }));
+}
+function AppleMark() {
+    return React.createElement("svg", { width: "16", height: "18", viewBox: "0 0 24 24", "aria-hidden": "true" },
+        React.createElement("path", { fill: "#fff", d: "M16.365 1.43c0 1.14-.437 2.2-1.207 3.01-.8.84-2.13 1.49-3.27 1.4-.13-1.1.4-2.26 1.16-3.04.82-.85 2.23-1.46 3.32-1.37zM20.76 17.37c-.58 1.33-.85 1.92-1.59 3.1-1.03 1.63-2.48 3.66-4.28 3.68-1.6.02-2.02-1.04-4.2-1.03-2.19.01-2.64 1.05-4.24 1.03-1.8-.02-3.18-1.85-4.21-3.48-2.88-4.57-3.18-9.93-1.4-12.77 1.26-2.01 3.26-3.19 5.14-3.19 1.91 0 3.11 1.05 4.69 1.05 1.54 0 2.48-1.06 4.69-1.06 1.67 0 3.44.91 4.7 2.48-4.13 2.26-3.46 8.15.7 9.19z" }));
+}
+function BrandButton({ kind, label, onClick }) {
+    const styles = {
+        google: { background: '#fff', color: '#1f1f1f', border: '1px solid #747775' },
+        facebook: { background: '#1877F2', color: '#fff', border: '1px solid #1877F2' },
+        apple: { background: '#000', color: '#fff', border: '1px solid #000' }
     };
-  });
-  const n = crits.filter(c => c.outcome === 'hit').length;
-  const state = n === crits.length ? 'Exam-Ready' : n >= Math.ceil(crits.length / 2) ? 'Rusty' : 'Gap';
-  return {
-    crits,
-    state
-  };
+    const mark = kind === 'google' ? React.createElement(GoogleMark, null) : kind === 'facebook' ? React.createElement(FacebookMark, null) : React.createElement(AppleMark, null);
+    return React.createElement("button", { type: "button", onClick: onClick, style: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%', minHeight: 44, padding: '10px 14px', borderRadius: varRadius(), font: '600 14px var(--font-display)', cursor: 'pointer', ...styles[kind] } },
+        mark,
+        label);
 }
-function StatePath({
-  state
-}) {
-  const idx = window.TB_STATES.indexOf(state);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 0,
-      flex: 1,
-      minWidth: 280
-    }
-  }, window.TB_STATES.map((s, i) => /*#__PURE__*/React.createElement(React.Fragment, {
-    key: s
-  }, i > 0 && /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      height: 4,
-      borderRadius: 2,
-      background: i <= idx ? 'var(--clover-500)' : 'var(--border)'
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    title: s,
-    style: {
-      display: 'grid',
-      gap: 4,
-      justifyItems: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: i === idx ? 26 : 18,
-      height: i === idx ? 26 : 18,
-      borderRadius: '50%',
-      background: i < idx ? 'var(--clover-500)' : i === idx ? `var(--state-${s.toLowerCase().replace('-', '')})` : 'var(--surface-sunken)',
-      border: '1px solid ' + (i <= idx ? 'transparent' : 'var(--border-strong)'),
-      boxShadow: i === idx ? '0 2px 0 rgba(0,0,0,.18)' : 'none',
-      display: 'grid',
-      placeItems: 'center',
-      color: '#fff',
-      fontSize: 12
-    }
-  }, i < idx && /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-check"
-  })), /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '700 9px var(--font-body)',
-      letterSpacing: '.05em',
-      textTransform: 'uppercase',
-      color: i === idx ? 'var(--text-body)' : 'var(--text-faint)',
-      whiteSpace: 'nowrap'
-    }
-  }, s)))));
+function varRadius() { return 'var(--radius-md)'; }
+function TopBar({ streak, user, setView, course, setCourse, onLogout }) {
+    const [courseOpen, setCourseOpen] = React.useState(false);
+    const [profOpen, setProfOpen] = React.useState(false);
+    const current = COURSES.find(c => c.id === course) || COURSES[0];
+    const initial = (user || '?').trim().charAt(0).toUpperCase();
+    return React.createElement("header", { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, maxWidth: 1280, margin: 'auto', padding: '16px var(--page-pad)', borderBottom: '1px solid var(--border)' } },
+        React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 } },
+            React.createElement("a", { href: "#", onClick: e => { e.preventDefault(); setView('home'); }, style: { font: '700 24px var(--font-display)', color: 'var(--text-body)', textDecoration: 'none', letterSpacing: '-.02em' } },
+                "teach",
+                React.createElement("span", { style: { color: 'var(--clover-500)' } }, "back")),
+            React.createElement("div", { style: { position: 'relative' } },
+                React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => setCourseOpen(o => !o) },
+                    "Course \u00B7 ",
+                    current.label,
+                    " ",
+                    React.createElement("i", { className: "ph-bold ph-caret-down" })),
+                courseOpen && React.createElement("div", { style: { position: 'absolute', top: '110%', left: 0, zIndex: 30, minWidth: 280, background: 'var(--paper)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--edge-card)', padding: 8 } }, COURSES.map(c => (React.createElement("button", { key: c.id, type: "button", disabled: !c.enabled, onClick: () => { if (c.enabled) {
+                        setCourse(c.id);
+                        setCourseOpen(false);
+                    } }, style: { display: 'grid', width: '100%', textAlign: 'left', gap: 2, padding: '10px 12px', minHeight: 44, border: 0, borderRadius: 'var(--radius-md)', background: c.id === course ? 'var(--clover-100)' : 'transparent', color: c.enabled ? 'var(--text-body)' : 'var(--text-faint)', cursor: c.enabled ? 'pointer' : 'default', font: '500 13px var(--font-body)' } },
+                    React.createElement("strong", { style: { font: '600 14px var(--font-display)' } }, c.label),
+                    React.createElement("span", null,
+                        c.detail,
+                        c.enabled ? '' : ' · future'))))))),
+        React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 12 } },
+            React.createElement(StreakBadge, { count: streak }),
+            user
+                ? React.createElement("div", { style: { position: 'relative' } },
+                    React.createElement("button", { type: "button", "aria-label": 'Profile ' + user, onClick: () => setProfOpen(o => !o), style: { width: 40, height: 40, borderRadius: '50%', border: '1px solid var(--clover-700)', background: 'var(--clover-500)', color: '#fff', font: '700 15px var(--font-display)', cursor: 'pointer' } }, initial),
+                    profOpen && React.createElement("div", { style: { position: 'absolute', top: '110%', right: 0, zIndex: 30, minWidth: 220, background: 'var(--paper)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--edge-card)', padding: 12, display: 'grid', gap: 10 } },
+                        React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis' } }, user),
+                        React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => { setProfOpen(false); onLogout(); } }, "Log out")))
+                : React.createElement(Button, { size: "sm", onClick: () => setView('login') }, "Log in")));
 }
-function TopBar({
-  streak
-}) {
-  return /*#__PURE__*/React.createElement("header", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 16,
-      maxWidth: 'var(--page-max)',
-      margin: 'auto',
-      padding: '18px var(--page-pad)'
-    }
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "#",
-    style: {
-      font: '700 26px var(--font-display)',
-      color: 'var(--text-body)',
-      textDecoration: 'none',
-      letterSpacing: '-.02em'
-    }
-  }, "teach", /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--clover-500)'
-    }
-  }, "back")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement(StreakBadge, {
-    count: streak
-  }), /*#__PURE__*/React.createElement(IconButton, {
-    icon: "gear",
-    label: "Settings"
-  })));
+function LeftNav({ view, setView }) {
+    const nav = [['home', 'Home', 'house'], ['outline', 'Outline', 'tree-structure'], ['qbank', 'QBank', 'exam'], ['brush', 'Brush-up', 'broom']];
+    return React.createElement("nav", { className: "tb-nav", "aria-label": "Primary" }, nav.map(([id, label, icon]) => React.createElement(Button, { key: id, size: "sm", fullWidth: true, variant: view === id ? 'primary' : 'ghost', onClick: () => setView(id) },
+        React.createElement("i", { className: 'ph-bold ph-' + icon }),
+        label)));
 }
-function NoteCard({
-  topic
-}) {
-  return /*#__PURE__*/React.createElement(Card, {
-    padding: 30
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      gap: 16,
-      paddingBottom: 18,
-      borderBottom: '1px solid var(--border)'
+function OverallBar({ results }) {
+    const rows = sectionStats(results);
+    const ready = rows.reduce((a, r) => a + r.ready, 0);
+    const assessed = rows.reduce((a, r) => a + r.assessed, 0);
+    const total = rows.reduce((a, r) => a + r.total, 0);
+    return React.createElement(Card, { padding: 18 },
+        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 10 } },
+            React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Ready \u00B7 Exam-Ready or Mastered"),
+            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                ready,
+                " ready \u00B7 ",
+                assessed,
+                " assessed \u00B7 ",
+                total)),
+        React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 8 } }, rows.map(r => (React.createElement("div", { key: r.sec, style: { display: 'grid', gap: 6, minWidth: 0 } },
+            React.createElement(ProgressBar, { value: r.ready, max: r.total }),
+            React.createElement("span", { style: { font: '600 10px var(--font-body)', letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--text-faint)' } },
+                "Sec ",
+                r.sec,
+                " \u00B7 ",
+                r.ready,
+                "/",
+                r.total))))));
+}
+function StateKey() {
+    return React.createElement("div", { style: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' } },
+        window.TB_STATES.map(s => (React.createElement("span", { key: s, style: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 'var(--radius-pill)', background: `var(--state-${stateKey(s)}-bg)`, color: `var(--state-${stateKey(s)})`, font: '600 11px var(--font-body)' } },
+            React.createElement("span", { style: { width: 8, height: 8, borderRadius: '50%', background: `var(--state-${stateKey(s)})` } }),
+            s))),
+        React.createElement("span", { style: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 'var(--radius-pill)', background: 'var(--state-unassessed-bg)', color: 'var(--text-faint)', font: '600 11px var(--font-body)', border: '1px dashed var(--border-strong)' } }, "Stub / outline only"));
+}
+function PlanChart({ ready, total, planStart, examDate }) {
+    if (!examDate)
+        return null;
+    const today = startOfDay(new Date());
+    const start = startOfDay(parseYmd(planStart || ymd(today)));
+    const exam = startOfDay(parseYmd(examDate));
+    if (exam < start)
+        return null;
+    const duration = Math.max(0, daysBetween(start, exam));
+    const domain = Math.max(1, duration);
+    const elapsed = duration === 0 ? domain : Math.max(0, Math.min(duration, daysBetween(start, today)));
+    const w = 280, h = 110, pad = 22;
+    const x = t => pad + (t / domain) * (w - 2 * pad);
+    const y = v => h - pad - (v / Math.max(1, total)) * (h - 2 * pad);
+    return React.createElement("svg", { viewBox: '0 0 ' + w + ' ' + h, width: "100%", height: "110", role: "img", "aria-label": "Progress versus plan" },
+        React.createElement("rect", { x: "0", y: "0", width: w, height: h, fill: "var(--cream)", rx: "8" }),
+        React.createElement("line", { x1: x(0), y1: y(0), x2: x(domain), y2: y(total), stroke: "var(--tangerine-500)", strokeDasharray: "4 4", strokeWidth: "1.5" }),
+        React.createElement("line", { x1: x(0), y1: y(0), x2: x(elapsed), y2: y(ready), stroke: "var(--clover-500)", strokeWidth: "2.2" }),
+        React.createElement("circle", { cx: x(elapsed), cy: y(ready), r: "4", fill: "var(--clover-500)" }));
+}
+function DayList({ ids, results, openModule, heading, empty }) {
+    if (!ids || ids.length === 0)
+        return React.createElement(Card, { sunken: true, padding: 20 },
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, empty));
+    return React.createElement("div", { style: { display: 'grid', gap: 8 } },
+        React.createElement("h3", { style: { margin: 0, font: '600 16px var(--font-display)', color: 'var(--sunny-700)' } }, heading),
+        ids.map(id => {
+            const t = biteOf(id);
+            const st = biteState(results, id);
+            return React.createElement(Card, { key: id, padding: 14, style: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', gap: 10, alignItems: 'center', background: heading === 'Today' ? 'var(--sunny-100)' : undefined } },
+                React.createElement("div", { style: { minWidth: 0 } },
+                    React.createElement("div", { style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
+                        React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
+                            t.id,
+                            " \u00B7 ",
+                            t.leaf),
+                        React.createElement(StateBadge, { state: st, size: "sm" }),
+                        isStub(t) && React.createElement("span", { style: { font: '500 11px var(--font-body)', color: 'var(--text-faint)' } }, "stub")),
+                    React.createElement("strong", { style: { display: 'block', marginTop: 4, font: '600 15px var(--font-display)' } }, t.title),
+                    React.createElement("span", { style: { color: 'var(--text-faint)', font: '500 12px var(--font-body)' } },
+                        "Teach-back \u00B7 ",
+                        t.read || '8 min')),
+                React.createElement(Button, { size: "sm", onClick: () => openModule(id, 'home') }, "Open"));
+        }));
+}
+function HomeView({ results, examDate, setExamDate, planStart, setPlanStart, openModule }) {
+    const today = startOfDay(new Date());
+    const todayStr = ymd(today);
+    const [cursor, setCursor] = React.useState({ y: today.getFullYear(), m: today.getMonth() });
+    const [selected, setSelected] = React.useState(todayStr);
+    const plan = buildPlan(examDate, planStart);
+    const remaining = window.TB_BITES.filter(b => !isReady(biteState(results, b.id))).length;
+    const exam = examDate ? startOfDay(parseYmd(examDate)) : null;
+    const countdown = exam ? Math.max(0, daysBetween(today, exam)) : null;
+    const studyDaysLeft = exam ? countdown + 1 : null;
+    const past = exam && daysBetween(today, exam) < 0;
+    const pace = (!exam || past || studyDaysLeft === 0) ? null : remaining / Math.max(1, studyDaysLeft);
+    const counts = readinessCounts(results);
+    const authored = window.TB_BITES.filter(b => b.demo);
+    const authoredReady = authored.filter(b => isReady(biteState(results, b.id))).length;
+    const authoredLine = authored.map(b => biteState(results, b.id)).reduce((acc, st) => { acc[st] = (acc[st] || 0) + 1; return acc; }, {});
+    const selectedIds = plan.byDay[selected] || [];
+    const todayIds = plan.byDay[todayStr] || [];
+    const nextEntry = Object.entries(plan.byDay).sort((a, b) => a[0].localeCompare(b[0])).find(([day, ids]) => day >= todayStr && firstAuthoredBite(ids.map(biteOf), b => !isReady(biteState(results, b.id))));
+    const nextBite = nextEntry && firstAuthoredBite(nextEntry[1].map(biteOf), b => !isReady(biteState(results, b.id)));
+    const cells = monthCells(cursor.y, cursor.m);
+    const onDate = e => {
+        const v = e.target.value;
+        if (v && v < todayStr)
+            return;
+        setExamDate(v);
+        setPlanStart(v ? todayStr : '');
+        if (v)
+            setSelected(todayStr);
+    };
+    return React.createElement("section", { style: { display: 'grid', gap: 22 } },
+        React.createElement("div", { className: "tb-home" },
+            React.createElement("div", { style: { display: 'grid', gap: 16, minWidth: 0 } },
+                React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 } },
+                    React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } },
+                        MONTHS[cursor.m],
+                        " ",
+                        cursor.y),
+                    React.createElement("div", { style: { display: 'flex', gap: 8 } },
+                        React.createElement(IconButton, { icon: "caret-left", label: "Previous month", onClick: () => setCursor(c => c.m === 0 ? { y: c.y - 1, m: 11 } : { y: c.y, m: c.m - 1 }) }),
+                        React.createElement(IconButton, { icon: "caret-right", label: "Next month", onClick: () => setCursor(c => c.m === 11 ? { y: c.y + 1, m: 0 } : { y: c.y, m: c.m + 1 }) }))),
+                !examDate && React.createElement(Card, { sunken: true, padding: 20 },
+                    React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, "Set an exam date to spread the modules. Stubs stay on the calendar.")),
+                React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(7,minmax(0,1fr))', gap: 6 } },
+                    WEEKDAYS.map(d => React.createElement("div", { key: d, style: { font: '600 11px var(--font-body)', color: 'var(--text-faint)', textAlign: 'center', padding: '4px 0' } }, d)),
+                    cells.map((cell, i) => {
+                        const key = ymd(cell.date);
+                        const ids = plan.byDay[key] || [];
+                        const isToday = key === todayStr;
+                        const isSel = key === selected;
+                        const shown = ids.slice(0, 3);
+                        const extra = ids.length - shown.length;
+                        const authoredIds = ids.filter(id => !isStub(biteOf(id)));
+                        const allReady = authoredIds.length > 0 && authoredIds.every(id => isReady(biteState(results, id)));
+                        const behind = !cell.outside && key < todayStr && authoredIds.some(id => !isReady(biteState(results, id)));
+                        return React.createElement("button", { key: i, type: "button", onClick: () => setSelected(key), style: { display: 'grid', alignContent: 'start', gap: 4, minHeight: 92, padding: 6, textAlign: 'left', border: isSel ? '1px solid var(--clover-500)' : '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: isToday ? 'var(--sunny-100)' : 'var(--paper)', boxShadow: isToday ? 'inset 0 3px 0 var(--sunny-500)' : 'none', cursor: 'pointer', opacity: cell.outside ? .5 : 1 } },
+                            React.createElement("span", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                                React.createElement("span", { style: { font: '600 12px var(--font-display)', color: behind ? 'var(--coral-700)' : isToday ? 'var(--sunny-700)' : 'var(--text-body)', background: behind ? 'var(--coral-100)' : 'transparent', borderRadius: 6, padding: behind ? '0 5px' : 0 } }, cell.date.getDate()),
+                                allReady && React.createElement("i", { className: "ph-bold ph-check", style: { color: 'var(--clover-600)', fontSize: 12 } })),
+                            shown.map(id => {
+                                const t = biteOf(id);
+                                const st = biteState(results, id);
+                                const done = isReady(st);
+                                return React.createElement("span", { key: id, style: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', font: '500 10px var(--font-body)', padding: '2px 4px', borderRadius: 4, background: isToday ? 'var(--sunny-500)' : done ? 'var(--clover-100)' : 'var(--cream)', color: done ? 'var(--clover-700)' : 'var(--text-muted)', border: '1px solid var(--border)' } }, t.title);
+                            }),
+                            extra > 0 && React.createElement("span", { style: { font: '600 10px var(--font-body)', color: 'var(--text-faint)' } },
+                                "+",
+                                extra));
+                    })),
+                examDate
+                    ? React.createElement(DayList, { ids: selectedIds, results: results, openModule: openModule, heading: selected === todayStr ? 'Today' : fmtLong(selected), empty: selected === todayStr && todayIds.length === 0 ? (nextEntry ? `Nothing scheduled. The next authored bite is ${nextBite.title} on ${fmtLong(nextEntry[0])}.` : 'Nothing scheduled.') : 'No modules on this day.' })
+                    : React.createElement(DayList, { ids: [], results: results, openModule: openModule, heading: "Today", empty: "Set an exam date to spread the modules." })),
+            React.createElement("aside", { style: { display: 'grid', gap: 14, alignContent: 'start' } },
+                React.createElement(Card, { padding: 18 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Exam"),
+                    React.createElement("h2", { style: { margin: '6px 0 10px', font: '600 20px var(--font-display)' } }, examDate ? ('SIE · ' + fmtLong(examDate)) : 'Set your exam date.'),
+                    React.createElement("input", { className: "tb-field", type: "date", name: "exam-date", min: todayStr, value: examDate, onChange: onDate, "aria-label": "Exam date" })),
+                React.createElement(Card, { padding: 18 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Days until exam"),
+                    React.createElement("div", { style: { font: '700 32px var(--font-display)' } }, examDate && !past ? countdown : '—')),
+                React.createElement(Card, { padding: 18 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Pace"),
+                    React.createElement("div", { style: { font: '700 28px var(--font-display)' } }, pace == null ? '—' : (pace.toFixed(1) + ' / day')),
+                    React.createElement("p", { style: { margin: '6px 0 0', color: 'var(--text-muted)', font: '500 12px var(--font-body)' } }, pace == null ? 'Remaining modules ÷ remaining days.' : 'Remaining ' + remaining + ' modules ÷ ' + studyDaysLeft + ' study days' + (pace >= 7 ? (' · ' + (pace * 7).toFixed(1) + ' / week') : '') + '.')),
+                React.createElement(Card, { padding: 18 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Progress vs plan"),
+                    examDate
+                        ? React.createElement(React.Fragment, null,
+                            React.createElement(PlanChart, { ready: authoredReady, total: authored.length, planStart: planStart, examDate: examDate }),
+                            React.createElement("p", { style: { margin: '8px 0 0', font: '500 12px var(--font-body)', color: 'var(--text-muted)' } },
+                                React.createElement("strong", null,
+                                    authored.length,
+                                    " authored notes"),
+                                " \u2014 ",
+                                Object.entries(authoredLine).map(([k, v]) => v + ' ' + k).join(', ') || 'all Unassessed',
+                                "."),
+                            React.createElement("p", { style: { margin: '4px 0 0', font: '500 12px var(--font-body)', color: 'var(--text-faint)' } },
+                                window.TB_BITE_COUNT - authored.length,
+                                " title stubs stay on the calendar."))
+                        : React.createElement("p", { style: { margin: '8px 0 0', color: 'var(--text-muted)' } }, "No plan until a date is set.")),
+                React.createElement(Card, { padding: 18 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Readiness"),
+                    React.createElement("div", { style: { display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 10 } }, window.TB_STATES.map(s => (React.createElement("span", { key: s, style: { padding: '4px 8px', borderRadius: 'var(--radius-pill)', background: `var(--state-${stateKey(s)}-bg)`, color: `var(--state-${stateKey(s)})`, font: '600 11px var(--font-body)' } },
+                        s,
+                        " ",
+                        counts[s]))))))),
+        React.createElement("div", { style: { display: 'grid', gap: 12 } },
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'end' } },
+                React.createElement("h2", { style: { margin: 0, font: 'var(--text-h2)', fontFamily: 'var(--font-display)' } }, "181 bites"),
+                React.createElement(StateKey, null)),
+            sectionStats(results).map(sec => (React.createElement("div", { key: sec.sec, style: { display: 'grid', gap: 8 } },
+                React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' } },
+                    React.createElement("strong", { style: { font: '600 14px var(--font-display)' } },
+                        "Section ",
+                        sec.sec,
+                        " \u00B7 ",
+                        sec.title),
+                    React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                        sec.ready,
+                        " ready \u00B7 ",
+                        sec.assessed,
+                        " assessed \u00B7 ",
+                        sec.total)),
+                React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(44px,1fr))', gap: 6 } }, sec.ids.map(id => {
+                    const t = biteOf(id);
+                    const st = biteState(results, id);
+                    const k = stateKey(st);
+                    const todayHit = (plan.byDay[todayStr] || []).includes(id);
+                    return React.createElement("button", { key: id, type: "button", title: t.id + ' ' + t.title + ' · ' + st + (isStub(t) ? ' · stub' : ''), onClick: () => openModule(id, 'home'), style: { minHeight: 44, minWidth: 44, padding: 4, border: todayHit ? '2px solid var(--sunny-500)' : (isStub(t) ? '1px dashed var(--border-strong)' : '1px solid var(--state-' + k + ')'), borderRadius: 8, background: `var(--state-${k}-bg)`, color: `var(--state-${k})`, font: '500 10px var(--font-mono)', cursor: 'pointer' } }, t.id.replace('B', ''));
+                })))))));
+}
+function LoginView({ setUser, setView }) {
+    const [mode, setMode] = React.useState('login');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const finish = u => { setUser(u); setView('home'); };
+    const primary = () => finish(email.trim() || 'you@email.com');
+    const social = kind => finish(email.trim() || kind + '.user@example.com');
+    return React.createElement(Card, { padding: 28, style: { maxWidth: 420, margin: '12px auto', position: 'relative' } },
+        React.createElement("div", { style: { display: 'flex', justifyContent: 'flex-end' } },
+            React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => setMode(mode === 'login' ? 'signup' : 'login') }, mode === 'login' ? 'Sign up' : 'Log in')),
+        React.createElement("a", { href: "#", onClick: e => e.preventDefault(), style: { font: '700 26px var(--font-display)', color: 'var(--text-body)', textDecoration: 'none', letterSpacing: '-.02em' } },
+            "teach",
+            React.createElement("span", { style: { color: 'var(--clover-500)' } }, "back")),
+        React.createElement("p", { style: { margin: '8px 0 18px', font: '600 16px var(--font-display)', color: 'var(--text-muted)' } }, "Learn it. Teach it back."),
+        React.createElement("label", { style: { display: 'grid', gap: 6, marginBottom: 12, font: '600 12px var(--font-body)', color: 'var(--text-muted)' } },
+            "Email",
+            React.createElement("input", { className: "tb-field", type: "email", name: "email", value: email, onChange: e => setEmail(e.target.value), placeholder: "you@email.com", autoComplete: "username" })),
+        React.createElement("label", { style: { display: 'grid', gap: 6, marginBottom: 16, font: '600 12px var(--font-body)', color: 'var(--text-muted)' } },
+            "Password",
+            React.createElement("input", { className: "tb-field", type: "password", name: "password", value: password, onChange: e => setPassword(e.target.value), placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", autoComplete: mode === 'login' ? 'current-password' : 'new-password' })),
+        React.createElement(Button, { fullWidth: true, size: "lg", onClick: primary }, mode === 'login' ? 'Log in' : 'Create account'),
+        React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--text-faint)', font: '500 11px var(--font-body)' } },
+            React.createElement("span", { style: { flex: 1, height: 1, background: 'var(--border)' } }),
+            "or",
+            React.createElement("span", { style: { flex: 1, height: 1, background: 'var(--border)' } })),
+        React.createElement("div", { style: { display: 'grid', gap: 8 } },
+            React.createElement(BrandButton, { kind: "google", label: mode === 'login' ? 'Continue with Google' : 'Sign up with Google', onClick: () => social('google') }),
+            React.createElement(BrandButton, { kind: "facebook", label: mode === 'login' ? 'Continue with Facebook' : 'Sign up with Facebook', onClick: () => social('facebook') }),
+            React.createElement(BrandButton, { kind: "apple", label: mode === 'login' ? 'Continue with Apple' : 'Sign up with Apple', onClick: () => social('apple') })),
+        React.createElement("p", { style: { margin: '14px 0 0', font: '500 11px var(--font-mono)', color: 'var(--text-faint)' } }, "Frontend stub \u00B7 nothing is sent"));
+}
+function OutlineView({ results, openModule, openSecs, setOpenSecs, openLeaves, setOpenLeaves }) {
+    const tree = window.TB_TREE;
+    const toggleSec = sec => setOpenSecs(openSecs.includes(sec) ? openSecs.filter(s => s !== sec) : openSecs.concat(sec));
+    const toggleLeaf = leaf => setOpenLeaves(openLeaves.includes(leaf) ? openLeaves.filter(s => s !== leaf) : openLeaves.concat(leaf));
+    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+        React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "SIE outline"),
+        React.createElement(StateKey, null),
+        React.createElement(OverallBar, { results: results }),
+        Object.entries(tree).map(([sec, s]) => {
+            const ids = Object.values(s.leaves).flatMap(l => l.ids);
+            const assessed = ids.filter(id => results[id]).length;
+            const ready = ids.filter(id => isReady(biteState(results, id))).length;
+            return React.createElement(Card, { key: sec, padding: 18 },
+                React.createElement("button", { onClick: () => toggleSec(sec), style: { all: 'unset', cursor: 'pointer', display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', gap: 12, minHeight: 44 } },
+                    React.createElement("div", null,
+                        React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } },
+                            "Section ",
+                            sec),
+                        React.createElement("h2", { style: { margin: '4px 0 0', font: '600 22px var(--font-display)' } }, s.title)),
+                    React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                        ready,
+                        " ready \u00B7 ",
+                        assessed,
+                        " assessed \u00B7 ",
+                        ids.length)),
+                openSecs.includes(sec) && React.createElement("div", { style: { display: 'grid', gap: 14, marginTop: 16 } }, Object.entries(s.leaves).map(([leaf, l]) => (React.createElement("div", { key: leaf },
+                    React.createElement("button", { onClick: () => toggleLeaf(leaf), style: { all: 'unset', cursor: 'pointer', font: '600 13px var(--font-body)', color: 'var(--text-body)', minHeight: 44, display: 'inline-flex', alignItems: 'center' } },
+                        leaf,
+                        " ",
+                        l.title),
+                    openLeaves.includes(leaf) && React.createElement("div", { style: { display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 } }, l.ids.map(id => {
+                        const t = biteOf(id);
+                        const st = biteState(results, id);
+                        return React.createElement(TopicChip, { key: id, id: id, title: t.title + (isStub(t) ? ' · stub' : ''), state: st, selected: false, onClick: () => openModule(id, 'outline') });
+                    })))))));
+        }));
+}
+function WorkView({ topic, state, answer, setAnswer, result, err, submit, back, goHome, openModule, goBrush, results, examDate }) {
+    const [openSecs, setOpenSecs] = React.useState(() => [topic.section]);
+    const [openLeaves, setOpenLeaves] = React.useState(() => [topic.leaf]);
+    React.useEffect(() => {
+        setOpenSecs(s => s.includes(topic.section) ? s : s.concat(topic.section));
+        setOpenLeaves(s => s.includes(topic.leaf) ? s : s.concat(topic.leaf));
+    }, [topic.id, topic.section, topic.leaf]);
+    const next = firstAuthoredBite(window.TB_BITES.slice(window.TB_BITES.indexOf(topic) + 1));
+    const pop = result && (result.state === 'Exam-Ready' || result.state === 'Mastered');
+    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
+            React.createElement("button", { onClick: back, style: { all: 'unset', cursor: 'pointer', font: '600 13px var(--font-body)', color: 'var(--clover-600)' } }, "\u2190 Back"),
+            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                "SIE",
+                examDate ? ' · ' + fmtLong(examDate) : '')),
+        React.createElement("div", { className: "tb-work" },
+            React.createElement(Card, { padding: 14, style: { maxHeight: '78vh', overflow: 'auto' } }, Object.entries(window.TB_TREE).map(([sec, s]) => {
+                const ids = Object.values(s.leaves).flatMap(l => l.ids);
+                const authored = ids.filter(id => biteOf(id).demo);
+                const stubs = ids.length - authored.length;
+                const assessed = authored.filter(id => results[id]).length;
+                return React.createElement("div", { key: sec, style: { marginBottom: 10 } },
+                    React.createElement("button", { type: "button", onClick: () => setOpenSecs(o => o.includes(sec) ? o.filter(x => x !== sec) : o.concat(sec)), style: { all: 'unset', cursor: 'pointer', display: 'block', width: '100%', padding: '8px 4px' } },
+                        React.createElement("strong", { style: { font: '600 13px var(--font-display)' } },
+                            "Sec ",
+                            sec,
+                            " \u00B7 ",
+                            s.title),
+                        React.createElement("div", { style: { font: '500 11px var(--font-mono)', color: 'var(--text-faint)' } },
+                            assessed,
+                            "/",
+                            authored.length,
+                            " authored \u00B7 stubs ",
+                            stubs)),
+                    openSecs.includes(sec) && Object.entries(s.leaves).map(([leaf, l]) => (React.createElement("div", { key: leaf, style: { marginLeft: 6 } },
+                        React.createElement("button", { type: "button", onClick: () => setOpenLeaves(o => o.includes(leaf) ? o.filter(x => x !== leaf) : o.concat(leaf)), style: { all: 'unset', cursor: 'pointer', font: '600 12px var(--font-body)', padding: '6px 4px', display: 'block' } },
+                            leaf,
+                            " ",
+                            l.title),
+                        openLeaves.includes(leaf) && l.ids.map(id => {
+                            const t = biteOf(id);
+                            const on = id === topic.id;
+                            return React.createElement("button", { key: id, type: "button", onClick: () => openModule(id, 'work'), style: { display: 'block', width: '100%', textAlign: 'left', padding: '8px 8px', minHeight: 40, border: 0, borderRadius: 8, background: on ? 'var(--clover-100)' : 'transparent', color: on ? 'var(--clover-700)' : 'var(--text-muted)', font: '500 12px var(--font-body)', cursor: 'pointer' } },
+                                t.id,
+                                " ",
+                                t.title);
+                        })))));
+            })),
+            React.createElement("div", { style: { display: 'grid', gap: 16, minWidth: 0 } },
+                React.createElement("div", { style: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' } },
+                    React.createElement(StateBadge, { state: state || 'Unassessed' }),
+                    React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
+                        topic.id,
+                        " \u00B7 ",
+                        topic.leaf)),
+                React.createElement(Card, { padding: 28 },
+                    React.createElement("h1", { style: { margin: '0 0 8px', font: '600 28px var(--font-display)' } }, topic.title),
+                    React.createElement("p", { style: { margin: '0 0 16px', color: 'var(--text-muted)' } }, topic.subtitle),
+                    isStub(topic) && React.createElement(Card, { sunken: true, padding: 14, style: { marginBottom: 16 } },
+                        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', font: '500 13px var(--font-body)' } }, "Title stub \u2014 the official bullet is the note. Full prose ships in the content pass.")),
+                    React.createElement(Card, { sunken: true, padding: 16, style: { marginBottom: 16 } },
+                        React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "In short"),
+                        React.createElement("div", { style: { display: 'grid', gap: 6, marginTop: 8 } }, topic.inShort.map(p => React.createElement("strong", { key: p, style: { font: '700 14px var(--font-body)' } }, p)))),
+                    React.createElement("h3", { style: { margin: '0 0 8px', font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--clover-600)' } }, "Core"),
+                    topic.core.map(p => React.createElement("p", { key: p, style: { margin: '0 0 12px', color: 'var(--text-muted)', font: '500 14px/1.7 var(--font-body)' } }, p)),
+                    React.createElement("h3", { style: { margin: '16px 0 8px', font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--clover-600)' } }, "Precision"),
+                    React.createElement("ul", { style: { margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 8 } }, topic.precision.map(p => React.createElement("li", { key: p, style: { paddingLeft: 22, position: 'relative', color: 'var(--text-muted)', font: '500 13px/1.55 var(--font-body)' } },
+                        React.createElement("i", { className: "ph-bold ph-arrow-fat-right", style: { position: 'absolute', left: 0, top: 2, color: 'var(--tangerine-500)' } }),
+                        p)))),
+                React.createElement(Card, { padding: 24 },
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Your turn"),
+                    React.createElement("h2", { style: { margin: '6px 0 14px', font: '600 22px var(--font-display)' } }, "Explain it to a colleague."),
+                    React.createElement(TeachBackBox, { value: answer, onChange: setAnswer, prompt: topic.prompt, placeholder: topic.placeholder, rows: 8 }),
+                    React.createElement("div", { style: { marginTop: 14 } },
+                        React.createElement(Button, { fullWidth: true, size: "lg", onClick: submit }, "Grade my teach-back")),
+                    err && React.createElement("p", { role: "alert", style: { margin: '10px 0 0', color: 'var(--coral-700)', font: '600 12px var(--font-body)' } }, err))),
+            React.createElement("div", { style: { display: 'grid', gap: 14, alignContent: 'start' } }, !result
+                ? React.createElement(Card, { sunken: true, padding: 26, style: { border: '1px dashed var(--border-strong)' } },
+                    React.createElement("i", { className: "ph-bold ph-arrow-elbow-down-right", style: { fontSize: 26, color: 'var(--tangerine-500)' } }),
+                    React.createElement("h3", { style: { margin: '10px 0 6px', font: '600 20px var(--font-display)' } }, "Your signal will appear here."),
+                    React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', font: '500 13px/1.6 var(--font-body)' } },
+                        "We\u2019ll compare your explanation with the ",
+                        topic.criteria.length,
+                        " things an exam-ready answer needs."))
+                : React.createElement(React.Fragment, null,
+                    React.createElement("div", { className: pop ? 'tb-pop' : undefined },
+                        React.createElement(ResultBanner, { state: result.state })),
+                    React.createElement(Card, { padding: "4px 22px" }, result.crits.map(c => React.createElement(CriterionRow, { key: c.id, outcome: c.outcome, label: c.label, feedback: c.feedback }))),
+                    React.createElement("p", { style: { margin: 0, font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                        result.attempts || 1,
+                        " \u00B7 Available"),
+                    STRUGGLE.has(result.state)
+                        ? React.createElement(Button, { variant: "ghost", onClick: goBrush }, "Review this miss in Brush-up")
+                        : pop && React.createElement("div", { style: { display: 'grid', gap: 8 } },
+                            next && React.createElement(Button, { onClick: () => openModule(next.id, 'work') }, "Open the next authored bite"),
+                            React.createElement(Button, { variant: "ghost", onClick: goHome }, "Back to today"))))));
+}
+function makeQuizItems(bites, count, styles) {
+    const wantTF = styles.includes('tf');
+    const wantMC = styles.includes('mc');
+    const pool = shuffle(bites).slice(0, Math.max(1, count));
+    return pool.map((b, i) => {
+        const useTF = wantTF && (!wantMC || i % 2 === 1);
+        if (useTF) {
+            return { id: 'Q' + (i + 1), biteId: b.id, style: 'tf', stub: true, stem: 'Stub item · ' + b.id + ' ' + b.title + '. No authored QBank item yet. Is this bite on the official SIE outline?', choices: ['True', 'False'], correct: 0 };
+        }
+        const otherTitles = Array.from(new Set(window.TB_BITES.filter(x => x.id !== b.id && x.title !== b.title).map(x => x.title)));
+        const others = shuffle(otherTitles).slice(0, 3);
+        const choices = shuffle([b.title, ...others]);
+        return { id: 'Q' + (i + 1), biteId: b.id, style: 'mc', stub: true, stem: 'Stub item · ' + b.id + '. No authored QBank item yet. Which outline bite is this?', choices, correct: choices.indexOf(b.title) };
+    });
+}
+function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQbankLog }) {
+    const [pane, setPane] = React.useState('list');
+    const [run, setRun] = React.useState(null);
+    const [now, setNow] = React.useState(Date.now());
+    React.useEffect(() => { if (!(run && run.quiz && run.quiz.prefs && run.quiz.prefs.timer))
+        return; const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, [run && run.quiz && run.quiz.prefs && run.quiz.prefs.timer]);
+    const items = window.TB_BITES.filter(t => t.demo);
+    const [name, setName] = React.useState('Custom quiz');
+    const [count, setCount] = React.useState(10);
+    const [styles, setStyles] = React.useState(['mc']);
+    const [include, setInclude] = React.useState('all');
+    const [pool, setPool] = React.useState('all');
+    const [prefs, setPrefs] = React.useState({ explain: true, scores: true, timer: false });
+    const [picked, setPicked] = React.useState(() => Object.values(window.TB_TREE).flatMap(s => Object.keys(s.leaves)));
+    const toggleStyle = id => setStyles(s => s.includes(id) ? s.filter(x => x !== id) : s.concat(id));
+    const toggleLeaf = id => setPicked(p => p.includes(id) ? p.filter(x => x !== id) : p.concat(id));
+    const selectAll = () => setPicked(Object.values(window.TB_TREE).flatMap(s => Object.keys(s.leaves)));
+    const selectNone = () => setPicked([]);
+    const toggleSec = sec => {
+        const leaves = Object.keys(window.TB_TREE[sec].leaves);
+        const allOn = leaves.every(l => picked.includes(l));
+        setPicked(allOn ? picked.filter(l => !leaves.includes(l)) : Array.from(new Set(picked.concat(leaves))));
+    };
+    const selectedBites = window.TB_BITES.filter(b => picked.includes(b.leaf));
+    const struggleBites = selectedBites.filter(b => STRUGGLE.has(biteState(results, b.id)));
+    const sourceBites = pool === 'struggle' ? struggleBites : selectedBites;
+    const availableBites = sourceBites.filter(b => include === 'unused' ? !qbankLog[b.id] : include === 'incorrect' ? qbankStatus(qbankLog, b.id).everIncorrect : true);
+    const requestedCount = Math.max(1, Number.parseInt(count, 10) || 1);
+    const quizCount = Math.min(requestedCount, availableBites.length);
+    const create = () => {
+        if (availableBites.length === 0 || styles.length === 0) {
+            setRun({ empty: true, reason: pool === 'struggle' && struggleBites.length === 0 ? 'No struggle topics yet (Gap / Rusty / Misconception).' : styles.length === 0 ? 'Pick at least one question style.' : 'No questions in that pool. Authored QBank items land with the content pass.' });
+            setPane('run');
+            return;
+        }
+        const quiz = { id: 'quiz-' + Date.now(), name: name.trim() || 'Custom quiz', count: quizCount, styles, include, pool, prefs: { ...prefs }, items: makeQuizItems(availableBites, quizCount, styles) };
+        setQuizzes(quizzes.concat(quiz));
+        setRun({ quiz, index: 0, picked: null, graded: null, answers: {}, started: Date.now() });
+        setPane('run');
+    };
+    if (pane === 'create') {
+        return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Create quiz"),
+                React.createElement(Button, { variant: "ghost", size: "sm", onClick: () => setPane('list') }, "Cancel")),
+            React.createElement(Card, { padding: 22, style: { display: 'grid', gap: 20 } },
+                React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 140px', gap: 12 } },
+                    React.createElement("label", { style: { display: 'grid', gap: 6, font: '600 12px var(--font-body)', color: 'var(--text-muted)' } },
+                        "Name",
+                        React.createElement("input", { className: "tb-field", value: name, onChange: e => setName(e.target.value) })),
+                    React.createElement("label", { style: { display: 'grid', gap: 6, font: '600 12px var(--font-body)', color: 'var(--text-muted)' } },
+                        "Questions",
+                        React.createElement("input", { className: "tb-field", type: "number", min: "1", max: Math.max(1, availableBites.length), value: count, onChange: e => setCount(e.target.value) }),
+                        React.createElement("span", { "aria-live": "polite", style: { font: '500 11px var(--font-body)', color: 'var(--text-faint)' } }, availableBites.length === 0 ? '0 questions available for these settings.' : requestedCount > availableBites.length ? `Capped at ${quizCount} questions · ${availableBites.length} available.` : `${quizCount} questions will be created · ${availableBites.length} available.`))),
+                React.createElement("div", null,
+                    React.createElement("h3", { style: { margin: '0 0 8px', font: '600 16px var(--font-display)' } }, "Pool source"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "radio", name: "pool", checked: pool === 'all', onChange: () => setPool('all') }),
+                        " All topics"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "radio", name: "pool", checked: pool === 'struggle', onChange: () => setPool('struggle') }),
+                        " Struggle topics (Gap / Rusty / Misconception)")),
+                React.createElement("div", null,
+                    React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 } },
+                        React.createElement("h3", { style: { margin: 0, font: '600 16px var(--font-display)' } }, "Topics"),
+                        React.createElement("div", { style: { display: 'flex', gap: 8 } },
+                            React.createElement(Button, { size: "sm", variant: "ghost", onClick: selectAll }, "Select all"),
+                            React.createElement(Button, { size: "sm", variant: "ghost", onClick: selectNone }, "Clear"))),
+                    Object.entries(window.TB_TREE).map(([sec, s]) => {
+                        const leaves = Object.keys(s.leaves);
+                        const on = leaves.every(l => picked.includes(l));
+                        return React.createElement("div", { key: sec, style: { marginBottom: 12 } },
+                            React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36, font: '600 13px var(--font-body)' } },
+                                React.createElement("input", { type: "checkbox", checked: on, onChange: () => toggleSec(sec) }),
+                                " Section ",
+                                sec,
+                                " \u00B7 ",
+                                s.title),
+                            React.createElement("div", { style: { marginLeft: 22, display: 'grid', gap: 4 } }, Object.entries(s.leaves).map(([leaf, l]) => (React.createElement("label", { key: leaf, style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 32, font: '500 13px var(--font-body)' } },
+                                React.createElement("input", { type: "checkbox", checked: picked.includes(leaf), onChange: () => toggleLeaf(leaf) }),
+                                " ",
+                                leaf,
+                                " ",
+                                l.title)))));
+                    })),
+                React.createElement("div", null,
+                    React.createElement("h3", { style: { margin: '0 0 8px', font: '600 16px var(--font-display)' } }, "Question style"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "checkbox", checked: styles.includes('mc'), onChange: () => toggleStyle('mc') }),
+                        " Multiple choice"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "checkbox", checked: styles.includes('tf'), onChange: () => toggleStyle('tf') }),
+                        " True / false"),
+                    React.createElement("p", { style: { margin: '6px 0 0', color: 'var(--text-faint)', font: '500 12px var(--font-body)' } }, "No applied or video questions.")),
+                React.createElement("div", null,
+                    React.createElement("h3", { style: { margin: '0 0 8px', font: '600 16px var(--font-display)' } }, "Include"),
+                    [['unused', 'Unused'], ['incorrect', 'Previously incorrect'], ['all', 'All']].map(([id, label]) => (React.createElement("label", { key: id, style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "radio", name: "include", checked: include === id, onChange: () => setInclude(id) }),
+                        " ",
+                        label)))),
+                React.createElement("div", null,
+                    React.createElement("h3", { style: { margin: '0 0 8px', font: '600 16px var(--font-display)' } }, "Preferences"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "checkbox", checked: prefs.explain, onChange: e => setPrefs({ ...prefs, explain: e.target.checked }) }),
+                        " Show explanation"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "checkbox", checked: prefs.scores, onChange: e => setPrefs({ ...prefs, scores: e.target.checked }) }),
+                        " Show scores as you go"),
+                    React.createElement("label", { style: { display: 'flex', gap: 8, alignItems: 'center', minHeight: 36 } },
+                        React.createElement("input", { type: "checkbox", checked: prefs.timer, onChange: e => setPrefs({ ...prefs, timer: e.target.checked }) }),
+                        " Show timer")),
+                React.createElement(Button, { size: "lg", onClick: create }, "Create quiz")));
     }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '500 11px var(--font-mono)',
-      color: 'var(--tangerine-600)'
+    if (pane === 'run' && run) {
+        if (run.empty) {
+            return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "QBank"),
+                React.createElement(Card, { sunken: true, padding: 24 },
+                    React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, run.reason)),
+                React.createElement(Button, { variant: "ghost", onClick: () => setPane('create') }, "Back to create"));
+        }
+        const quiz = run.quiz;
+        const item = quiz.items[run.index];
+        const done = run.index >= quiz.items.length;
+        const rights = Object.values(run.answers).filter(a => a.ok).length;
+        const tick = quiz.prefs.timer ? Math.max(0, Math.floor((now - (run.started || now)) / 1000)) : null;
+        if (done) {
+            return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, quiz.name),
+                React.createElement(Card, { padding: 24 },
+                    React.createElement("p", { style: { margin: 0, font: '600 22px var(--font-display)' } },
+                        rights,
+                        " / ",
+                        quiz.items.length,
+                        " right"),
+                    React.createElement("p", { style: { margin: '8px 0 0', color: 'var(--text-muted)' } }, "Right/wrong only \u2014 this does not write Gap / Rusty / Exam-Ready / Mastered.")),
+                React.createElement(Button, { onClick: () => { setRun(null); setPane('list'); } }, "Back to QBank"));
+        }
+        const gradeItem = () => {
+            if (run.picked == null)
+                return;
+            const ok = run.picked === item.correct;
+            const answers = { ...run.answers, [item.id]: { pick: run.picked, ok } };
+            const prior = qbankStatus(qbankLog, item.biteId);
+            setQbankLog({ ...qbankLog, [item.biteId]: { latest: ok ? 'right' : 'wrong', everIncorrect: prior.everIncorrect || !ok } });
+            setRun({ ...run, graded: { ok }, answers });
+        };
+        const next = () => setRun({ ...run, index: run.index + 1, picked: null, graded: null });
+        return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' } },
+                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, quiz.name),
+                React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                    run.index + 1,
+                    " / ",
+                    quiz.items.length,
+                    quiz.prefs.scores ? ' · ' + rights + ' right' : '',
+                    tick != null ? ' · ' + tick + 's' : '')),
+            React.createElement(Card, { padding: 22 },
+                React.createElement("p", { style: { margin: '0 0 6px', font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
+                    item.biteId,
+                    " \u00B7 stub"),
+                React.createElement("h2", { style: { margin: '0 0 16px', font: '600 20px var(--font-display)' } }, item.stem),
+                React.createElement("div", { style: { display: 'grid', gap: 8 } }, item.choices.map((c, i) => {
+                    const show = run.graded;
+                    const good = i === item.correct;
+                    const mine = i === run.picked;
+                    const bg = show && good ? 'var(--clover-100)' : show && mine && !good ? 'var(--coral-100)' : 'var(--paper)';
+                    return React.createElement("button", { key: i, type: "button", onClick: () => !run.graded && setRun({ ...run, picked: i }), style: { textAlign: 'left', padding: '12px 14px', minHeight: 44, border: '1px solid ' + (mine ? 'var(--clover-500)' : 'var(--border)'), borderRadius: 'var(--radius-md)', background: bg, cursor: run.graded ? 'default' : 'pointer', font: '500 14px var(--font-body)' } }, c);
+                })),
+                run.graded && quiz.prefs.explain && React.createElement("p", { style: { margin: '14px 0 0', color: 'var(--text-muted)' } },
+                    run.graded.ok ? 'Right.' : 'Wrong. ',
+                    "This is a placeholder item. Authored questions land with the content pass."),
+                React.createElement("div", { style: { marginTop: 16 } }, run.graded ? React.createElement(Button, { onClick: next }, run.index + 1 === quiz.items.length ? 'See score' : 'Next') : React.createElement(Button, { onClick: gradeItem, disabled: run.picked == null }, "Check"))),
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-faint)', font: '500 12px var(--font-body)' } }, "Right/wrong only \u2014 this does not write Gap / Rusty / Exam-Ready / Mastered."));
     }
-  }, topic.id, " \xB7 ", topic.section), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      margin: '6px 0 3px',
-      font: '600 28px var(--font-display)',
-      color: 'var(--text-body)'
+    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
+            React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "QBank"),
+            React.createElement(Button, { onClick: () => setPane('create') }, "Create quiz")),
+        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', maxWidth: 520 } }, "Random practice. Right/wrong only \u2014 this does not write Gap / Rusty / Exam-ready / Mastered."),
+        items.map(t => React.createElement(Card, { key: t.id, padding: 20 },
+            React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, t.id),
+            React.createElement("h3", { style: { margin: '6px 0', font: '600 20px var(--font-display)' } }, t.title),
+            React.createElement("p", { style: { margin: '0 0 12px', color: 'var(--text-muted)' } }, t.prompt),
+            React.createElement(Button, { size: "sm", onClick: () => openModule(t.id, 'qbank') }, "Open the module"))),
+        quizzes.length > 0 && React.createElement("div", { style: { display: 'grid', gap: 10 } },
+            React.createElement("h2", { style: { margin: 0, font: '600 18px var(--font-display)' } }, "Your quizzes"),
+            quizzes.map(q => React.createElement(Card, { key: q.id, padding: 16, style: { display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' } },
+                React.createElement("div", null,
+                    React.createElement("strong", { style: { font: '600 16px var(--font-display)' } }, q.name),
+                    React.createElement("p", { style: { margin: '4px 0 0', color: 'var(--text-faint)', font: '500 12px var(--font-body)' } },
+                        q.items.length,
+                        " stub items \u00B7 right/wrong only")),
+                React.createElement(Button, { size: "sm", onClick: () => { setRun({ quiz: q, index: 0, picked: null, graded: null, answers: {}, started: Date.now() }); setPane('run'); } }, "Open")))),
+        React.createElement(Card, { sunken: true, padding: 20 },
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-faint)' } }, "Full authored bank lands with the content pass. These three are the demo pool.")));
+}
+function BrushView({ results, openModule }) {
+    const byBite = {};
+    for (const [id, r] of Object.entries(results)) {
+        if (!STRUGGLE.has(r.state))
+            continue;
+        const topic = biteOf(id);
+        byBite[id] = { id, title: topic.title, state: r.state, misses: r.misses || [] };
     }
-  }, topic.title), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      color: 'var(--text-muted)',
-      font: '600 14px var(--font-body)'
-    }
-  }, topic.subtitle)), /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: '500 11px var(--font-mono)',
-      color: 'var(--text-faint)',
-      whiteSpace: 'nowrap',
-      paddingTop: 4
-    }
-  }, topic.read)), /*#__PURE__*/React.createElement(Card, {
-    sunken: true,
-    padding: 16,
-    style: {
-      margin: '18px 0'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--tangerine-600)'
-    }
-  }, "In short"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 6,
-      marginTop: 8
-    }
-  }, topic.inShort.map(p => /*#__PURE__*/React.createElement("strong", {
-    key: p,
-    style: {
-      color: 'var(--text-body)',
-      font: '700 14px var(--font-body)'
-    }
-  }, p)))), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      margin: '0 0 8px',
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--clover-600)'
-    }
-  }, "Core"), topic.core.map(p => /*#__PURE__*/React.createElement("p", {
-    key: p,
-    style: {
-      margin: '0 0 12px',
-      color: 'var(--text-muted)',
-      font: '600 14px/1.7 var(--font-body)'
-    }
-  }, p)), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      margin: '16px 0 8px',
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--clover-600)'
-    }
-  }, "Precision"), /*#__PURE__*/React.createElement("ul", {
-    style: {
-      margin: 0,
-      padding: 0,
-      listStyle: 'none',
-      display: 'grid',
-      gap: 8
-    }
-  }, topic.precision.map(p => /*#__PURE__*/React.createElement("li", {
-    key: p,
-    style: {
-      position: 'relative',
-      paddingLeft: 22,
-      color: 'var(--text-muted)',
-      font: '600 13px/1.55 var(--font-body)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-arrow-fat-right",
-    style: {
-      position: 'absolute',
-      left: 0,
-      top: 2,
-      color: 'var(--tangerine-500)'
-    }
-  }), p))));
+    const cards = Object.values(byBite);
+    const buckets = ['Gap', 'Misconception', 'Rusty'];
+    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+        React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Brush-up"),
+        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', maxWidth: 540 } }, "Not the official outline. Grouped by how you missed. We\u2019ll thicken this once the struggle bank has real traffic."),
+        cards.length === 0
+            ? React.createElement(Card, { sunken: true, padding: 28 },
+                React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, "No struggle data yet. Teach a bite back and misses land here."))
+            : buckets.map(bucket => {
+                const rows = cards.filter(c => c.state === bucket);
+                if (!rows.length)
+                    return null;
+                return React.createElement("div", { key: bucket, style: { display: 'grid', gap: 10 } },
+                    React.createElement("h2", { style: { margin: 0, font: '600 18px var(--font-display)' } }, bucket),
+                    rows.map(m => React.createElement(Card, { key: m.id, padding: 18 },
+                        React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, m.id),
+                        React.createElement("h3", { style: { margin: '4px 0', font: '600 18px var(--font-display)' } }, m.title),
+                        React.createElement("ul", { style: { margin: '0 0 12px', paddingLeft: 18, color: 'var(--text-muted)' } }, (m.misses.length ? m.misses : ['Missed criteria not stored']).map(x => React.createElement("li", { key: x }, x))),
+                        React.createElement(Button, { size: "sm", onClick: () => openModule(m.id, 'brush') }, "Open teach-back"))));
+            }));
 }
 function App() {
-  const saved = React.useMemo(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORE)) || {};
-    } catch {
-      return {};
-    }
-  }, []);
-  const [topicId, setTopicId] = React.useState(saved.topicId || 'T004');
-  const [answers, setAnswers] = React.useState(saved.answers || {});
-  const [results, setResults] = React.useState(saved.results || {});
-  const topic = window.TB_TOPICS.find(t => t.id === topicId);
-  const answer = answers[topicId] || '';
-  const result = results[topicId];
-  const [err, setErr] = React.useState('');
-  const persist = patch => {
-    try {
-      localStorage.setItem(STORE, JSON.stringify({
-        topicId,
-        answers,
-        results,
-        ...patch
-      }));
-    } catch {}
-  };
-  const submit = () => {
-    if (answer.trim().length < 20) {
-      setErr('Write at least a couple of sentences so the rubric has something to assess.');
-      return;
-    }
-    setErr('');
-    const r = grade(topic, answer);
-    const nextResults = {
-      ...results,
-      [topicId]: r
+    const saved = React.useMemo(() => loadStore(), []);
+    const todayStr = ymd(new Date());
+    const savedExamDate = saved.examDate && saved.examDate >= todayStr ? saved.examDate : '';
+    const savedPlanStart = savedExamDate && saved.planStart && saved.planStart <= savedExamDate ? saved.planStart : '';
+    const firstDemo = window.TB_BITES.find(t => t.demo)?.id || window.TB_BITES[0].id;
+    const [topicId, setTopicId] = React.useState(saved.topicId || firstDemo);
+    const [answers, setAnswers] = React.useState(saved.answers || {});
+    const [results, setResults] = React.useState(saved.results || {});
+    const [view, setView] = React.useState(saved.view || 'home');
+    const [fromView, setFromView] = React.useState(saved.fromView || 'home');
+    const [user, setUser] = React.useState(saved.user || '');
+    const [course, setCourse] = React.useState(saved.course || 'SIE');
+    const [examDate, setExamDate] = React.useState(savedExamDate);
+    const [planStart, setPlanStart] = React.useState(savedPlanStart);
+    const [openSecs, setOpenSecs] = React.useState(saved.openSecs || ['1']);
+    const [openLeaves, setOpenLeaves] = React.useState(saved.openLeaves || ['1.1.1']);
+    const [quizzes, setQuizzes] = React.useState(saved.quizzes || []);
+    const [qbankLog, setQbankLog] = React.useState(saved.qbankLog || {});
+    const [err, setErr] = React.useState('');
+    const topic = window.TB_BITES.find(t => t.id === topicId);
+    const answer = answers[topicId] || '';
+    const result = results[topicId];
+    React.useEffect(() => {
+        try {
+            localStorage.setItem(STORE, JSON.stringify({ topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog }));
+        }
+        catch { }
+    }, [topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog]);
+    const submit = () => {
+        if (answer.trim().length < 20) {
+            setErr('Write at least a couple of sentences so the rubric has something to assess.');
+            return;
+        }
+        setErr('');
+        const r = grade(topic, answer);
+        const prev = results[topicId];
+        const next = { ...r, attempts: (prev && prev.attempts || 0) + 1 };
+        setResults({ ...results, [topicId]: next });
     };
-    setResults(nextResults);
-    persist({
-      results: nextResults
-    });
-  };
-  const pick = id => {
-    setTopicId(id);
-    setErr('');
-    persist({
-      topicId: id
-    });
-  };
-  const setAnswer = v => {
-    const na = {
-      ...answers,
-      [topicId]: v
+    const openModule = (id, from) => {
+        setTopicId(id);
+        setFromView(from || view);
+        setView('work');
+        setErr('');
     };
-    setAnswers(na);
-    persist({
-      answers: na
-    });
-  };
-  const stateOf = id => results[id] ? results[id].state : 'Unassessed';
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      minHeight: '100vh',
-      background: 'var(--surface-page)'
-    }
-  }, /*#__PURE__*/React.createElement(TopBar, {
-    streak: 7
-  }), /*#__PURE__*/React.createElement("main", {
-    style: {
-      maxWidth: 'var(--page-max)',
-      margin: 'auto',
-      padding: '26px var(--page-pad) 80px',
-      display: 'grid',
-      gap: 22
-    }
-  }, /*#__PURE__*/React.createElement("section", {
-    style: {
-      display: 'grid',
-      gap: 16
-    }
-  }, /*#__PURE__*/React.createElement("h1", {
-    style: {
-      margin: 0,
-      font: 'var(--text-hero)',
-      fontFamily: 'var(--font-display)',
-      color: 'var(--text-body)',
-      letterSpacing: 'var(--tracking-display)'
-    }
-  }, "Learn it. ", /*#__PURE__*/React.createElement("em", {
-    style: {
-      color: 'var(--clover-500)',
-      fontStyle: 'normal'
-    }
-  }, "Teach it back.")), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      maxWidth: 520,
-      color: 'var(--text-muted)',
-      font: 'var(--text-body-lg)'
-    }
-  }, "Read a focused note, explain it in your own words, and get an honest signal for what to revisit."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 10,
-      flexWrap: 'wrap'
-    }
-  }, window.TB_TOPICS.map(t => /*#__PURE__*/React.createElement(TopicChip, {
-    key: t.id,
-    id: t.id,
-    title: t.title,
-    state: stateOf(t.id),
-    selected: t.id === topicId,
-    onClick: () => pick(t.id)
-  })))), /*#__PURE__*/React.createElement(Card, {
-    padding: 20,
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 28,
-      flexWrap: 'wrap'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--text-faint)'
-    }
-  }, "Your topic state"), /*#__PURE__*/React.createElement(StateBadge, {
-    state: stateOf(topicId)
-  })), /*#__PURE__*/React.createElement(StatePath, {
-    state: stateOf(topicId)
-  }), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      color: 'var(--text-muted)',
-      font: '600 12px var(--font-body)',
-      maxWidth: 180
-    }
-  }, window.TB_STATE_DESC[stateOf(topicId)])), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gridTemplateColumns: 'minmax(0,1.05fr) minmax(340px,.8fr)',
-      gap: 22,
-      alignItems: 'start'
-    }
-  }, /*#__PURE__*/React.createElement(NoteCard, {
-    topic: topic
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'grid',
-      gap: 16
-    }
-  }, /*#__PURE__*/React.createElement(Card, {
-    padding: 24
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      font: 'var(--text-label)',
-      letterSpacing: 'var(--tracking-label)',
-      textTransform: 'uppercase',
-      color: 'var(--tangerine-600)'
-    }
-  }, "Your turn \xB7 ", topic.id), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      margin: '6px 0 14px',
-      font: '600 24px var(--font-display)',
-      color: 'var(--text-body)'
-    }
-  }, "Explain it to a colleague."), /*#__PURE__*/React.createElement(TeachBackBox, {
-    value: answer,
-    onChange: setAnswer,
-    prompt: topic.prompt,
-    placeholder: topic.placeholder,
-    rows: 8
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 14
-    }
-  }, /*#__PURE__*/React.createElement(Button, {
-    fullWidth: true,
-    size: "lg",
-    onClick: submit
-  }, "Grade my teach-back")), err && /*#__PURE__*/React.createElement("p", {
-    role: "alert",
-    style: {
-      margin: '10px 0 0',
-      color: 'var(--coral-700)',
-      font: '600 12px var(--font-body)'
-    }
-  }, err), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: '14px 0 0',
-      font: '500 10px var(--font-mono)',
-      color: 'var(--text-faint)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-sparkle",
-    style: {
-      color: 'var(--tangerine-500)'
-    }
-  }), " Local deterministic grader \xB7 no API key required")), result ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(ResultBanner, {
-    state: result.state
-  }), /*#__PURE__*/React.createElement(Card, {
-    padding: "4px 22px"
-  }, result.crits.map(c => /*#__PURE__*/React.createElement(CriterionRow, {
-    key: c.id,
-    outcome: c.outcome,
-    label: c.label,
-    feedback: c.feedback
-  })))) : /*#__PURE__*/React.createElement(Card, {
-    sunken: true,
-    padding: 26,
-    style: {
-      border: '1px dashed var(--border-strong)'
-    }
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "ph-bold ph-arrow-elbow-down-right",
-    style: {
-      fontSize: 26,
-      color: 'var(--tangerine-500)'
-    }
-  }), /*#__PURE__*/React.createElement("h3", {
-    style: {
-      margin: '10px 0 6px',
-      font: '600 20px var(--font-display)',
-      color: 'var(--text-body)'
-    }
-  }, "Your signal will appear here."), /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: 0,
-      color: 'var(--text-muted)',
-      font: '600 13px/1.6 var(--font-body)',
-      maxWidth: 300
-    }
-  }, "We'll compare your explanation with the ", topic.criteria.length, " things an exam-ready answer needs to make clear."))))), /*#__PURE__*/React.createElement("footer", {
-    style: {
-      maxWidth: 'var(--page-max)',
-      margin: 'auto',
-      padding: '0 var(--page-pad) 30px',
-      font: '500 11px var(--font-mono)',
-      color: 'var(--text-faint)'
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: 'var(--tangerine-600)'
-    }
-  }, "Explanation first."), " Three topics, one loop, one honest signal."));
+    const setAnswer = v => setAnswers({ ...answers, [topicId]: v });
+    const back = () => setView(fromView === 'work' ? 'home' : fromView);
+    const changeView = v => { setView(v); if (v !== 'work')
+        setErr(''); };
+    return React.createElement("div", { className: "tb-shell" },
+        React.createElement(TopBar, { streak: 3, user: user, setView: changeView, course: course, setCourse: setCourse, onLogout: () => setUser('') }),
+        view === 'login'
+            ? React.createElement("main", { className: "tb-main", style: { maxWidth: 1280, margin: 'auto' } },
+                React.createElement(LoginView, { setUser: setUser, setView: changeView }))
+            : React.createElement("div", { className: "tb-body" },
+                React.createElement(LeftNav, { view: view, setView: changeView }),
+                React.createElement("main", { className: "tb-main" },
+                    view === 'home' && React.createElement(HomeView, { results: results, examDate: examDate, setExamDate: setExamDate, planStart: planStart, setPlanStart: setPlanStart, openModule: openModule }),
+                    view === 'outline' && React.createElement(OutlineView, { results: results, openModule: openModule, openSecs: openSecs, setOpenSecs: setOpenSecs, openLeaves: openLeaves, setOpenLeaves: setOpenLeaves }),
+                    view === 'work' && topic && React.createElement(WorkView, { topic: topic, state: result ? result.state : 'Unassessed', answer: answer, setAnswer: setAnswer, result: result, err: err, submit: submit, back: back, goHome: () => changeView('home'), openModule: openModule, goBrush: () => changeView('brush'), results: results, examDate: examDate }),
+                    view === 'qbank' && React.createElement(QBankView, { results: results, openModule: openModule, quizzes: quizzes, setQuizzes: setQuizzes, qbankLog: qbankLog, setQbankLog: setQbankLog }),
+                    view === 'brush' && React.createElement(BrushView, { results: results, openModule: openModule }))));
 }
 window.TBWebApp = App;
 })(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/web/screens.jsx", error: String((e && e.message) || e) }); }
 
 __ds_ns.Button = __ds_scope.Button;
-
 __ds_ns.Card = __ds_scope.Card;
-
 __ds_ns.IconButton = __ds_scope.IconButton;
-
 __ds_ns.ProgressBar = __ds_scope.ProgressBar;
-
 __ds_ns.StateBadge = __ds_scope.StateBadge;
-
 __ds_ns.StreakBadge = __ds_scope.StreakBadge;
-
 __ds_ns.CriterionRow = __ds_scope.CriterionRow;
-
 __ds_ns.ResultBanner = __ds_scope.ResultBanner;
-
 __ds_ns.TeachBackBox = __ds_scope.TeachBackBox;
-
 __ds_ns.TopicChip = __ds_scope.TopicChip;
-
 })();

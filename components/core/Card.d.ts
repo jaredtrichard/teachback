@@ -1,8 +1,8 @@
-/** White rounded panel with 2px border and hard 3px edge. */
+/** White rounded panel with 1px border and hard 2px edge. */
 export interface CardProps {
   /** Tinted well (no edge shadow) instead of raised white card */
   sunken?: boolean;
-  /** Color the 2px border: primary | accent | info | star | danger | mastered */
+  /** Color the 1px border: primary | accent | info | star | danger | mastered */
   accent?: 'primary' | 'accent' | 'info' | 'star' | 'danger' | 'mastered';
   padding?: number | string;
   children?: React.ReactNode;

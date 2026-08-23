@@ -5,4 +5,4 @@ Square pressable icon-only button with the same hard-edge press physics as Butto
 <IconButton icon="gear" label="Settings" variant="primary" />
 ```
 
-`icon` takes a Phosphor (fill) name — the page must load `@phosphor-icons/web` CSS — or any ReactNode. Always pass `label`. Keep `size` at 44+.
+`icon` takes a Phosphor bold-weight name — the page must load the bold `@phosphor-icons/web` CSS — or any ReactNode. Always pass `label`. Keep `size` at 44+.

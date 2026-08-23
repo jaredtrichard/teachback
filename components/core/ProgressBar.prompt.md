@@ -1,8 +1,8 @@
-Rounded pill progress track with an eased fill and a subtle inner bottom shade for toy depth.
+Rounded pill progress track with an eased fill and a subtle inner bottom edge.
 
 ```jsx
 <ProgressBar value={12} max={28} label="Section 1 · Capital markets" />
-<ProgressBar value={340} max={500} color="star" height={12} />
+<ProgressBar value={1} max={3} height={12} />
 ```
 
-Use `star` gold for XP, `primary` for topic/section completion, `mastered` grape only for mastery tracks.
+Use `primary` for readiness and section completion. Use `mastered` teal only for Mastered-specific tracks; never count Gap as done.

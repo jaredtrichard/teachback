@@ -5,4 +5,4 @@ Streak counter pill with a Phosphor flame — tangerine when alive, gray until t
 <StreakBadge count={7} active={false} />
 ```
 
-Requires the Phosphor (fill) CSS on the page. An intentional gamification addition — no counterpart in the source repo.
+Requires the bold Phosphor CSS on the page. It reports the existing study-day streak and does not award points.
