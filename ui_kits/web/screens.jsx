@@ -110,14 +110,13 @@ function rowMonthLabel(row,isFirst){
   if(isFirst) return MONTHS[days[0].getMonth()]+' '+days[0].getFullYear();
   return null;
 }
+const CARD_LADDER=[0,1,3,7,14,30];
 function cardInterval(box,rating){
   if(rating==='again') return {box:0,days:0};
-  if(rating==='good'){
-    const n=Math.min(4,Math.max(1,(box||0)+1));
-    return {box:n,days:[0,1,3,7,14][n]};
-  }
-  const n=Math.min(4,Math.max(2,(box||0)+2));
-  return {box:n,days:[0,1,3,14,30][n]};
+  const top=CARD_LADDER.length-1;
+  const step=rating==='easy'?2:1;
+  const n=Math.min(top,Math.max(step,(box||0)+step));
+  return {box:n,days:CARD_LADDER[n]};
 }
 function flashPool(results,qbankLog){
   return window.TB_BITES.filter(b=>{

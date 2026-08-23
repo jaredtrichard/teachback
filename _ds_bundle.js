@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"189aac6cd90e"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"cffdb31891a8"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -466,15 +466,14 @@ function rowMonthLabel(row, isFirst) {
         return MONTHS[days[0].getMonth()] + ' ' + days[0].getFullYear();
     return null;
 }
+const CARD_LADDER = [0, 1, 3, 7, 14, 30];
 function cardInterval(box, rating) {
     if (rating === 'again')
         return { box: 0, days: 0 };
-    if (rating === 'good') {
-        const n = Math.min(4, Math.max(1, (box || 0) + 1));
-        return { box: n, days: [0, 1, 3, 7, 14][n] };
-    }
-    const n = Math.min(4, Math.max(2, (box || 0) + 2));
-    return { box: n, days: [0, 1, 3, 14, 30][n] };
+    const top = CARD_LADDER.length - 1;
+    const step = rating === 'easy' ? 2 : 1;
+    const n = Math.min(top, Math.max(step, (box || 0) + step));
+    return { box: n, days: CARD_LADDER[n] };
 }
 function flashPool(results, qbankLog) {
     return window.TB_BITES.filter(b => {
