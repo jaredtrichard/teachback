@@ -777,7 +777,10 @@ function QBankView({results,quizzes,setQuizzes,qbankLog,setQbankLog,onClose,laun
     return <section style={{display:'grid',gap:16}}>
       <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}>
         <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>{quiz.name}</h1>
-        <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{run.index+1} / {quiz.items.length}{quiz.prefs.scores?' · '+rights+' right':''}{tick!=null?' · '+tick+'s':''}</span>
+        <div style={{display:'flex',gap:12,alignItems:'center'}}>
+          <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{run.index+1} / {quiz.items.length}{quiz.prefs.scores?' · '+rights+' right':''}{tick!=null?' · '+tick+'s':''}</span>
+          <Button size="sm" variant="ghost" onClick={onClose}>Exit quiz</Button>
+        </div>
       </div>
       <Card padding={22}>
         <p style={{margin:'0 0 6px',font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{item.biteId} · stub</p>

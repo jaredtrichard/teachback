@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"76fa846b498c"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"189aac6cd90e"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -1131,12 +1131,14 @@ function QBankView({ results, quizzes, setQuizzes, qbankLog, setQbankLog, onClos
         return React.createElement("section", { style: { display: 'grid', gap: 16 } },
             React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' } },
                 React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, quiz.name),
-                React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
-                    run.index + 1,
-                    " / ",
-                    quiz.items.length,
-                    quiz.prefs.scores ? ' · ' + rights + ' right' : '',
-                    tick != null ? ' · ' + tick + 's' : '')),
+                React.createElement("div", { style: { display: 'flex', gap: 12, alignItems: 'center' } },
+                    React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                        run.index + 1,
+                        " / ",
+                        quiz.items.length,
+                        quiz.prefs.scores ? ' · ' + rights + ' right' : '',
+                        tick != null ? ' · ' + tick + 's' : ''),
+                    React.createElement(Button, { size: "sm", variant: "ghost", onClick: onClose }, "Exit quiz"))),
             React.createElement(Card, { padding: 22 },
                 React.createElement("p", { style: { margin: '0 0 6px', font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
                     item.biteId,
