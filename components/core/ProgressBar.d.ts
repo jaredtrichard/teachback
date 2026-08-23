@@ -1,4 +1,4 @@
-/** Pill progress track with springy fill — XP, section completion, note read progress. */
+/** Pill progress track — section completion and note read progress. */
 export interface ProgressBarProps {
   value: number;
   max?: number;

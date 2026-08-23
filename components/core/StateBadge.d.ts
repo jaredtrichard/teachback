@@ -1,4 +1,4 @@
-/** Pill badge for the canonical topic-state vocabulary. */
+/** Pill badge for the canonical bite-state vocabulary. */
 export interface StateBadgeProps {
   /** Canonical state name — never renamed */
   state: 'Unassessed' | 'Gap' | 'Misconception' | 'Rusty' | 'Exam-Ready' | 'Mastered';

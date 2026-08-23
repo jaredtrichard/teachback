@@ -1,15 +1,15 @@
 :root{
-/* shape — everything rounded; nothing sharper than 10px */
---radius-sm:10px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;--radius-pill:999px;
---border-width:2px; /* cards & controls always carry a visible 2px border */
-/* "toy" depth: hard offset edges, never blurry drop shadows */
---edge-card:0 3px 0 var(--border-strong);
---edge-btn:0 4px 0; /* @kind shadow */ /* + the fill's -edge color; press = translateY(4px) & shadow 0 */
---edge-btn-sm:0 3px 0; /* @kind shadow */
-/* motion — springy, quick */
---ease-pop:cubic-bezier(.34,1.56,.64,1); /* @kind other */
+/* shape — rounded but restrained */
+--radius-sm:8px;--radius-md:10px;--radius-lg:14px;--radius-xl:18px;--radius-pill:999px;
+--border-width:1px; /* cards & controls carry a visible 1px border */
+/* depth: hard offset edges (signature kept from v2), never blurry drop shadows */
+--edge-card:0 2px 0 var(--border-strong);
+--edge-btn:0 3px 0; /* @kind shadow */ /* + the fill's -edge color; press = translateY(3px) & shadow 0 */
+--edge-btn-sm:0 2px 0; /* @kind shadow */
+/* motion — quick, composed; slight overshoot reserved for result reveals */
+--ease-pop:cubic-bezier(.3,1.18,.45,1); /* @kind other */
 --ease-out:cubic-bezier(.22,1,.36,1); /* @kind other */
---dur-press:.09s; /* @kind other */
---dur-pop:.22s; /* @kind other */
---dur-slide:.32s; /* @kind other */
+--dur-press:.08s; /* @kind other */
+--dur-pop:.18s; /* @kind other */
+--dur-slide:.28s; /* @kind other */
 }

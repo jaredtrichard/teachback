@@ -10,12 +10,12 @@
 const {TeachBackBox,TopicChip}=window.TeachbackDesignSystem_417209;
 function Demo(){
   const [v,setV]=React.useState('');
-  const [sel,setSel]=React.useState('T004');
+  const [sel,setSel]=React.useState('B008');
   return <>
     <div className="row">
-      <TopicChip id="T004" title="SIPC vs FDIC" state="Rusty" selected={sel==='T004'} onClick={()=>setSel('T004')}/>
-      <TopicChip id="T005" title="Investor categories" state="Exam-Ready" selected={sel==='T005'} onClick={()=>setSel('T005')}/>
-      <TopicChip id="T010" title="Primary vs secondary market" selected={sel==='T010'} onClick={()=>setSel('T010')}/>
+      <TopicChip id="B008" title="SIPC" state="Rusty" selected={sel==='B008'} onClick={()=>setSel('B008')}/>
+      <TopicChip id="B010" title="Investors" state="Exam-Ready" selected={sel==='B010'} onClick={()=>setSel('B010')}/>
+      <TopicChip id="B019" title="Primary market" selected={sel==='B019'} onClick={()=>setSel('B019')}/>
     </div>
     <TeachBackBox value={v} onChange={setV} rows={4}
       prompt="In your own words, explain SIPC vs FDIC—what each protects, the coverage limits, and the important exclusions."

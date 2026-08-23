@@ -1,15 +1,15 @@
 :root{
-/* base ramps — playful, rounded, high-chroma but warm */
---clover-100:#E3F7E7;--clover-500:#37B24D;--clover-600:#2B9A3F;--clover-700:#238336;
---tangerine-100:#FFEFDF;--tangerine-500:#FA8A3B;--tangerine-600:#E8712A;--tangerine-700:#D45F1B;
---splash-100:#E3F3FD;--splash-500:#38A8E8;--splash-600:#2A92CF;--splash-700:#2385C4;
---grape-100:#F0E8FC;--grape-500:#9B6BE0;--grape-600:#8A58D4;--grape-700:#7C4EC4;
---sunny-100:#FFF4D6;--sunny-500:#FFC13B;--sunny-600:#F0B02A;--sunny-700:#E3A31A;
---coral-100:#FDE7E1;--coral-500:#F0705A;--coral-600:#DE6350;--coral-700:#D15743;
-/* neutrals — warm cream shell, green-tinted ink (never harsh black or red) */
---ink:#243329;--ink-muted:#5F6F5C;--ink-faint:#93A08F;
---cream:#FDF8EC;--paper:#FFFFFF;--tint:#F6F1E1;
---border:#E8E2D0;--border-strong:#D9D2BC;
+/* base ramps — desaturated, confident; same hue families as v2, dialed down */
+--clover-100:#E9F1EB;--clover-500:#2F8F5B;--clover-600:#28794D;--clover-700:#216540;
+--tangerine-100:#F8ECDF;--tangerine-500:#CE8449;--tangerine-600:#B57139;--tangerine-700:#995F2F;
+--splash-100:#E8EFF5;--splash-500:#4E8CB8;--splash-600:#40789F;--splash-700:#366685;
+--teal-100:#E4EEF0;--teal-500:#2E7E8C;--teal-600:#276C79;--teal-700:#205A66;
+--sunny-100:#F7EFDC;--sunny-500:#CDA344;--sunny-600:#B58E36;--sunny-700:#99772B;
+--coral-100:#F7E7E2;--coral-500:#CE6B57;--coral-600:#B85C49;--coral-700:#9E4E3D;
+/* neutrals — quiet warm off-white shell, green-tinted ink (never harsh black or red) */
+--ink:#1E2822;--ink-muted:#5A665D;--ink-faint:#8E998F;
+--cream:#FAF8F2;--paper:#FFFFFF;--tint:#F1EEE6;
+--border:#E3DFD4;--border-strong:#CFC9BA;
 /* semantic aliases */
 --color-primary:var(--clover-500);--color-primary-hover:var(--clover-600);--color-primary-edge:var(--clover-700);
 --color-accent:var(--tangerine-500);--color-accent-edge:var(--tangerine-700);
@@ -19,10 +19,10 @@
 --surface-page:var(--cream);--surface-card:var(--paper);--surface-sunken:var(--tint);
 --text-body:var(--ink);--text-muted:var(--ink-muted);--text-faint:var(--ink-faint);--text-on-fill:#FFFFFF;
 /* topic-state colors: Unassessed → Mastered */
---state-unassessed:#ADB8A7;--state-unassessed-bg:#EFEDE2;
+--state-unassessed:#9AA595;--state-unassessed-bg:#ECEAE0;
 --state-gap:var(--coral-600);--state-gap-bg:var(--coral-100);
 --state-misconception:var(--tangerine-600);--state-misconception-bg:var(--tangerine-100);
 --state-rusty:var(--sunny-700);--state-rusty-bg:var(--sunny-100);
 --state-examready:var(--clover-600);--state-examready-bg:var(--clover-100);
---state-mastered:var(--grape-600);--state-mastered-bg:var(--grape-100);
+--state-mastered:var(--teal-600);--state-mastered-bg:var(--teal-100);
 }

@@ -5,12 +5,11 @@ branch: main
 date: 2026-08-22T20:12:45Z
 
 ### Updated in this project
-- Read product context, app UI (src/App.tsx, src/styles.css), study notes, business plan
-- Built new gamified token system (founder-directed redesign, not a recreation)
+- Locked the product-facing web kit to the v3 cream, desaturated clover, Sora / DM Sans system
+- Added the 181-bite home plan, same-page teach-back, login stub, and right/wrong QBank
 
 ## Screen map
 | Project screen | Repo files |
 | --- | --- |
 | ui_kits/web/index.html | src/App.tsx, src/styles.css, src/content/topics.ts, content/notes/*.md |
-| ui_kits/app/index.html | src/App.tsx (loop + states), src/grading/progress.ts |
 | tokens/*.css | src/styles.css (heritage reference only) |

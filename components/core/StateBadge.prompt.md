@@ -1,4 +1,4 @@
-Pill badge showing a topic's knowledge state in its canonical color pair (Gap is soft coral, Mastered is grape).
+Pill badge showing a bite’s knowledge state in its canonical color pair (Gap is soft coral, Mastered is teal).
 
 ```jsx
 <StateBadge state="Exam-Ready" />

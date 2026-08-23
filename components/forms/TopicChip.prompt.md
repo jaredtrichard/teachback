@@ -1,5 +1,5 @@
-Pressable pill for choosing a topic — mono ID in tangerine, title, and a colored dot for any assessed state.
+Pressable pill for choosing a bite — mono ID in tangerine, title, and a colored dot for any assessed state.
 
 ```jsx
-<TopicChip id="T004" title="SIPC vs FDIC" state="Rusty" selected onClick={pick} />
+<TopicChip id="B008" title="SIPC" state="Rusty" selected onClick={pick} />
 ```

@@ -1,4 +1,4 @@
-The base surface: white, radius 20, 2px border, hard 3px bottom edge (never a blurry shadow).
+The base surface: white, radius 14, 1px border, hard 2px bottom edge (never a blurry shadow).
 
 ```jsx
 <Card>note content</Card>
