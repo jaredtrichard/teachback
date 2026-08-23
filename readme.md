@@ -10,6 +10,8 @@ Product-facing frontend kit on the frozen product grain:
 - Frontend-only email, Google, Facebook, and Apple login stubs
 - Left nav is Home / Outline / Brush-up. Brush-up is flashcards for spaced recall (Gap / Misconception / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
 - v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
+- **181** official outline bites, **34** FINRA leaves as folders
+- QBank is right/wrong only — it does not write Gap / Rusty / Exam-Ready / Mastered
 
 ## Review the frontend
 
@@ -21,8 +23,22 @@ python3 -m http.server 8765
 
 Open http://127.0.0.1:8765/ui_kits/web/
 
-Three demo bites have real notes (SIPC, investor categories, primary market). The rest are title stubs so you can walk the full outline.
+Notes are outline-derived from the ©2024 SIE Content Outline. Three bites are authored (SIPC, investor categories, primary market) and may carry specific figures. Everything else unpacks the official bullet and parentheticals; leftover numbers stay labeled **stub**.
+
+## Persistence
+
+The live kit still writes `localStorage`. The contract the UI rewrite should switch to is `store/tb-store.js` (local-first, hosted stub, optional file server). Plan: `docs/backend-plan.md`.
+
+```sh
+python3 content/compile.py
+node store/tb-store.test.mjs
+node server/store-server.mjs   # optional; writes gitignored data/users/
+```
 
 ## Source outline
 
 https://www.finra.org/sites/default/files/SIE_Content_Outline.pdf
+
+## Skills pack
+
+The generic “drop in an outline, get an HTML app” generator is a different local repo: `~/Developer/firstmate/projects/teachback-skill`. Not this product.

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "Q001",
+    "biteId": "B008",
+    "leaf": "1.1.3",
+    "stem": "SIPC is a backstop for which kind of failure?",
+    "choices": [
+      "An insured bank’s deposit shortfall",
+      "A brokerage firm’s customer-asset shortfall",
+      "A stock that lost value in the market",
+      "A municipal issuer that missed a payment"
+    ],
+    "answer": 1,
+    "explain": "The authored SIPC note: brokerage-firm shortfalls, not bank deposits (FDIC) and not market loss."
+  },
+  {
+    "id": "Q002",
+    "biteId": "B008",
+    "leaf": "1.1.3",
+    "stem": "Which pair of figures is in the authored SIPC note?",
+    "choices": [
+      "$250,000 total, including $125,000 cash",
+      "$500,000 per customer, including no more than $250,000 for cash claims",
+      "$1,000,000 per account, unlimited cash",
+      "No dollar figures — SIPC is unlimited"
+    ],
+    "answer": 1,
+    "explain": "Authored precision on B008. QBank is right/wrong only; it does not write Gap / Rusty / Exam-Ready."
+  },
+  {
+    "id": "Q003",
+    "biteId": "B010",
+    "leaf": "1.1.4",
+    "stem": "The authored investors note distinguishes which three categories?",
+    "choices": [
+      "Retail, accredited, institutional",
+      "Introducing, clearing, prime",
+      "GO, revenue, taxable municipal",
+      "Open-end, closed-end, UIT"
+    ],
+    "answer": 0,
+    "explain": "Those three names are the official 1.1.4 investor examples and the authored note’s cut."
+  },
+  {
+    "id": "Q004",
+    "biteId": "B010",
+    "leaf": "1.1.4",
+    "stem": "In the authored investors note, accreditation is described as gating access to what?",
+    "choices": [
+      "Exchange-listed common stock",
+      "FDIC-insured CDs",
+      "Private placements",
+      "Treasury auctions"
+    ],
+    "answer": 2,
+    "explain": "Authored B010: category changes disclosure and access, not the quality of the deal; private placements are the gate."
+  },
+  {
+    "id": "Q005",
+    "biteId": "B019",
+    "leaf": "1.2.1",
+    "stem": "How does the authored primary-market note tell primary from secondary?",
+    "choices": [
+      "Whether the venue is electronic or physical",
+      "Whether the trade happens before 9:30 a.m.",
+      "Whether proceeds go to the issuer",
+      "Whether the buyer is accredited"
+    ],
+    "answer": 2,
+    "explain": "Follow the money: issuer receives proceeds → primary."
+  },
+  {
+    "id": "Q006",
+    "biteId": "B019",
+    "leaf": "1.2.1",
+    "stem": "On the authored primary-market note, when does dilution happen?",
+    "choices": [
+      "Whenever a share changes hands in the secondary market",
+      "Only when new shares are created",
+      "Only on odd-lot trades",
+      "Whenever a preferred converts"
+    ],
+    "answer": 1,
+    "explain": "Authored precision: dilution only when new shares are created. Follow-ons do that; secondary offerings of existing shares do not raise capital for the issuer."
+  }
+]
