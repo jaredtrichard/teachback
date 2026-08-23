@@ -833,7 +833,7 @@ function App(){
           <main className="tb-main">
             {view==='home' && <HomeView results={results} examDate={examDate} setExamDate={setExamDate} planStart={planStart} setPlanStart={setPlanStart} openModule={openModule}/>}
             {view==='outline' && <OutlineView results={results} openModule={openModule} openSecs={openSecs} setOpenSecs={setOpenSecs} openLeaves={openLeaves} setOpenLeaves={setOpenLeaves}/>}
-            {view==='work' && topic && <WorkView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={back} goHome={()=>changeView('home')} openModule={openModule} goBrush={()=>changeView('brush')} results={results} examDate={examDate}/>} 
+            {view==='work' && topic && <WorkView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={back} goHome={()=>changeView('home')} openModule={openModule} goBrush={()=>changeView('brush')} results={results} examDate={examDate}/>}
             {view==='qbank' && <QBankView results={results} openModule={openModule} quizzes={quizzes} setQuizzes={setQuizzes} qbankLog={qbankLog} setQbankLog={setQbankLog}/>}
             {view==='brush' && <BrushView results={results} openModule={openModule}/>}
           </main>

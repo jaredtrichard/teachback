@@ -2,12 +2,13 @@
 
 Explanation-first SIE prep. Read a bite, teach it back.
 
-Frontend review kit on the frozen product grain:
+Product-facing frontend kit on the frozen product grain:
 
-- **181** official outline bites, colored by that bite's readiness
-- Home calendar spaces modules to a learner-set exam date
-- Tutor on the same page as the note (no read-gate)
-- QBank is right/wrong only and does not write readiness
+- Home pairs an evenly spaced, learner-dated calendar (including stubs) with a section-grouped **181**-bite readiness grid; each grid cell is colored by its bite's own readiness
+- Pace is remaining modules divided by remaining study days
+- Same-page note, teach-back, and readiness feedback (no read-gate)
+- Frontend-only email, Google, Facebook, and Apple login stubs
+- QBank list and one-pane quiz builder; generated questions are honest stubs, scored right/wrong only, and never write readiness
 - Brush-up from misses (not the official 181)
 - v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
 
