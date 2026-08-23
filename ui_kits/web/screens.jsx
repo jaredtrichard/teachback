@@ -12,6 +12,7 @@ function biteOf(id){return window.TB_BITES.find(t=>t.id===id);}
 function biteState(results,id){return (results[id]&&results[id].state)||'Unassessed';}
 function isReady(state){return READY.has(state);}
 function isStub(topic){return !topic.demo;}
+function firstAuthoredBite(bites,predicate=()=>true){return bites.find(b=>!isStub(b)&&predicate(b));}
 function ymd(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day;}
 function parseYmd(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);}
 function startOfDay(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate());}
@@ -23,6 +24,7 @@ function loadStore(){
   try{
     const raw=JSON.parse(localStorage.getItem(STORE)||localStorage.getItem(STORE_LEGACY)||'{}')||{};
     if(raw.view==='teach'||raw.view==='module') raw.view='work';
+    if(raw.view==='login') raw.view='home';
     delete raw.xp;
     return raw;
   }catch{return {};}
@@ -248,7 +250,8 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
   const authoredLine=authored.map(b=>biteState(results,b.id)).reduce((acc,st)=>{acc[st]=(acc[st]||0)+1;return acc;},{});
   const selectedIds=plan.byDay[selected]||[];
   const todayIds=plan.byDay[todayStr]||[];
-  const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&ids.some(id=>!isReady(biteState(results,id))));
+  const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&firstAuthoredBite(ids.map(biteOf),b=>!isReady(biteState(results,b.id))));
+  const nextBite=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
   const cells=monthCells(cursor.y,cursor.m);
 
   const onDate=e=>{
@@ -298,7 +301,7 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
           })}
         </div>
         {examDate
-          ? <DayList ids={selectedIds} results={results} openModule={openModule} heading={selected===todayStr?'Today':fmtLong(selected)} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${biteOf(nextEntry[1].find(id=>!isReady(biteState(results,id)))).title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
+          ? <DayList ids={selectedIds} results={results} openModule={openModule} heading={selected===todayStr?'Today':fmtLong(selected)} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${nextBite.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
           : <DayList ids={[]} results={results} openModule={openModule} heading="Today" empty="Set an exam date to spread the modules."/>}
       </div>
       <aside style={{display:'grid',gap:14,alignContent:'start'}}>
@@ -438,7 +441,7 @@ function WorkView({topic,state,answer,setAnswer,result,err,submit,back,goHome,op
     setOpenSecs(s=>s.includes(topic.section)?s:s.concat(topic.section));
     setOpenLeaves(s=>s.includes(topic.leaf)?s:s.concat(topic.leaf));
   },[topic.id,topic.section,topic.leaf]);
-  const next=window.TB_BITES.slice(window.TB_BITES.indexOf(topic)+1).find(b=>b.demo);
+  const next=firstAuthoredBite(window.TB_BITES.slice(window.TB_BITES.indexOf(topic)+1));
   const pop=result&&(result.state==='Exam-Ready'||result.state==='Mastered');
   return <section style={{display:'grid',gap:16}}>
     <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
@@ -565,14 +568,16 @@ function QBankView({results,openModule,quizzes,setQuizzes,qbankLog,setQbankLog})
     setPicked(allOn?picked.filter(l=>!leaves.includes(l)):Array.from(new Set(picked.concat(leaves))));
   };
 
+  const selectedBites=window.TB_BITES.filter(b=>picked.includes(b.leaf));
+  const struggleBites=selectedBites.filter(b=>STRUGGLE.has(biteState(results,b.id)));
+  const sourceBites=pool==='struggle'?struggleBites:selectedBites;
+  const availableBites=sourceBites.filter(b=>include==='unused'?!qbankLog[b.id]:include==='incorrect'?qbankLog[b.id]==='wrong':true);
+  const requestedCount=Math.max(1,Number.parseInt(count,10)||1);
+  const quizCount=Math.min(requestedCount,availableBites.length);
+
   const create=()=>{
-    const selectedBites=window.TB_BITES.filter(b=>picked.includes(b.leaf));
-    const struggle=selectedBites.filter(b=>STRUGGLE.has(biteState(results,b.id)));
-    let poolBites=pool==='struggle'?struggle:selectedBites;
-    if(include==='unused') poolBites=poolBites.filter(b=>!qbankLog[b.id]);
-    if(include==='incorrect') poolBites=poolBites.filter(b=>qbankLog[b.id]==='wrong');
-    if(poolBites.length===0||styles.length===0){setRun({empty:true,reason:pool==='struggle'&&struggle.length===0?'No struggle topics yet (Gap / Rusty / Misconception).':styles.length===0?'Pick at least one question style.':'No questions in that pool. Authored QBank items land with the content pass.'});setPane('run');return;}
-    const quiz={id:'quiz-'+Date.now(),name:name.trim()||'Custom quiz',count:Number(count)||10,styles,include,pool,prefs:{...prefs},items:makeQuizItems(poolBites,Number(count)||10,styles)};
+    if(availableBites.length===0||styles.length===0){setRun({empty:true,reason:pool==='struggle'&&struggleBites.length===0?'No struggle topics yet (Gap / Rusty / Misconception).':styles.length===0?'Pick at least one question style.':'No questions in that pool. Authored QBank items land with the content pass.'});setPane('run');return;}
+    const quiz={id:'quiz-'+Date.now(),name:name.trim()||'Custom quiz',count:quizCount,styles,include,pool,prefs:{...prefs},items:makeQuizItems(availableBites,quizCount,styles)};
     setQuizzes(quizzes.concat(quiz));
     setRun({quiz,index:0,picked:null,graded:null,answers:{},started:Date.now()});
     setPane('run');
@@ -587,7 +592,7 @@ function QBankView({results,openModule,quizzes,setQuizzes,qbankLog,setQbankLog})
       <Card padding={22} style={{display:'grid',gap:20}}>
         <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 140px',gap:12}}>
           <label style={{display:'grid',gap:6,font:'600 12px var(--font-body)',color:'var(--text-muted)'}}>Name<input className="tb-field" value={name} onChange={e=>setName(e.target.value)}/></label>
-          <label style={{display:'grid',gap:6,font:'600 12px var(--font-body)',color:'var(--text-muted)'}}>Questions<input className="tb-field" type="number" min="1" max="181" value={count} onChange={e=>setCount(e.target.value)}/></label>
+          <label style={{display:'grid',gap:6,font:'600 12px var(--font-body)',color:'var(--text-muted)'}}>Questions<input className="tb-field" type="number" min="1" max={Math.max(1,availableBites.length)} value={count} onChange={e=>setCount(e.target.value)}/><span aria-live="polite" style={{font:'500 11px var(--font-body)',color:'var(--text-faint)'}}>{availableBites.length===0?'0 questions available for these settings.':requestedCount>availableBites.length?`Capped at ${quizCount} questions · ${availableBites.length} available.`:`${quizCount} questions will be created · ${availableBites.length} available.`}</span></label>
         </div>
         <div>
           <h3 style={{margin:'0 0 8px',font:'600 16px var(--font-display)'}}>Pool source</h3>
