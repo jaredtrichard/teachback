@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"998d2ab37ed3"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d40c1ca9e04f","ui_kits/web/screens.jsx":"76fa846b498c"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -375,6 +375,10 @@ function loadStore() {
             raw.view = 'work';
         if (raw.view === 'login')
             raw.view = 'home';
+        if (raw.view === 'qbank')
+            raw.view = 'brush';
+        if (raw.fromView === 'qbank')
+            raw.fromView = 'brush';
         delete raw.xp;
         return raw;
     }
@@ -426,19 +430,67 @@ function buildPlan(examDate, planStart) {
     });
     return { byDay, days: span };
 }
-function monthCells(year, month) {
-    const first = new Date(year, month, 1);
-    const lead = first.getDay();
-    const daysIn = new Date(year, month + 1, 0).getDate();
-    const prevIn = new Date(year, month, 0).getDate();
-    const cells = [];
-    for (let i = 0; i < lead; i++)
-        cells.push({ date: new Date(year, month - 1, prevIn - lead + 1 + i), outside: true });
-    for (let d = 1; d <= daysIn; d++)
-        cells.push({ date: new Date(year, month, d), outside: false });
-    while (cells.length % 7)
-        cells.push({ date: new Date(year, month + 1, cells.length - (lead + daysIn) + 1), outside: true });
-    return cells;
+function weekStrip(start) { return Array.from({ length: 7 }, (_, i) => addDays(start, i)); }
+function weekdayLabels(start) { return weekStrip(start).map(d => WEEKDAYS[d.getDay()]); }
+function fmtRange(start, end) {
+    const sameYear = start.getFullYear() === end.getFullYear();
+    const sameMonth = sameYear && start.getMonth() === end.getMonth();
+    const a = MONTHS[start.getMonth()].slice(0, 3) + ' ' + start.getDate();
+    const b = (sameMonth ? '' : MONTHS[end.getMonth()].slice(0, 3) + ' ') + end.getDate();
+    return a + ' – ' + b + (sameYear ? '' : ', ' + end.getFullYear());
+}
+function daysInSpan(start, end) {
+    const n = Math.max(0, daysBetween(start, end) + 1);
+    return Array.from({ length: n }, (_, i) => addDays(start, i));
+}
+function calendarRows(start, end, col0) {
+    const lead = (start.getDay() - col0.getDay() + 7) % 7;
+    const cells = Array.from({ length: lead }, () => null).concat(daysInSpan(start, end));
+    const rows = [];
+    for (let i = 0; i < cells.length; i += 7) {
+        const row = cells.slice(i, i + 7);
+        while (row.length < 7)
+            row.push(null);
+        rows.push(row);
+    }
+    return rows;
+}
+function rowMonthLabel(row, isFirst) {
+    const days = row.filter(Boolean);
+    if (!days.length)
+        return null;
+    const hit = days.find(d => d.getDate() === 1);
+    if (hit)
+        return MONTHS[hit.getMonth()] + ' ' + hit.getFullYear();
+    if (isFirst)
+        return MONTHS[days[0].getMonth()] + ' ' + days[0].getFullYear();
+    return null;
+}
+function cardInterval(box, rating) {
+    if (rating === 'again')
+        return { box: 0, days: 0 };
+    if (rating === 'good') {
+        const n = Math.min(4, Math.max(1, (box || 0) + 1));
+        return { box: n, days: [0, 1, 3, 7, 14][n] };
+    }
+    const n = Math.min(4, Math.max(2, (box || 0) + 2));
+    return { box: n, days: [0, 1, 3, 14, 30][n] };
+}
+function flashPool(results, qbankLog) {
+    return window.TB_BITES.filter(b => {
+        if (isStub(b))
+            return false;
+        const st = biteState(results, b.id);
+        return STRUGGLE.has(st) || st === 'Unassessed' || qbankStatus(qbankLog, b.id).everIncorrect;
+    });
+}
+function flashWhy(b, results, qbankLog) {
+    const st = biteState(results, b.id);
+    if (STRUGGLE.has(st))
+        return st;
+    if (qbankStatus(qbankLog, b.id).everIncorrect)
+        return 'Missed in a quiz';
+    return st === 'Unassessed' ? 'Unassessed' : st;
 }
 function GoogleMark() {
     return React.createElement("svg", { width: "18", height: "18", viewBox: "0 0 18 18", "aria-hidden": "true" },
@@ -502,7 +554,7 @@ function TopBar({ streak, user, setView, course, setCourse, onLogout }) {
                 : React.createElement(Button, { size: "sm", onClick: () => setView('login') }, "Log in")));
 }
 function LeftNav({ view, setView }) {
-    const nav = [['home', 'Home', 'house'], ['outline', 'Outline', 'tree-structure'], ['qbank', 'QBank', 'exam'], ['brush', 'Brush-up', 'broom']];
+    const nav = [['home', 'Home', 'house'], ['outline', 'Outline', 'tree-structure'], ['brush', 'Brush-up', 'broom']];
     return React.createElement("nav", { className: "tb-nav", "aria-label": "Primary" }, nav.map(([id, label, icon]) => React.createElement(Button, { key: id, size: "sm", fullWidth: true, variant: view === id ? 'primary' : 'ghost', onClick: () => setView(id) },
         React.createElement("i", { className: 'ph-bold ph-' + icon }),
         label)));
@@ -593,10 +645,36 @@ function DayList({ ids, results, openModule, heading, empty }) {
                 React.createElement(Button, { size: "sm", onClick: () => openModule(id, 'home') }, "Open"));
         }));
 }
+function DayCell({ date, todayStr, selected, onSelect, plan, results, compact }) {
+    const key = ymd(date);
+    const ids = plan.byDay[key] || [];
+    const isToday = key === todayStr;
+    const isSel = key === selected;
+    const shown = ids.slice(0, compact ? 2 : 3);
+    const extra = ids.length - shown.length;
+    const authoredIds = ids.filter(id => !isStub(biteOf(id)));
+    const allReady = authoredIds.length > 0 && authoredIds.every(id => isReady(biteState(results, id)));
+    const behind = key < todayStr && authoredIds.some(id => !isReady(biteState(results, id)));
+    return React.createElement("button", { type: "button", onClick: () => onSelect(key), style: { display: 'grid', alignContent: 'start', gap: 4, minHeight: compact ? 72 : 104, padding: 6, textAlign: 'left', border: isSel ? '1px solid var(--clover-500)' : '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: isToday ? 'var(--sunny-100)' : 'var(--paper)', boxShadow: isToday ? 'inset 0 3px 0 var(--sunny-500)' : 'none', cursor: 'pointer' } },
+        React.createElement("span", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+            React.createElement("span", { style: { font: '600 12px var(--font-display)', color: behind ? 'var(--coral-700)' : isToday ? 'var(--sunny-700)' : 'var(--text-body)', background: behind ? 'var(--coral-100)' : 'transparent', borderRadius: 6, padding: behind ? '0 5px' : 0 } }, date.getDate()),
+            allReady && React.createElement("i", { className: "ph-bold ph-check", style: { color: 'var(--clover-600)', fontSize: 12 } })),
+        shown.map(id => {
+            const t = biteOf(id);
+            const st = biteState(results, id);
+            const done = isReady(st);
+            const overdueAuthored = key < todayStr && !isStub(t) && !done;
+            return React.createElement("span", { key: id, style: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', font: '500 10px var(--font-body)', padding: '2px 4px', borderRadius: 4, background: isToday ? 'var(--sunny-500)' : overdueAuthored ? 'var(--coral-100)' : done ? 'var(--clover-100)' : 'var(--cream)', color: overdueAuthored ? 'var(--coral-700)' : done ? 'var(--clover-700)' : 'var(--text-muted)', border: '1px solid var(--border)' } }, t.title);
+        }),
+        extra > 0 && React.createElement("span", { style: { font: '600 10px var(--font-body)', color: 'var(--text-faint)' } },
+            "+",
+            extra));
+}
 function HomeView({ results, examDate, setExamDate, planStart, setPlanStart, openModule }) {
     const today = startOfDay(new Date());
     const todayStr = ymd(today);
-    const [cursor, setCursor] = React.useState({ y: today.getFullYear(), m: today.getMonth() });
+    const [weekStart, setWeekStart] = React.useState(today);
+    const [calMode, setCalMode] = React.useState('week');
     const [selected, setSelected] = React.useState(todayStr);
     const plan = buildPlan(examDate, planStart);
     const remaining = window.TB_BITES.filter(b => !isReady(biteState(results, b.id))).length;
@@ -613,7 +691,19 @@ function HomeView({ results, examDate, setExamDate, planStart, setPlanStart, ope
     const todayIds = plan.byDay[todayStr] || [];
     const nextEntry = Object.entries(plan.byDay).sort((a, b) => a[0].localeCompare(b[0])).find(([day, ids]) => day >= todayStr && firstAuthoredBite(ids.map(biteOf), b => !isReady(biteState(results, b.id))));
     const nextBite = nextEntry && firstAuthoredBite(nextEntry[1].map(biteOf), b => !isReady(biteState(results, b.id)));
-    const cells = monthCells(cursor.y, cursor.m);
+    const weekDays = weekStrip(weekStart);
+    const monthFrom = planStart && planStart < todayStr ? parseYmd(planStart) : today;
+    const monthTo = exam || addDays(today, 27);
+    const monthRows = calendarRows(monthFrom, monthTo, today);
+    const shiftWeek = n => {
+        setWeekStart(s => {
+            const next = addDays(s, n);
+            const from = ymd(next);
+            const to = ymd(addDays(next, 6));
+            setSelected(sel => sel >= from && sel <= to ? sel : from);
+            return next;
+        });
+    };
     const onDate = e => {
         const v = e.target.value;
         if (v && v < todayStr)
@@ -626,43 +716,29 @@ function HomeView({ results, examDate, setExamDate, planStart, setPlanStart, ope
     return React.createElement("section", { style: { display: 'grid', gap: 22 } },
         React.createElement("div", { className: "tb-home" },
             React.createElement("div", { style: { display: 'grid', gap: 16, minWidth: 0 } },
-                React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 } },
-                    React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } },
-                        MONTHS[cursor.m],
-                        " ",
-                        cursor.y),
-                    React.createElement("div", { style: { display: 'flex', gap: 8 } },
-                        React.createElement(IconButton, { icon: "caret-left", label: "Previous month", onClick: () => setCursor(c => c.m === 0 ? { y: c.y - 1, m: 11 } : { y: c.y, m: c.m - 1 }) }),
-                        React.createElement(IconButton, { icon: "caret-right", label: "Next month", onClick: () => setCursor(c => c.m === 11 ? { y: c.y + 1, m: 0 } : { y: c.y, m: c.m + 1 }) }))),
+                React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' } },
+                    React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, calMode === 'week' ? fmtRange(weekStart, addDays(weekStart, 6)) : (examDate ? ('Through ' + fmtLong(examDate)) : 'Look-ahead')),
+                    React.createElement("div", { style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
+                        React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => setCalMode(m => m === 'week' ? 'month' : 'week') }, calMode === 'week' ? 'Month view' : 'Week view'),
+                        calMode === 'week' && React.createElement(React.Fragment, null,
+                            React.createElement(IconButton, { icon: "caret-left", label: "Previous week", onClick: () => shiftWeek(-7) }),
+                            React.createElement(IconButton, { icon: "caret-right", label: "Next week", onClick: () => shiftWeek(7) })))),
                 !examDate && React.createElement(Card, { sunken: true, padding: 20 },
                     React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, "Set an exam date to spread the modules. Stubs stay on the calendar.")),
-                React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(7,minmax(0,1fr))', gap: 6 } },
-                    WEEKDAYS.map(d => React.createElement("div", { key: d, style: { font: '600 11px var(--font-body)', color: 'var(--text-faint)', textAlign: 'center', padding: '4px 0' } }, d)),
-                    cells.map((cell, i) => {
-                        const key = ymd(cell.date);
-                        const ids = plan.byDay[key] || [];
-                        const isToday = key === todayStr;
-                        const isSel = key === selected;
-                        const shown = ids.slice(0, 3);
-                        const extra = ids.length - shown.length;
-                        const authoredIds = ids.filter(id => !isStub(biteOf(id)));
-                        const allReady = authoredIds.length > 0 && authoredIds.every(id => isReady(biteState(results, id)));
-                        const behind = !cell.outside && key < todayStr && authoredIds.some(id => !isReady(biteState(results, id)));
-                        return React.createElement("button", { key: i, type: "button", onClick: () => setSelected(key), style: { display: 'grid', alignContent: 'start', gap: 4, minHeight: 92, padding: 6, textAlign: 'left', border: isSel ? '1px solid var(--clover-500)' : '1px solid var(--border)', borderRadius: 'var(--radius-sm)', background: isToday ? 'var(--sunny-100)' : 'var(--paper)', boxShadow: isToday ? 'inset 0 3px 0 var(--sunny-500)' : 'none', cursor: 'pointer', opacity: cell.outside ? .5 : 1 } },
-                            React.createElement("span", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
-                                React.createElement("span", { style: { font: '600 12px var(--font-display)', color: behind ? 'var(--coral-700)' : isToday ? 'var(--sunny-700)' : 'var(--text-body)', background: behind ? 'var(--coral-100)' : 'transparent', borderRadius: 6, padding: behind ? '0 5px' : 0 } }, cell.date.getDate()),
-                                allReady && React.createElement("i", { className: "ph-bold ph-check", style: { color: 'var(--clover-600)', fontSize: 12 } })),
-                            shown.map(id => {
-                                const t = biteOf(id);
-                                const st = biteState(results, id);
-                                const done = isReady(st);
-                                const overdueAuthored = !cell.outside && key < todayStr && !isStub(t) && !done;
-                                return React.createElement("span", { key: id, style: { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', font: '500 10px var(--font-body)', padding: '2px 4px', borderRadius: 4, background: isToday ? 'var(--sunny-500)' : overdueAuthored ? 'var(--coral-100)' : done ? 'var(--clover-100)' : 'var(--cream)', color: overdueAuthored ? 'var(--coral-700)' : done ? 'var(--clover-700)' : 'var(--text-muted)', border: '1px solid var(--border)' } }, t.title);
-                            }),
-                            extra > 0 && React.createElement("span", { style: { font: '600 10px var(--font-body)', color: 'var(--text-faint)' } },
-                                "+",
-                                extra));
-                    })),
+                calMode === 'week'
+                    ? React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(7,minmax(0,1fr))', gap: 6 } },
+                        weekdayLabels(weekStart).map((d, i) => React.createElement("div", { key: i, style: { font: '600 11px var(--font-body)', color: 'var(--text-faint)', textAlign: 'center', padding: '4px 0' } }, d)),
+                        weekDays.map(date => React.createElement(DayCell, { key: ymd(date), date: date, todayStr: todayStr, selected: selected, onSelect: setSelected, plan: plan, results: results })))
+                    : React.createElement("div", { className: "tb-cal-month", style: { display: 'grid', gap: 10, maxHeight: 560, overflow: 'auto', paddingRight: 4 } },
+                        React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(7,minmax(0,1fr))', gap: 6, position: 'sticky', top: 0, zIndex: 1, background: 'var(--surface-page)', paddingBottom: 4 } }, weekdayLabels(today).map((d, i) => React.createElement("div", { key: i, style: { font: '600 11px var(--font-body)', color: 'var(--text-faint)', textAlign: 'center', padding: '4px 0' } }, d))),
+                        monthRows.map((row, ri) => {
+                            const label = rowMonthLabel(row, ri === 0);
+                            return React.createElement("div", { key: ri, style: { display: 'grid', gap: 6 } },
+                                label && React.createElement("strong", { style: { font: '600 13px var(--font-display)', color: 'var(--text-muted)', padding: '4px 2px' } }, label),
+                                React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(7,minmax(0,1fr))', gap: 6 } }, row.map((date, di) => date
+                                    ? React.createElement(DayCell, { key: ymd(date), date: date, todayStr: todayStr, selected: selected, onSelect: setSelected, plan: plan, results: results, compact: true })
+                                    : React.createElement("div", { key: 'e' + ri + '-' + di }))));
+                        })),
                 examDate
                     ? React.createElement(DayList, { ids: selectedIds, results: results, openModule: openModule, heading: selected === todayStr ? 'Today' : fmtLong(selected), empty: selected === todayStr && todayIds.length === 0 ? (nextEntry ? `Nothing scheduled. The next authored bite is ${nextBite.title} on ${fmtLong(nextEntry[0])}.` : 'Nothing scheduled.') : 'No modules on this day.' })
                     : React.createElement(DayList, { ids: [], results: results, openModule: openModule, heading: "Today", empty: "Set an exam date to spread the modules." })),
@@ -905,13 +981,12 @@ function makeQuizItems(bites, count, styles) {
         return { id: 'Q' + (i + 1), biteId: b.id, style: 'mc', stub: true, stem: 'Stub item · ' + b.id + '. No authored QBank item yet. Which outline bite is this?', choices, correct: choices.indexOf(b.title) };
     });
 }
-function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQbankLog }) {
-    const [pane, setPane] = React.useState('list');
-    const [run, setRun] = React.useState(null);
+function QBankView({ results, quizzes, setQuizzes, qbankLog, setQbankLog, onClose, launch }) {
+    const [pane, setPane] = React.useState(launch && launch.quiz ? 'run' : 'create');
+    const [run, setRun] = React.useState(() => launch && launch.quiz ? { quiz: launch.quiz, index: 0, picked: null, graded: null, answers: {}, started: Date.now() } : null);
     const [now, setNow] = React.useState(Date.now());
     React.useEffect(() => { if (!(run && run.quiz && run.quiz.prefs && run.quiz.prefs.timer))
         return; const t = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(t); }, [run && run.quiz && run.quiz.prefs && run.quiz.prefs.timer]);
-    const items = window.TB_BITES.filter(t => t.demo);
     const [name, setName] = React.useState('Custom quiz');
     const [count, setCount] = React.useState(10);
     const [styles, setStyles] = React.useState(['mc']);
@@ -949,7 +1024,7 @@ function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQban
         return React.createElement("section", { style: { display: 'grid', gap: 16 } },
             React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
                 React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Create quiz"),
-                React.createElement(Button, { variant: "ghost", size: "sm", onClick: () => setPane('list') }, "Cancel")),
+                React.createElement(Button, { variant: "ghost", size: "sm", onClick: onClose }, "Cancel")),
             React.createElement(Card, { padding: 22, style: { display: 'grid', gap: 20 } },
                 React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) 140px', gap: 12 } },
                     React.createElement("label", { style: { display: 'grid', gap: 6, font: '600 12px var(--font-body)', color: 'var(--text-muted)' } },
@@ -1021,7 +1096,7 @@ function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQban
     if (pane === 'run' && run) {
         if (run.empty) {
             return React.createElement("section", { style: { display: 'grid', gap: 16 } },
-                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "QBank"),
+                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Create quiz"),
                 React.createElement(Card, { sunken: true, padding: 24 },
                     React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, run.reason)),
                 React.createElement(Button, { variant: "ghost", onClick: () => setPane('create') }, "Back to create"));
@@ -1041,7 +1116,7 @@ function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQban
                         quiz.items.length,
                         " right"),
                     React.createElement("p", { style: { margin: '8px 0 0', color: 'var(--text-muted)' } }, "Right/wrong only \u2014 this does not write Gap / Rusty / Exam-Ready / Mastered.")),
-                React.createElement(Button, { onClick: () => { setRun(null); setPane('list'); } }, "Back to QBank"));
+                React.createElement(Button, { onClick: onClose }, "Back to Brush-up"));
         }
         const gradeItem = () => {
             if (run.picked == null)
@@ -1080,16 +1155,88 @@ function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQban
                 React.createElement("div", { style: { marginTop: 16 } }, run.graded ? React.createElement(Button, { onClick: next }, run.index + 1 === quiz.items.length ? 'See score' : 'Next') : React.createElement(Button, { onClick: gradeItem, disabled: run.picked == null }, "Check"))),
             React.createElement("p", { style: { margin: 0, color: 'var(--text-faint)', font: '500 12px var(--font-body)' } }, "Right/wrong only \u2014 this does not write Gap / Rusty / Exam-Ready / Mastered."));
     }
+    return null;
+}
+function Flashcards({ results, qbankLog, schedule, setSchedule, openModule }) {
+    const todayStr = ymd(new Date());
+    const pool = flashPool(results, qbankLog);
+    const poolKey = pool.map(b => b.id).sort().join('|');
+    const rank = id => {
+        const st = biteState(results, id);
+        if (st === 'Gap')
+            return 0;
+        if (st === 'Misconception')
+            return 1;
+        if (st === 'Rusty')
+            return 2;
+        if (qbankStatus(qbankLog, id).everIncorrect)
+            return 3;
+        return 4;
+    };
+    const dueIds = pool.filter(b => { const s = schedule[b.id]; return !s || s.due <= todayStr; }).sort((a, b) => rank(a.id) - rank(b.id)).map(b => b.id);
+    const [queue, setQueue] = React.useState(dueIds);
+    const [flipped, setFlipped] = React.useState(false);
+    React.useEffect(() => { setQueue(dueIds); setFlipped(false); }, [poolKey, todayStr]);
+    const nextFuture = pool.map(b => schedule[b.id]).filter(s => s && s.due > todayStr).sort((a, b) => a.due.localeCompare(b.due))[0];
+    if (pool.length === 0) {
+        return React.createElement(Card, { sunken: true, padding: 28 },
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, "No struggle data yet. Teach a bite back or miss a quiz item and a card lands here. Unassessed authored notes also join the deck."));
+    }
+    if (queue.length === 0) {
+        return React.createElement(Card, { sunken: true, padding: 28 },
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, nextFuture ? ('Caught up. Next card due ' + fmtLong(nextFuture.due) + '.') : 'Caught up for today.'));
+    }
+    const topic = biteOf(queue[0]);
+    const st = biteState(results, topic.id);
+    const why = flashWhy(topic, results, qbankLog);
+    const grade = rating => {
+        const prev = schedule[topic.id] || { box: 0, reps: 0 };
+        const next = cardInterval(prev.box, rating);
+        setSchedule({ ...schedule, [topic.id]: { box: next.box, reps: (prev.reps || 0) + 1, due: ymd(addDays(parseYmd(todayStr), next.days)) } });
+        setFlipped(false);
+        setQueue(q => rating === 'again' ? q.slice(1).concat(q[0]) : q.slice(1));
+    };
+    return React.createElement("div", { style: { display: 'grid', gap: 14, maxWidth: 640 } },
+        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' } },
+            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                queue.length,
+                " due"),
+            React.createElement(StateBadge, { state: st, size: "sm" })),
+        React.createElement(Card, { padding: 28, style: { minHeight: 280, display: 'grid', alignContent: 'start', gap: 12 } },
+            React.createElement("div", { style: { display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' } },
+                React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
+                    topic.id,
+                    " \u00B7 ",
+                    topic.leaf),
+                React.createElement("span", { style: { font: '600 11px var(--font-body)', color: 'var(--text-faint)' } }, why)),
+            React.createElement("h2", { style: { margin: 0, font: '600 24px var(--font-display)' } }, topic.title),
+            flipped
+                ? React.createElement(React.Fragment, null,
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Answer"),
+                    React.createElement("div", { style: { display: 'grid', gap: 8 } }, topic.inShort.map(p => React.createElement("strong", { key: p, style: { font: '600 15px var(--font-body)' } }, p))),
+                    topic.precision.slice(0, 2).map(p => React.createElement("p", { key: p, style: { margin: 0, color: 'var(--text-muted)', font: '500 13px/1.55 var(--font-body)' } }, p)))
+                : React.createElement(React.Fragment, null,
+                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Recall"),
+                    React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', font: '500 15px/1.6 var(--font-body)' } }, topic.prompt),
+                    React.createElement("p", { style: { margin: 0, color: 'var(--text-faint)', font: '500 12px var(--font-body)' } }, "Flip when you\u2019ve said it out loud. Grading only schedules the next due date \u2014 it does not write readiness."))),
+        flipped
+            ? React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8 } },
+                React.createElement(Button, { variant: "ghost", onClick: () => grade('again') }, "Again"),
+                React.createElement(Button, { onClick: () => grade('good') }, "Good"),
+                React.createElement(Button, { variant: "ghost", onClick: () => grade('easy') }, "Easy"))
+            : React.createElement(Button, { size: "lg", onClick: () => setFlipped(true) }, "Flip"),
+        React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => openModule(topic.id, 'brush') }, "Open teach-back"));
+}
+function BrushView({ results, openModule, quizzes, setQuizzes, qbankLog, setQbankLog, cards, setCards }) {
+    const [quiz, setQuiz] = React.useState(null);
+    if (quiz)
+        return React.createElement(QBankView, { results: results, quizzes: quizzes, setQuizzes: setQuizzes, qbankLog: qbankLog, setQbankLog: setQbankLog, onClose: () => setQuiz(null), launch: quiz === 'create' ? null : quiz });
     return React.createElement("section", { style: { display: 'grid', gap: 16 } },
         React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
-            React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "QBank"),
-            React.createElement(Button, { onClick: () => setPane('create') }, "Create quiz")),
-        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', maxWidth: 520 } }, "Random practice. Right/wrong only \u2014 this does not write Gap / Rusty / Exam-ready / Mastered."),
-        items.map(t => React.createElement(Card, { key: t.id, padding: 20 },
-            React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, t.id),
-            React.createElement("h3", { style: { margin: '6px 0', font: '600 20px var(--font-display)' } }, t.title),
-            React.createElement("p", { style: { margin: '0 0 12px', color: 'var(--text-muted)' } }, t.prompt),
-            React.createElement(Button, { size: "sm", onClick: () => openModule(t.id, 'qbank') }, "Open the module"))),
+            React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Brush-up"),
+            React.createElement(Button, { onClick: () => setQuiz('create') }, "Create quiz")),
+        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', maxWidth: 560 } }, "Spaced recall from Gap, Rusty, quiz misses, and unassessed authored notes. No invented mastery."),
+        React.createElement(Flashcards, { results: results, qbankLog: qbankLog, schedule: cards, setSchedule: setCards, openModule: openModule }),
         quizzes.length > 0 && React.createElement("div", { style: { display: 'grid', gap: 10 } },
             React.createElement("h2", { style: { margin: 0, font: '600 18px var(--font-display)' } }, "Your quizzes"),
             quizzes.map(q => React.createElement(Card, { key: q.id, padding: 16, style: { display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' } },
@@ -1098,38 +1245,7 @@ function QBankView({ results, openModule, quizzes, setQuizzes, qbankLog, setQban
                     React.createElement("p", { style: { margin: '4px 0 0', color: 'var(--text-faint)', font: '500 12px var(--font-body)' } },
                         q.items.length,
                         " stub items \u00B7 right/wrong only")),
-                React.createElement(Button, { size: "sm", onClick: () => { setRun({ quiz: q, index: 0, picked: null, graded: null, answers: {}, started: Date.now() }); setPane('run'); } }, "Open")))),
-        React.createElement(Card, { sunken: true, padding: 20 },
-            React.createElement("p", { style: { margin: 0, color: 'var(--text-faint)' } }, "Full authored bank lands with the content pass. These three are the demo pool.")));
-}
-function BrushView({ results, openModule }) {
-    const byBite = {};
-    for (const [id, r] of Object.entries(results)) {
-        if (!STRUGGLE.has(r.state))
-            continue;
-        const topic = biteOf(id);
-        byBite[id] = { id, title: topic.title, state: r.state, misses: r.misses || [] };
-    }
-    const cards = Object.values(byBite);
-    const buckets = ['Gap', 'Misconception', 'Rusty'];
-    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
-        React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Brush-up"),
-        React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', maxWidth: 540 } }, "Not the official outline. Grouped by how you missed. We\u2019ll thicken this once the struggle bank has real traffic."),
-        cards.length === 0
-            ? React.createElement(Card, { sunken: true, padding: 28 },
-                React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, "No struggle data yet. Teach a bite back and misses land here."))
-            : buckets.map(bucket => {
-                const rows = cards.filter(c => c.state === bucket);
-                if (!rows.length)
-                    return null;
-                return React.createElement("div", { key: bucket, style: { display: 'grid', gap: 10 } },
-                    React.createElement("h2", { style: { margin: 0, font: '600 18px var(--font-display)' } }, bucket),
-                    rows.map(m => React.createElement(Card, { key: m.id, padding: 18 },
-                        React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, m.id),
-                        React.createElement("h3", { style: { margin: '4px 0', font: '600 18px var(--font-display)' } }, m.title),
-                        React.createElement("ul", { style: { margin: '0 0 12px', paddingLeft: 18, color: 'var(--text-muted)' } }, (m.misses.length ? m.misses : ['Missed criteria not stored']).map(x => React.createElement("li", { key: x }, x))),
-                        React.createElement(Button, { size: "sm", onClick: () => openModule(m.id, 'brush') }, "Open teach-back"))));
-            }));
+                React.createElement(Button, { size: "sm", onClick: () => setQuiz({ quiz: q }) }, "Open")))));
 }
 function App() {
     const saved = React.useMemo(() => loadStore(), []);
@@ -1150,16 +1266,17 @@ function App() {
     const [openLeaves, setOpenLeaves] = React.useState(saved.openLeaves || ['1.1.1']);
     const [quizzes, setQuizzes] = React.useState(saved.quizzes || []);
     const [qbankLog, setQbankLog] = React.useState(saved.qbankLog || {});
+    const [cards, setCards] = React.useState(saved.cards || {});
     const [err, setErr] = React.useState('');
     const topic = window.TB_BITES.find(t => t.id === topicId);
     const answer = answers[topicId] || '';
     const result = results[topicId];
     React.useEffect(() => {
         try {
-            localStorage.setItem(STORE, JSON.stringify({ topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog }));
+            localStorage.setItem(STORE, JSON.stringify({ topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog, cards }));
         }
         catch { }
-    }, [topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog]);
+    }, [topicId, answers, results, view, fromView, user, course, examDate, planStart, openSecs, openLeaves, quizzes, qbankLog, cards]);
     const submit = () => {
         if (answer.trim().length < 20) {
             setErr('Write at least a couple of sentences so the rubric has something to assess.');
@@ -1192,8 +1309,7 @@ function App() {
                     view === 'home' && React.createElement(HomeView, { results: results, examDate: examDate, setExamDate: setExamDate, planStart: planStart, setPlanStart: setPlanStart, openModule: openModule }),
                     view === 'outline' && React.createElement(OutlineView, { results: results, openModule: openModule, openSecs: openSecs, setOpenSecs: setOpenSecs, openLeaves: openLeaves, setOpenLeaves: setOpenLeaves }),
                     view === 'work' && topic && React.createElement(WorkView, { topic: topic, state: result ? result.state : 'Unassessed', answer: answer, setAnswer: setAnswer, result: result, err: err, submit: submit, back: back, goHome: () => changeView('home'), openModule: openModule, goBrush: () => changeView('brush'), results: results, examDate: examDate }),
-                    view === 'qbank' && React.createElement(QBankView, { results: results, openModule: openModule, quizzes: quizzes, setQuizzes: setQuizzes, qbankLog: qbankLog, setQbankLog: setQbankLog }),
-                    view === 'brush' && React.createElement(BrushView, { results: results, openModule: openModule }))));
+                    view === 'brush' && React.createElement(BrushView, { results: results, openModule: openModule, quizzes: quizzes, setQuizzes: setQuizzes, qbankLog: qbankLog, setQbankLog: setQbankLog, cards: cards, setCards: setCards }))));
 }
 window.TBWebApp = App;
 })(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/web/screens.jsx", error: String((e && e.message) || e) }); }

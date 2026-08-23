@@ -4,12 +4,11 @@ Explanation-first SIE prep. Read a bite, teach it back.
 
 Product-facing frontend kit on the frozen product grain:
 
-- Home pairs an evenly spaced, learner-dated calendar (including stubs) with a section-grouped **181**-bite readiness grid; each grid cell is colored by its bite's own readiness
+- Home pairs a one-week look-ahead calendar (today is the first column; arrows shift the window; Month view scrolls continuously to the exam date) with a section-grouped **181**-bite readiness grid; each grid cell is colored by its bite's own readiness. Yellow is today. Coral is overdue authored unready work only — stubs are never coral.
 - Pace is remaining modules divided by remaining study days
 - Same-page note, teach-back, and readiness feedback (no read-gate)
 - Frontend-only email, Google, Facebook, and Apple login stubs
-- QBank list and one-pane quiz builder; generated questions are honest stubs, scored right/wrong only, and never write readiness
-- Brush-up from misses (not the official 181)
+- Left nav is Home / Outline / Brush-up. Brush-up is flashcards for spaced recall (Gap / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
 - v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
 
 ## Review the frontend
