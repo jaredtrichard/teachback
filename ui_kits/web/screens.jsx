@@ -1,4 +1,4 @@
-const {Button,IconButton,Card,StateBadge,ProgressBar,StreakBadge,TeachBackBox,TopicChip,CriterionRow,ResultBanner}=window.TeachbackDesignSystem_417209;
+const {Button,IconButton,Card,StateBadge,ProgressBar,StreakBadge,TeachBackBox,CriterionRow,ResultBanner}=window.TeachbackDesignSystem_417209;
 const STORE='tb-frontend-review:v3';
 const STORE_LEGACY='tb-frontend-review:v2';
 const READY=new Set(['Exam-Ready','Mastered']);
@@ -28,9 +28,21 @@ function loadStore(){
     if(raw.view==='login') raw.view='home';
     if(raw.view==='qbank') raw.view='brush';
     if(raw.fromView==='qbank') raw.fromView='brush';
+    if(raw.workStep!=='note'&&raw.workStep!=='teach') raw.workStep='note';
     delete raw.xp;
     return raw;
   }catch{return {};}
+}
+function nextBite(id){
+  const i=window.TB_BITES.findIndex(b=>b.id===id);
+  return i>=0?window.TB_BITES[i+1]||null:null;
+}
+function authoredPlannedBy(plan,dayStr){
+  let n=0;
+  Object.keys(plan.byDay).sort().forEach(day=>{
+    if(day<=dayStr) n+=plan.byDay[day].filter(id=>biteOf(id)&&!isStub(biteOf(id))).length;
+  });
+  return n;
 }
 
 function grade(topic,answer){
@@ -196,7 +208,7 @@ function TopBar({streak,user,setView,course,setCourse,onLogout}){
 }
 
 function LeftNav({view,setView}){
-  const nav=[['home','Home','house'],['outline','Outline','tree-structure'],['brush','Brush-up','broom']];
+  const nav=[['home','Home','house'],['outline','Outline','tree-structure'],['calendar','Calendar','calendar-blank'],['brush','Brush-up','broom']];
   return <nav className="tb-nav" aria-label="Primary">
     {nav.map(([id,label,icon])=>
       <Button key={id} size="sm" fullWidth variant={view===id?'primary':'ghost'} onClick={()=>setView(id)}>
@@ -206,11 +218,12 @@ function LeftNav({view,setView}){
   </nav>;
 }
 
-function OverallBar({results}){
+function ReadinessSummary({results}){
   const rows=sectionStats(results);
   const ready=rows.reduce((a,r)=>a+r.ready,0);
   const assessed=rows.reduce((a,r)=>a+r.assessed,0);
   const total=rows.reduce((a,r)=>a+r.total,0);
+  const counts=readinessCounts(results);
   return <Card padding={18}>
     <div style={{display:'flex',justifyContent:'space-between',gap:12,marginBottom:10}}>
       <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Ready · Exam-Ready or Mastered</span>
@@ -222,6 +235,11 @@ function OverallBar({results}){
           <ProgressBar value={r.ready} max={r.total}/>
           <span style={{font:'600 10px var(--font-body)',letterSpacing:'.06em',textTransform:'uppercase',color:'var(--text-faint)'}}>Sec {r.sec} · {r.ready}/{r.total}</span>
         </div>
+      ))}
+    </div>
+    <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:12}}>
+      {window.TB_STATES.map(s=>(
+        <span key={s} style={{padding:'4px 8px',borderRadius:'var(--radius-pill)',background:`var(--state-${stateKey(s)}-bg)`,color:`var(--state-${stateKey(s)})`,font:'600 11px var(--font-body)'}}>{s} {counts[s]}</span>
       ))}
     </div>
   </Card>;
@@ -267,14 +285,14 @@ function PlanChart({ready,total,planStart,examDate,plan}){
   </svg>;
 }
 
-function DayList({ids,results,openModule,heading,empty}){
+function DayList({ids,results,openModule,heading,empty,today}){
   if(!ids||ids.length===0) return <Card sunken padding={20}><p style={{margin:0,color:'var(--text-muted)'}}>{empty}</p></Card>;
   return <div style={{display:'grid',gap:8}}>
-    <h3 style={{margin:0,font:'600 16px var(--font-display)',color:'var(--sunny-700)'}}>{heading}</h3>
+    {heading?<h3 style={{margin:0,font:'600 16px var(--font-display)',color:'var(--sunny-700)'}}>{heading}</h3>:null}
     {ids.map(id=>{
       const t=biteOf(id);
       const st=biteState(results,id);
-      return <Card key={id} padding={14} style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) auto',gap:10,alignItems:'center',background:heading==='Today'?'var(--sunny-100)':undefined}}>
+      return <Card key={id} padding={14} style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) auto',gap:10,alignItems:'center',background:today?'var(--sunny-100)':undefined}}>
         <div style={{minWidth:0}}>
           <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
             <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{t.id} · {t.leaf}</span>
@@ -284,7 +302,7 @@ function DayList({ids,results,openModule,heading,empty}){
           <strong style={{display:'block',marginTop:4,font:'600 15px var(--font-display)'}}>{t.title}</strong>
           <span style={{color:'var(--text-faint)',font:'500 12px var(--font-body)'}}>Teach-back · {t.read||'8 min'}</span>
         </div>
-        <Button size="sm" onClick={()=>openModule(id,'home')}>Open</Button>
+        <Button size="sm" onClick={()=>openModule(id)}>Open</Button>
       </Card>;
     })}
   </div>;
@@ -316,12 +334,9 @@ function DayCell({date,todayStr,selected,onSelect,plan,results,compact}){
   </button>;
 }
 
-function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModule}){
+function HomeView({results,examDate,planStart,openModule,goCalendar}){
   const today=startOfDay(new Date());
   const todayStr=ymd(today);
-  const [weekStart,setWeekStart]=React.useState(today);
-  const [calMode,setCalMode]=React.useState('week');
-  const [selected,setSelected]=React.useState(todayStr);
   const plan=buildPlan(examDate,planStart);
   const remaining=window.TB_BITES.filter(b=>!isReady(biteState(results,b.id))).length;
   const exam=examDate?startOfDay(parseYmd(examDate)):null;
@@ -329,14 +344,61 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
   const studyDaysLeft=exam?countdown+1:null;
   const past=exam&&daysBetween(today,exam)<0;
   const pace=(!exam||past||studyDaysLeft===0)?null:remaining/Math.max(1,studyDaysLeft);
-  const counts=readinessCounts(results);
   const authored=window.TB_BITES.filter(b=>b.demo);
   const authoredReady=authored.filter(b=>isReady(biteState(results,b.id))).length;
   const authoredLine=authored.map(b=>biteState(results,b.id)).reduce((acc,st)=>{acc[st]=(acc[st]||0)+1;return acc;},{});
+  const todayIds=plan.byDay[todayStr]||[];
+  const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&firstAuthoredBite(ids.map(biteOf),b=>!isReady(biteState(results,b.id))));
+  const upcoming=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
+  const plannedByToday=authoredPlannedBy(plan,todayStr);
+  const emptyToday=todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.';
+  return <section style={{display:'grid',gap:22}}>
+    <div className="tb-home">
+      <div style={{display:'grid',gap:16,minWidth:0}}>
+        <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Today</h1>
+        {examDate
+          ? <DayList ids={todayIds} results={results} openModule={openModule} today empty={emptyToday}/>
+          : <Card sunken padding={20}>
+              <p style={{margin:'0 0 12px',color:'var(--text-muted)'}}>Set an exam date to spread the modules. Stubs stay on the calendar.</p>
+              <Button size="sm" onClick={goCalendar}>Open Calendar</Button>
+            </Card>}
+      </div>
+      <aside style={{display:'grid',gap:14,alignContent:'start'}}>
+        <Card padding={18}>
+          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
+          <div style={{font:'700 32px var(--font-display)'}}>{examDate&&!past?countdown:'—'}</div>
+          {!examDate&&<Button size="sm" variant="ghost" onClick={goCalendar} style={{marginTop:10}}>Set exam date</Button>}
+        </Card>
+        <Card padding={18}>
+          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Pace</span>
+          <div style={{font:'700 28px var(--font-display)'}}>{pace==null?'—':(pace.toFixed(1)+' / day')}</div>
+          <p style={{margin:'6px 0 0',color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules ÷ remaining days.':'Remaining '+remaining+' modules ÷ '+studyDaysLeft+' study days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
+          {examDate
+            ? <>
+                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate} plan={plan}/>
+                <p style={{margin:'8px 0 0',font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authoredReady} of {authored.length} authored notes ready</strong>{plannedByToday?` · plan called for ${plannedByToday} by today`:''}. {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
+                <p style={{margin:'4px 0 0',font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs stay on the calendar.</p>
+              </>
+            : <p style={{margin:'8px 0 0',color:'var(--text-muted)'}}>No plan until a date is set.</p>}
+        </Card>
+        <ReadinessSummary results={results}/>
+      </aside>
+    </div>
+  </section>;
+}
+
+function CalendarView({results,examDate,setExamDate,planStart,setPlanStart,openModule}){
+  const today=startOfDay(new Date());
+  const todayStr=ymd(today);
+  const [weekStart,setWeekStart]=React.useState(today);
+  const [calMode,setCalMode]=React.useState('week');
+  const [selected,setSelected]=React.useState(todayStr);
+  const plan=buildPlan(examDate,planStart);
+  const exam=examDate?startOfDay(parseYmd(examDate)):null;
   const selectedIds=plan.byDay[selected]||[];
   const todayIds=plan.byDay[todayStr]||[];
   const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&firstAuthoredBite(ids.map(biteOf),b=>!isReady(biteState(results,b.id))));
-  const nextBite=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
+  const upcoming=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
   const weekDays=weekStrip(weekStart);
   const monthFrom=planStart&&planStart<todayStr?parseYmd(planStart):today;
   const monthTo=exam||addDays(today,27);
@@ -361,7 +423,7 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
   };
 
   return <section style={{display:'grid',gap:22}}>
-    <div className="tb-home">
+    <div className="tb-cal">
       <div style={{display:'grid',gap:16,minWidth:0}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,flexWrap:'wrap'}}>
           <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>{calMode==='week'?fmtRange(weekStart,addDays(weekStart,6)):(examDate?('Through '+fmtLong(examDate)):'Look-ahead')}</h1>
@@ -396,66 +458,16 @@ function HomeView({results,examDate,setExamDate,planStart,setPlanStart,openModul
               })}
             </div>}
         {examDate
-          ? <DayList ids={selectedIds} results={results} openModule={openModule} heading={selected===todayStr?'Today':fmtLong(selected)} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${nextBite.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
+          ? <DayList ids={selectedIds} results={results} openModule={(id)=>openModule(id,'calendar')} heading={selected===todayStr?'Today':fmtLong(selected)} today={selected===todayStr} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
           : <DayList ids={[]} results={results} openModule={openModule} heading="Today" empty="Set an exam date to spread the modules."/>}
       </div>
       <aside style={{display:'grid',gap:14,alignContent:'start'}}>
         <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Exam</span>
+          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Exam date</span>
           <h2 style={{margin:'6px 0 10px',font:'600 20px var(--font-display)'}}>{examDate?('SIE · '+fmtLong(examDate)):'Set your exam date.'}</h2>
           <input className="tb-field" type="date" name="exam-date" min={todayStr} value={examDate} onChange={onDate} aria-label="Exam date"/>
         </Card>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
-          <div style={{font:'700 32px var(--font-display)'}}>{examDate&&!past?countdown:'—'}</div>
-        </Card>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Pace</span>
-          <div style={{font:'700 28px var(--font-display)'}}>{pace==null?'—':(pace.toFixed(1)+' / day')}</div>
-          <p style={{margin:'6px 0 0',color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules ÷ remaining days.':'Remaining '+remaining+' modules ÷ '+studyDaysLeft+' study days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
-        </Card>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Progress vs plan</span>
-          {examDate
-            ? <>
-                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate} plan={plan}/>
-                <p style={{margin:'8px 0 0',font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authored.length} authored notes</strong> — {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
-                <p style={{margin:'4px 0 0',font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs stay on the calendar.</p>
-              </>
-            : <p style={{margin:'8px 0 0',color:'var(--text-muted)'}}>No plan until a date is set.</p>}
-        </Card>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Readiness</span>
-          <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:10}}>
-            {window.TB_STATES.map(s=>(
-              <span key={s} style={{padding:'4px 8px',borderRadius:'var(--radius-pill)',background:`var(--state-${stateKey(s)}-bg)`,color:`var(--state-${stateKey(s)})`,font:'600 11px var(--font-body)'}}>{s} {counts[s]}</span>
-            ))}
-          </div>
-        </Card>
       </aside>
-    </div>
-    <div style={{display:'grid',gap:12}}>
-      <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'end'}}>
-        <h2 style={{margin:0,font:'var(--text-h2)',fontFamily:'var(--font-display)'}}>181 bites</h2>
-        <StateKey/>
-      </div>
-      {sectionStats(results).map(sec=>(
-        <div key={sec.sec} style={{display:'grid',gap:8}}>
-          <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}>
-            <strong style={{font:'600 14px var(--font-display)'}}>Section {sec.sec} · {sec.title}</strong>
-            <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{sec.ready} ready · {sec.assessed} assessed · {sec.total}</span>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(44px,1fr))',gap:6}}>
-            {sec.ids.map(id=>{
-              const t=biteOf(id);
-              const st=biteState(results,id);
-              const k=stateKey(st);
-              const todayHit=(plan.byDay[todayStr]||[]).includes(id);
-              return <button key={id} type="button" title={t.id+' '+t.title+' · '+st+(isStub(t)?' · stub':'')} onClick={()=>openModule(id,'home')} style={{minHeight:44,minWidth:44,padding:4,border:todayHit?'2px solid var(--sunny-500)':(isStub(t)?'1px dashed var(--border-strong)':'1px solid var(--state-'+k+')'),borderRadius:8,background:`var(--state-${k}-bg)`,color:`var(--state-${k})`,font:'500 10px var(--font-mono)',cursor:'pointer'}}>{t.id.replace('B','')}</button>;
-            })}
-          </div>
-        </div>
-      ))}
     </div>
   </section>;
 }
@@ -490,114 +502,104 @@ function LoginView({setUser,setView}){
   </Card>;
 }
 
-function OutlineView({results,openModule,openSecs,setOpenSecs,openLeaves,setOpenLeaves}){
-  const tree=window.TB_TREE;
-  const toggleSec=sec=>setOpenSecs(openSecs.includes(sec)?openSecs.filter(s=>s!==sec):openSecs.concat(sec));
-  const toggleLeaf=leaf=>setOpenLeaves(openLeaves.includes(leaf)?openLeaves.filter(s=>s!==leaf):openLeaves.concat(leaf));
+function OutlineView({results,openModule,examDate,planStart}){
+  const todayStr=ymd(new Date());
+  const plan=buildPlan(examDate,planStart);
+  const todayIds=new Set(plan.byDay[todayStr]||[]);
   return <section style={{display:'grid',gap:16}}>
-    <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>SIE outline</h1>
-    <StateKey/>
-    <OverallBar results={results}/>
-    {Object.entries(tree).map(([sec,s])=>{
+    <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'end'}}>
+      <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>SIE outline</h1>
+      <StateKey/>
+    </div>
+    {Object.entries(window.TB_TREE).map(([sec,s])=>{
       const ids=Object.values(s.leaves).flatMap(l=>l.ids);
       const assessed=ids.filter(id=>results[id]).length;
       const ready=ids.filter(id=>isReady(biteState(results,id))).length;
-      return <Card key={sec} padding={18}>
-        <button onClick={()=>toggleSec(sec)} style={{all:'unset',cursor:'pointer',display:'flex',width:'100%',justifyContent:'space-between',alignItems:'center',gap:12,minHeight:44}}>
+      return <div key={sec} style={{display:'grid',gap:10}}>
+        <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'baseline'}}>
           <div>
             <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Section {sec}</span>
-            <h2 style={{margin:'4px 0 0',font:'600 22px var(--font-display)'}}>{s.title}</h2>
+            <h2 style={{margin:'4px 0 0',font:'600 20px var(--font-display)'}}>{s.title}</h2>
           </div>
           <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{ready} ready · {assessed} assessed · {ids.length}</span>
-        </button>
-        {openSecs.includes(sec) && <div style={{display:'grid',gap:14,marginTop:16}}>
-          {Object.entries(s.leaves).map(([leaf,l])=>(
-            <div key={leaf}>
-              <button onClick={()=>toggleLeaf(leaf)} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--text-body)',minHeight:44,display:'inline-flex',alignItems:'center'}}>{leaf} {l.title}</button>
-              {openLeaves.includes(leaf) && <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:10}}>
-                {l.ids.map(id=>{
-                  const t=biteOf(id);
-                  const st=biteState(results,id);
-                  return <TopicChip key={id} id={id} title={t.title+(isStub(t)?' · stub':'')} state={st} selected={false} onClick={()=>openModule(id,'outline')}/>;
-                })}
-              </div>}
+        </div>
+        {Object.entries(s.leaves).map(([leaf,l])=>(
+          <div key={leaf} style={{display:'grid',gap:6}}>
+            <strong style={{font:'600 13px var(--font-body)',color:'var(--text-muted)'}}>{leaf} {l.title}</strong>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(44px,1fr))',gap:6}}>
+              {l.ids.map(id=>{
+                const t=biteOf(id);
+                const st=biteState(results,id);
+                const k=stateKey(st);
+                const todayHit=todayIds.has(id);
+                return <button key={id} type="button" title={t.id+' '+t.title+' · '+st+(isStub(t)?' · stub':'')} onClick={()=>openModule(id,'outline')} style={{minHeight:44,minWidth:44,padding:4,border:todayHit?'2px solid var(--sunny-500)':(isStub(t)?'1px dashed var(--border-strong)':'1px solid var(--state-'+k+')'),borderRadius:8,background:`var(--state-${k}-bg)`,color:`var(--state-${k})`,font:'500 10px var(--font-mono)',cursor:'pointer'}}>{t.id.replace('B','')}</button>;
+              })}
             </div>
-          ))}
-        </div>}
-      </Card>;
+          </div>
+        ))}
+      </div>;
     })}
   </section>;
 }
 
-function WorkView({topic,state,answer,setAnswer,result,err,submit,back,goHome,openModule,goBrush,results,examDate}){
-  const [openSecs,setOpenSecs]=React.useState(()=>[topic.section]);
-  const [openLeaves,setOpenLeaves]=React.useState(()=>[topic.leaf]);
-  React.useEffect(()=>{
-    setOpenSecs(s=>s.includes(topic.section)?s:s.concat(topic.section));
-    setOpenLeaves(s=>s.includes(topic.leaf)?s:s.concat(topic.leaf));
-  },[topic.id,topic.section,topic.leaf]);
-  const next=firstAuthoredBite(window.TB_BITES.slice(window.TB_BITES.indexOf(topic)+1));
+function BiteNote({topic}){
+  return <>
+    {isStub(topic)&&<Card sunken padding={14} style={{marginBottom:16}}><p style={{margin:0,color:'var(--text-muted)',font:'500 13px var(--font-body)'}}>Title stub — the official bullet is the note. Full prose ships in the content pass.</p></Card>}
+    <Card sunken padding={16} style={{marginBottom:16}}>
+      <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>In short</span>
+      <div style={{display:'grid',gap:6,marginTop:8}}>
+        {topic.inShort.map(p=><strong key={p} style={{font:'700 14px var(--font-body)'}}>{p}</strong>)}
+      </div>
+    </Card>
+    <h3 style={{margin:'0 0 8px',font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--clover-600)'}}>Core</h3>
+    {topic.core.map(p=><p key={p} style={{margin:'0 0 12px',color:'var(--text-muted)',font:'500 14px/1.7 var(--font-body)'}}>{p}</p>)}
+    <h3 style={{margin:'16px 0 8px',font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--clover-600)'}}>Precision</h3>
+    <ul style={{margin:0,padding:0,listStyle:'none',display:'grid',gap:8}}>
+      {topic.precision.map(p=><li key={p} style={{paddingLeft:22,position:'relative',color:'var(--text-muted)',font:'500 13px/1.55 var(--font-body)'}}><i className="ph-bold ph-arrow-fat-right" style={{position:'absolute',left:0,top:2,color:'var(--tangerine-500)'}}></i>{p}</li>)}
+    </ul>
+  </>;
+}
+
+function NoteView({topic,state,back,onTeach}){
+  return <section className="tb-note">
+    <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
+      <button onClick={back} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← Back</button>
+      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>Note</span>
+    </div>
+    <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+      <StateBadge state={state||'Unassessed'}/>
+      <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{topic.id} · {topic.leaf}</span>
+    </div>
+    <Card padding={28}>
+      <h1 style={{margin:'0 0 8px',font:'600 28px var(--font-display)'}}>{topic.title}</h1>
+      <p style={{margin:'0 0 16px',color:'var(--text-muted)'}}>{topic.subtitle}</p>
+      <BiteNote topic={topic}/>
+    </Card>
+    <Button fullWidth size="lg" onClick={onTeach}>Teach it back</Button>
+  </section>;
+}
+
+function TeachView({topic,state,answer,setAnswer,result,err,submit,onNote,goHome,openNext,goBrush}){
+  const next=nextBite(topic.id);
   const pop=result&&(result.state==='Exam-Ready'||result.state==='Mastered');
   return <section style={{display:'grid',gap:16}}>
     <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
-      <button onClick={back} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← Back</button>
-      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>SIE{examDate?' · '+fmtLong(examDate):''}</span>
+      <button onClick={onNote} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← Note</button>
+      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>Teach-back</span>
     </div>
-    <div className="tb-work">
-      <Card padding={14} style={{maxHeight:'78vh',overflow:'auto'}}>
-        {Object.entries(window.TB_TREE).map(([sec,s])=>{
-          const ids=Object.values(s.leaves).flatMap(l=>l.ids);
-          const authored=ids.filter(id=>biteOf(id).demo);
-          const stubs=ids.length-authored.length;
-          const assessed=authored.filter(id=>results[id]).length;
-          return <div key={sec} style={{marginBottom:10}}>
-            <button type="button" onClick={()=>setOpenSecs(o=>o.includes(sec)?o.filter(x=>x!==sec):o.concat(sec))} style={{all:'unset',cursor:'pointer',display:'block',width:'100%',padding:'8px 4px'}}>
-              <strong style={{font:'600 13px var(--font-display)'}}>Sec {sec} · {s.title}</strong>
-              <div style={{font:'500 11px var(--font-mono)',color:'var(--text-faint)'}}>{assessed}/{authored.length} authored · stubs {stubs}</div>
-            </button>
-            {openSecs.includes(sec)&&Object.entries(s.leaves).map(([leaf,l])=>(
-              <div key={leaf} style={{marginLeft:6}}>
-                <button type="button" onClick={()=>setOpenLeaves(o=>o.includes(leaf)?o.filter(x=>x!==leaf):o.concat(leaf))} style={{all:'unset',cursor:'pointer',font:'600 12px var(--font-body)',padding:'6px 4px',display:'block'}}>{leaf} {l.title}</button>
-                {openLeaves.includes(leaf)&&l.ids.map(id=>{
-                  const t=biteOf(id);
-                  const on=id===topic.id;
-                  return <button key={id} type="button" onClick={()=>openModule(id,'work')} style={{display:'block',width:'100%',textAlign:'left',padding:'8px 8px',minHeight:40,border:0,borderRadius:8,background:on?'var(--clover-100)':'transparent',color:on?'var(--clover-700)':'var(--text-muted)',font:'500 12px var(--font-body)',cursor:'pointer'}}>{t.id} {t.title}</button>;
-                })}
-              </div>
-            ))}
-          </div>;
-        })}
+    <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+      <StateBadge state={result?result.state:(state||'Unassessed')}/>
+      <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{topic.id} · {topic.leaf}</span>
+    </div>
+    <div className="tb-teach">
+      <Card padding={24}>
+        <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Your turn</span>
+        <h2 style={{margin:'6px 0 14px',font:'600 22px var(--font-display)'}}>Explain it to a colleague.</h2>
+        <p style={{margin:'0 0 14px',color:'var(--text-muted)',font:'500 14px var(--font-body)'}}>{topic.title}</p>
+        <TeachBackBox value={answer} onChange={setAnswer} prompt={topic.prompt} placeholder={topic.placeholder} rows={8}/>
+        <div style={{marginTop:14}}><Button fullWidth size="lg" onClick={submit}>Grade my teach-back</Button></div>
+        {err&&<p role="alert" style={{margin:'10px 0 0',color:'var(--coral-700)',font:'600 12px var(--font-body)'}}>{err}</p>}
       </Card>
-      <div style={{display:'grid',gap:16,minWidth:0}}>
-        <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
-          <StateBadge state={state||'Unassessed'}/>
-          <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{topic.id} · {topic.leaf}</span>
-        </div>
-        <Card padding={28}>
-          <h1 style={{margin:'0 0 8px',font:'600 28px var(--font-display)'}}>{topic.title}</h1>
-          <p style={{margin:'0 0 16px',color:'var(--text-muted)'}}>{topic.subtitle}</p>
-          {isStub(topic)&&<Card sunken padding={14} style={{marginBottom:16}}><p style={{margin:0,color:'var(--text-muted)',font:'500 13px var(--font-body)'}}>Title stub — the official bullet is the note. Full prose ships in the content pass.</p></Card>}
-          <Card sunken padding={16} style={{marginBottom:16}}>
-            <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>In short</span>
-            <div style={{display:'grid',gap:6,marginTop:8}}>
-              {topic.inShort.map(p=><strong key={p} style={{font:'700 14px var(--font-body)'}}>{p}</strong>)}
-            </div>
-          </Card>
-          <h3 style={{margin:'0 0 8px',font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--clover-600)'}}>Core</h3>
-          {topic.core.map(p=><p key={p} style={{margin:'0 0 12px',color:'var(--text-muted)',font:'500 14px/1.7 var(--font-body)'}}>{p}</p>)}
-          <h3 style={{margin:'16px 0 8px',font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--clover-600)'}}>Precision</h3>
-          <ul style={{margin:0,padding:0,listStyle:'none',display:'grid',gap:8}}>
-            {topic.precision.map(p=><li key={p} style={{paddingLeft:22,position:'relative',color:'var(--text-muted)',font:'500 13px/1.55 var(--font-body)'}}><i className="ph-bold ph-arrow-fat-right" style={{position:'absolute',left:0,top:2,color:'var(--tangerine-500)'}}></i>{p}</li>)}
-          </ul>
-        </Card>
-        <Card padding={24}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Your turn</span>
-          <h2 style={{margin:'6px 0 14px',font:'600 22px var(--font-display)'}}>Explain it to a colleague.</h2>
-          <TeachBackBox value={answer} onChange={setAnswer} prompt={topic.prompt} placeholder={topic.placeholder} rows={8}/>
-          <div style={{marginTop:14}}><Button fullWidth size="lg" onClick={submit}>Grade my teach-back</Button></div>
-          {err&&<p role="alert" style={{margin:'10px 0 0',color:'var(--coral-700)',font:'600 12px var(--font-body)'}}>{err}</p>}
-        </Card>
-      </div>
       <div style={{display:'grid',gap:14,alignContent:'start'}}>
         {!result
           ? <Card sunken padding={26} style={{border:'1px dashed var(--border-strong)'}}>
@@ -611,12 +613,11 @@ function WorkView({topic,state,answer,setAnswer,result,err,submit,back,goHome,op
                 {result.crits.map(c=><CriterionRow key={c.id} outcome={c.outcome} label={c.label} feedback={c.feedback}/>)}
               </Card>
               <p style={{margin:0,font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{result.attempts||1} · Available</p>
-              {STRUGGLE.has(result.state)
-                ? <Button variant="ghost" onClick={goBrush}>Review this miss in Brush-up</Button>
-                : pop && <div style={{display:'grid',gap:8}}>
-                    {next&&<Button onClick={()=>openModule(next.id,'work')}>Open the next authored bite</Button>}
-                    <Button variant="ghost" onClick={goHome}>Back to today</Button>
-                  </div>}
+              <div style={{display:'grid',gap:8}}>
+                {next&&<Button onClick={()=>openNext(next.id)}>Next · {next.title}</Button>}
+                {STRUGGLE.has(result.state)&&<Button variant="ghost" onClick={goBrush}>Review this miss in Brush-up</Button>}
+                <Button variant="ghost" onClick={goHome}>{next?'Back to today':'Done for now'}</Button>
+              </div>
             </>}
       </div>
     </div>
@@ -906,12 +907,11 @@ function App(){
   const [results,setResults]=React.useState(saved.results||{});
   const [view,setView]=React.useState(saved.view||'home');
   const [fromView,setFromView]=React.useState(saved.fromView||'home');
+  const [workStep,setWorkStep]=React.useState(saved.workStep||'note');
   const [user,setUser]=React.useState(saved.user||'');
   const [course,setCourse]=React.useState(saved.course||'SIE');
   const [examDate,setExamDate]=React.useState(savedExamDate);
   const [planStart,setPlanStart]=React.useState(savedPlanStart);
-  const [openSecs,setOpenSecs]=React.useState(saved.openSecs||['1']);
-  const [openLeaves,setOpenLeaves]=React.useState(saved.openLeaves||['1.1.1']);
   const [quizzes,setQuizzes]=React.useState(saved.quizzes||[]);
   const [qbankLog,setQbankLog]=React.useState(saved.qbankLog||{});
   const [cards,setCards]=React.useState(saved.cards||{});
@@ -919,12 +919,13 @@ function App(){
   const topic=window.TB_BITES.find(t=>t.id===topicId);
   const answer=answers[topicId]||'';
   const result=results[topicId];
+  const inFlow=view==='work';
 
   React.useEffect(()=>{
     try{
-      localStorage.setItem(STORE,JSON.stringify({topicId,answers,results,view,fromView,user,course,examDate,planStart,openSecs,openLeaves,quizzes,qbankLog,cards}));
+      localStorage.setItem(STORE,JSON.stringify({topicId,answers,results,view,fromView,workStep,user,course,examDate,planStart,quizzes,qbankLog,cards}));
     }catch{}
-  },[topicId,answers,results,view,fromView,user,course,examDate,planStart,openSecs,openLeaves,quizzes,qbankLog,cards]);
+  },[topicId,answers,results,view,fromView,workStep,user,course,examDate,planStart,quizzes,qbankLog,cards]);
 
   const submit=()=>{
     if(answer.trim().length<20){setErr('Write at least a couple of sentences so the rubric has something to assess.');return;}
@@ -938,10 +939,16 @@ function App(){
     setTopicId(id);
     setFromView(from||view);
     setView('work');
+    setWorkStep('note');
+    setErr('');
+  };
+  const openNext=id=>{
+    setTopicId(id);
+    setWorkStep('note');
     setErr('');
   };
   const setAnswer=v=>setAnswers({...answers,[topicId]:v});
-  const back=()=>setView(fromView==='work'?'home':fromView);
+  const back=()=>setView(fromView==='work'||fromView==='teach'?'home':fromView);
   const changeView=v=>{setView(v);if(v!=='work') setErr('');};
 
   return <div className="tb-shell">
@@ -950,12 +957,18 @@ function App(){
       ? <main className="tb-main" style={{maxWidth:1280,margin:'auto'}}>
           <LoginView setUser={setUser} setView={changeView}/>
         </main>
-      : <div className="tb-body">
+      : inFlow && topic
+        ? <main className="tb-main tb-flow">
+            {workStep==='teach'
+              ? <TeachView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} onNote={()=>{setWorkStep('note');setErr('');}} goHome={()=>changeView('home')} openNext={openNext} goBrush={()=>changeView('brush')}/>
+              : <NoteView topic={topic} state={result?result.state:'Unassessed'} back={back} onTeach={()=>setWorkStep('teach')}/>}
+          </main>
+        : <div className="tb-body">
           <LeftNav view={view} setView={changeView}/>
           <main className="tb-main">
-            {view==='home' && <HomeView results={results} examDate={examDate} setExamDate={setExamDate} planStart={planStart} setPlanStart={setPlanStart} openModule={openModule}/>}
-            {view==='outline' && <OutlineView results={results} openModule={openModule} openSecs={openSecs} setOpenSecs={setOpenSecs} openLeaves={openLeaves} setOpenLeaves={setOpenLeaves}/>}
-            {view==='work' && topic && <WorkView topic={topic} state={result?result.state:'Unassessed'} answer={answer} setAnswer={setAnswer} result={result} err={err} submit={submit} back={back} goHome={()=>changeView('home')} openModule={openModule} goBrush={()=>changeView('brush')} results={results} examDate={examDate}/>}
+            {view==='home' && <HomeView results={results} examDate={examDate} planStart={planStart} openModule={openModule} goCalendar={()=>changeView('calendar')}/>}
+            {view==='outline' && <OutlineView results={results} openModule={openModule} examDate={examDate} planStart={planStart}/>}
+            {view==='calendar' && <CalendarView results={results} examDate={examDate} setExamDate={setExamDate} planStart={planStart} setPlanStart={setPlanStart} openModule={openModule}/>}
             {view==='brush' && <BrushView results={results} openModule={openModule} quizzes={quizzes} setQuizzes={setQuizzes} qbankLog={qbankLog} setQbankLog={setQbankLog} cards={cards} setCards={setCards}/>}
           </main>
         </div>}
