@@ -351,7 +351,7 @@ function HomeView({results,examDate,planStart,openModule,goCalendar}){
   const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&firstAuthoredBite(ids.map(biteOf),b=>!isReady(biteState(results,b.id))));
   const upcoming=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
   const plannedByToday=authoredPlannedBy(plan,todayStr);
-  const emptyToday=todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.';
+  const emptyToday=todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.';
   return <section style={{display:'grid',gap:22}}>
     <div className="tb-home">
       <div style={{display:'grid',gap:16,minWidth:0}}>
@@ -458,7 +458,7 @@ function CalendarView({results,examDate,setExamDate,planStart,setPlanStart,openM
               })}
             </div>}
         {examDate
-          ? <DayList ids={selectedIds} results={results} openModule={(id)=>openModule(id,'calendar')} heading={selected===todayStr?'Today':fmtLong(selected)} today={selected===todayStr} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next authored bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
+          ? <DayList ids={selectedIds} results={results} openModule={(id)=>openModule(id,'calendar')} heading={selected===todayStr?'Today':fmtLong(selected)} today={selected===todayStr} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
           : <DayList ids={[]} results={results} openModule={openModule} heading="Today" empty="Set an exam date to spread the modules."/>}
       </div>
       <aside style={{display:'grid',gap:14,alignContent:'start'}}>
