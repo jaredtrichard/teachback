@@ -73,10 +73,10 @@ function FlowChrome({back,backLabel,phase}){
   return <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
     <button type="button" onClick={back} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← {backLabel}</button>
     <div style={{display:'flex',gap:8,alignItems:'center',font:'600 11px var(--font-body)',letterSpacing:'.08em',textTransform:'uppercase',color:'var(--text-faint)'}}>
-      {steps.map(([id,label],i)=><React.Fragment key={id}>
-        {i>0&&<span aria-hidden="true">→</span>}
-        <span style={{color:phase===id?'var(--clover-600)':undefined}}>{label}</span>
-      </React.Fragment>)}
+      {steps.flatMap(([id,label],i)=>[
+        i>0?<span key={'sep-'+id} aria-hidden="true">→</span>:null,
+        <span key={id} style={{color:phase===id?'var(--clover-600)':undefined}}>{label}</span>
+      ])}
     </div>
   </div>;
 }

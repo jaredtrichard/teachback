@@ -8,7 +8,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 Explanation-first SIE prep. 181 official outline bites, 34 FINRA leaves. Teach-back readiness (Gap / Misconception / Rusty / Exam-Ready / Mastered) is the module assessment. QBank is right/wrong only and never writes those states. Plan: `docs/backend-plan.md`. UI blueprint (do not re-litigate): firstmate data `tb-review-teachback-frontend-interactivity-73/report.md`.
 
-Study has two modes: overview Home (today's notes, days until exam, pace merged with progress-versus-plan, summary readiness) and a sequential work path (note alone → teach-back + Signal after submit → next bite). Calendar is its own nav item. Outline is the section-grouped 181-bite grid, not a second home. Product behavior: `readme.md`.
+Study UI (overview Home, Calendar, Outline map, sequential note → teach → Signal work path): `readme.md`.
 
 ## Content vs user state
 
