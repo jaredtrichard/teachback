@@ -7,7 +7,7 @@ Product-facing frontend kit on the frozen product grain:
 - Two study modes: an overview Home, and a sequential flow-state work path
 - Home is today's notes, days until the exam (not the exam date itself), pace with progress-versus-plan merged in, and summary readiness. Yellow is today. Coral is overdue authored unready work only — stubs are never coral.
 - Calendar is its own nav item (week look-ahead; today is the first column; arrows shift the window; Month view scrolls continuously to the exam date). Exam date is set here.
-- Outline is the section-grouped **181**-bite readiness grid with section and leaf names. Hover a cell for the bite title. It is an outline of the SIE, not a second home.
+- Outline is a section-grouped map of the **181** bites with section and leaf names. Cells show bite titles (hover for the full title and state). It is a map of the SIE, not a second home.
 - Work path: note page only → teach-back page (explanation on the left, Signal after submit) → next bite. Note and explanation are never on the same page. No left TOC, calendar, countdown, pace, or readiness summary in the flow.
 - Pace is remaining modules divided by remaining study days
 - Frontend-only email, Google, Facebook, and Apple login stubs

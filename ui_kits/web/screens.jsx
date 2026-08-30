@@ -44,6 +44,42 @@ function authoredPlannedBy(plan,dayStr){
   });
   return n;
 }
+function workQueue(results,examDate,planStart){
+  const todayStr=ymd(new Date());
+  const unreadyId=id=>!isReady(biteState(results,id));
+  if(!examDate){
+    const next=window.TB_BITES.filter(b=>unreadyId(b.id));
+    const authored=next.filter(b=>!isStub(b));
+    const rest=next.filter(b=>isStub(b));
+    return {ids:authored.concat(rest).slice(0,5).map(b=>b.id),todayIds:[],overdueIds:[],planned:false};
+  }
+  const plan=buildPlan(examDate,planStart);
+  const todayIds=plan.byDay[todayStr]||[];
+  const overdueIds=[];
+  Object.keys(plan.byDay).sort().forEach(day=>{
+    if(day>=todayStr) return;
+    (plan.byDay[day]||[]).forEach(id=>{
+      const t=biteOf(id);
+      if(t&&!isStub(t)&&unreadyId(id)) overdueIds.push(id);
+    });
+  });
+  const seen=new Set();
+  const ids=[];
+  overdueIds.concat(todayIds).forEach(id=>{if(!seen.has(id)){seen.add(id);ids.push(id);}});
+  return {ids,todayIds,overdueIds,planned:true};
+}
+function FlowChrome({back,backLabel,phase}){
+  const steps=[['note','Read'],['teach','Teach'],['signal','Signal']];
+  return <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
+    <button type="button" onClick={back} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← {backLabel}</button>
+    <div style={{display:'flex',gap:8,alignItems:'center',font:'600 11px var(--font-body)',letterSpacing:'.08em',textTransform:'uppercase',color:'var(--text-faint)'}}>
+      {steps.map(([id,label],i)=><React.Fragment key={id}>
+        {i>0&&<span aria-hidden="true">→</span>}
+        <span style={{color:phase===id?'var(--clover-600)':undefined}}>{label}</span>
+      </React.Fragment>)}
+    </div>
+  </div>;
+}
 
 function grade(topic,answer){
   const a=answer.toLowerCase();
@@ -224,11 +260,10 @@ function ReadinessSummary({results}){
   const assessed=rows.reduce((a,r)=>a+r.assessed,0);
   const total=rows.reduce((a,r)=>a+r.total,0);
   const counts=readinessCounts(results);
-  return <Card padding={18}>
-    <div style={{display:'flex',justifyContent:'space-between',gap:12,marginBottom:10}}>
-      <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Ready · Exam-Ready or Mastered</span>
-      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{ready} ready · {assessed} assessed · {total}</span>
-    </div>
+  return <Card padding={18} style={{display:'grid',alignContent:'start',gap:10}}>
+    <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Readiness</span>
+    <div className="tb-dash-num" style={{fontSize:42}}>{ready}<span style={{font:'600 16px var(--font-body)',color:'var(--text-faint)'}}> / {total}</span></div>
+    <span style={{font:'500 12px var(--font-body)',color:'var(--text-muted)'}}>{ready} Exam-Ready or Mastered · {assessed} assessed</span>
     <div style={{display:'grid',gridTemplateColumns:'repeat(4,minmax(0,1fr))',gap:8}}>
       {rows.map(r=>(
         <div key={r.sec} style={{display:'grid',gap:6,minWidth:0}}>
@@ -237,7 +272,7 @@ function ReadinessSummary({results}){
         </div>
       ))}
     </div>
-    <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:12}}>
+    <div style={{display:'flex',gap:6,flexWrap:'wrap'}}>
       {window.TB_STATES.map(s=>(
         <span key={s} style={{padding:'4px 8px',borderRadius:'var(--radius-pill)',background:`var(--state-${stateKey(s)}-bg)`,color:`var(--state-${stateKey(s)})`,font:'600 11px var(--font-body)'}}>{s} {counts[s]}</span>
       ))}
@@ -334,9 +369,35 @@ function DayCell({date,todayStr,selected,onSelect,plan,results,compact}){
   </button>;
 }
 
+function WorkNow({ids,results,openModule,todayIds,overdueIds,empty}){
+  if(!ids||ids.length===0) return <Card sunken padding={22}><p style={{margin:0,color:'var(--text-muted)'}}>{empty}</p></Card>;
+  const todaySet=new Set(todayIds||[]);
+  const overdueSet=new Set(overdueIds||[]);
+  return <div style={{display:'grid',gap:10}}>
+    {ids.map(id=>{
+      const t=biteOf(id);
+      const st=biteState(results,id);
+      const isToday=todaySet.has(id);
+      const isOverdue=overdueSet.has(id);
+      return <Card key={id} padding={18} style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) auto',gap:12,alignItems:'center',background:isToday?'var(--sunny-100)':isOverdue?'var(--coral-100)':undefined,boxShadow:isToday?'inset 0 3px 0 var(--sunny-500)':'var(--edge-card)'}}>
+        <div style={{minWidth:0}}>
+          <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+            {isToday&&<span style={{font:'600 11px var(--font-body)',letterSpacing:'.06em',textTransform:'uppercase',color:'var(--sunny-700)'}}>Today</span>}
+            {isOverdue&&<span style={{font:'600 11px var(--font-body)',letterSpacing:'.06em',textTransform:'uppercase',color:'var(--coral-700)'}}>Overdue</span>}
+            <StateBadge state={st} size="sm"/>
+            {isStub(t)&&<span style={{font:'500 11px var(--font-body)',color:'var(--text-faint)'}}>stub</span>}
+          </div>
+          <strong style={{display:'block',marginTop:6,font:'600 18px var(--font-display)'}}>{t.title}</strong>
+          <span style={{color:'var(--text-faint)',font:'500 12px var(--font-body)'}}>{t.leafTitle||t.leaf} · Teach-back · {t.read||'8 min'}</span>
+        </div>
+        <Button onClick={()=>openModule(id)}>Open</Button>
+      </Card>;
+    })}
+  </div>;
+}
+
 function HomeView({results,examDate,planStart,openModule,goCalendar}){
   const today=startOfDay(new Date());
-  const todayStr=ymd(today);
   const plan=buildPlan(examDate,planStart);
   const remaining=window.TB_BITES.filter(b=>!isReady(biteState(results,b.id))).length;
   const exam=examDate?startOfDay(parseYmd(examDate)):null;
@@ -347,42 +408,46 @@ function HomeView({results,examDate,planStart,openModule,goCalendar}){
   const authored=window.TB_BITES.filter(b=>b.demo);
   const authoredReady=authored.filter(b=>isReady(biteState(results,b.id))).length;
   const authoredLine=authored.map(b=>biteState(results,b.id)).reduce((acc,st)=>{acc[st]=(acc[st]||0)+1;return acc;},{});
-  const todayIds=plan.byDay[todayStr]||[];
+  const queue=workQueue(results,examDate,planStart);
+  const todayStr=ymd(today);
   const nextEntry=Object.entries(plan.byDay).sort((a,b)=>a[0].localeCompare(b[0])).find(([day,ids])=>day>=todayStr&&firstAuthoredBite(ids.map(biteOf),b=>!isReady(biteState(results,b.id))));
   const upcoming=nextEntry&&firstAuthoredBite(nextEntry[1].map(biteOf),b=>!isReady(biteState(results,b.id)));
-  const plannedByToday=authoredPlannedBy(plan,todayStr);
-  const emptyToday=todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.';
-  return <section style={{display:'grid',gap:22}}>
-    <div className="tb-home">
-      <div style={{display:'grid',gap:16,minWidth:0}}>
-        <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Today</h1>
+  const plannedByToday=authoredPlannedBy(plan,ymd(today));
+  const empty=queue.planned
+    ?(upcoming?`Nothing scheduled today. Next up is ${upcoming.title}.`:'Nothing left to teach back.')
+    :(remaining===0?'Every bite is ready. Open Outline to roam.':'Open a bite to start.');
+  return <section className="tb-dash">
+    <div>
+      <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>SIE</span>
+      <h1 style={{margin:'4px 0 0',font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>Overview</h1>
+    </div>
+    <div className="tb-metrics">
+      <Card padding={18} style={{display:'grid',alignContent:'start',gap:8}}>
+        <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
+        {examDate&&!past
+          ? <div className="tb-dash-num">{countdown}</div>
+          : <div className="tb-dash-num" style={{fontSize:28,color:'var(--text-faint)'}}>Not set</div>}
+        {!examDate
+          ? <Button size="sm" variant="ghost" onClick={goCalendar}>Set a date on Calendar</Button>
+          : <span style={{color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{past?'Exam day has passed.':'Study days include today.'}</span>}
+      </Card>
+      <Card padding={18} style={{display:'grid',alignContent:'start',gap:8}}>
+        <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Pace</span>
+        <div className="tb-dash-num" style={{fontSize:pace==null?42:undefined}}>{pace==null?remaining:(pace.toFixed(1))}<span style={{font:'600 16px var(--font-body)',color:'var(--text-faint)'}}>{pace==null?' left':' / day'}</span></div>
+        <p style={{margin:0,color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules. Calendar sets the daily pace.':'Remaining '+remaining+' modules ÷ '+studyDaysLeft+' study days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
         {examDate
-          ? <DayList ids={todayIds} results={results} openModule={openModule} today empty={emptyToday}/>
-          : <Card sunken padding={20}>
-              <p style={{margin:'0 0 12px',color:'var(--text-muted)'}}>Set an exam date to spread the modules. Stubs stay on the calendar.</p>
-              <Button size="sm" onClick={goCalendar}>Open Calendar</Button>
-            </Card>}
-      </div>
-      <aside style={{display:'grid',gap:14,alignContent:'start'}}>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
-          <div style={{font:'700 32px var(--font-display)'}}>{examDate&&!past?countdown:'—'}</div>
-          {!examDate&&<Button size="sm" variant="ghost" onClick={goCalendar} style={{marginTop:10}}>Set exam date</Button>}
-        </Card>
-        <Card padding={18}>
-          <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Pace</span>
-          <div style={{font:'700 28px var(--font-display)'}}>{pace==null?'—':(pace.toFixed(1)+' / day')}</div>
-          <p style={{margin:'6px 0 0',color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{pace==null?'Remaining modules ÷ remaining days.':'Remaining '+remaining+' modules ÷ '+studyDaysLeft+' study days'+(pace>=7?(' · '+(pace*7).toFixed(1)+' / week'):'')+'.'}</p>
-          {examDate
-            ? <>
-                <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate} plan={plan}/>
-                <p style={{margin:'8px 0 0',font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authoredReady} of {authored.length} authored notes ready</strong>{plannedByToday?` · plan called for ${plannedByToday} by today`:''}. {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
-                <p style={{margin:'4px 0 0',font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs stay on the calendar.</p>
-              </>
-            : <p style={{margin:'8px 0 0',color:'var(--text-muted)'}}>No plan until a date is set.</p>}
-        </Card>
-        <ReadinessSummary results={results}/>
-      </aside>
+          ? <>
+              <PlanChart ready={authoredReady} total={authored.length} planStart={planStart} examDate={examDate} plan={plan}/>
+              <p style={{margin:0,font:'500 12px var(--font-body)',color:'var(--text-muted)'}}><strong>{authoredReady} of {authored.length} authored notes ready</strong>{plannedByToday?` · plan called for ${plannedByToday} by today`:''}. {Object.entries(authoredLine).map(([k,v])=>v+' '+k).join(', ')||'all Unassessed'}.</p>
+              <p style={{margin:0,font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{window.TB_BITE_COUNT-authored.length} title stubs are outline-only.</p>
+            </>
+          : null}
+      </Card>
+      <ReadinessSummary results={results}/>
+    </div>
+    <div style={{display:'grid',gap:12}}>
+      <h2 style={{margin:0,font:'600 20px var(--font-display)',color:queue.todayIds.length?'var(--sunny-700)':'var(--text-body)'}}>Work on now</h2>
+      <WorkNow ids={queue.ids} results={results} openModule={openModule} todayIds={queue.todayIds} overdueIds={queue.overdueIds} empty={empty}/>
     </div>
   </section>;
 }
@@ -426,7 +491,10 @@ function CalendarView({results,examDate,setExamDate,planStart,setPlanStart,openM
     <div className="tb-cal">
       <div style={{display:'grid',gap:16,minWidth:0}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,flexWrap:'wrap'}}>
-          <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>{calMode==='week'?fmtRange(weekStart,addDays(weekStart,6)):(examDate?('Through '+fmtLong(examDate)):'Look-ahead')}</h1>
+          <div>
+            <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Calendar</span>
+            <h1 style={{margin:'4px 0 0',font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>{calMode==='week'?fmtRange(weekStart,addDays(weekStart,6)):(examDate?('Through '+fmtLong(examDate)):'Look-ahead')}</h1>
+          </div>
           <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
             <Button size="sm" variant="ghost" onClick={()=>setCalMode(m=>m==='week'?'month':'week')}>{calMode==='week'?'Month view':'Week view'}</Button>
             {calMode==='week'&&<>
@@ -457,9 +525,7 @@ function CalendarView({results,examDate,setExamDate,planStart,setPlanStart,openM
                 </div>;
               })}
             </div>}
-        {examDate
-          ? <DayList ids={selectedIds} results={results} openModule={(id)=>openModule(id,'calendar')} heading={selected===todayStr?'Today':fmtLong(selected)} today={selected===todayStr} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>
-          : <DayList ids={[]} results={results} openModule={openModule} heading="Today" empty="Set an exam date to spread the modules."/>}
+        {examDate && <DayList ids={selectedIds} results={results} openModule={(id)=>openModule(id,'calendar')} heading={selected===todayStr?'Today':fmtLong(selected)} today={selected===todayStr} empty={selected===todayStr&&todayIds.length===0?(nextEntry?`Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.`:'Nothing scheduled.'):'No modules on this day.'}/>}
       </div>
       <aside style={{display:'grid',gap:14,alignContent:'start'}}>
         <Card padding={18}>
@@ -502,42 +568,50 @@ function LoginView({setUser,setView}){
   </Card>;
 }
 
+function BiteTile({topic,state,today,onOpen}){
+  const k=stateKey(state);
+  return <button type="button" className="tb-tile" title={topic.title+' · '+state+(isStub(topic)?' · stub':'')} onClick={onOpen} style={{border:today?'2px solid var(--sunny-500)':(isStub(topic)?'1px dashed var(--border-strong)':'1px solid var(--state-'+k+')'),background:`var(--state-${k}-bg)`,color:`var(--state-${k})`,boxShadow:today?'inset 0 3px 0 var(--sunny-500)':'none'}}>{topic.title}</button>;
+}
+
 function OutlineView({results,openModule,examDate,planStart}){
   const todayStr=ymd(new Date());
   const plan=buildPlan(examDate,planStart);
   const todayIds=new Set(plan.byDay[todayStr]||[]);
-  return <section style={{display:'grid',gap:16}}>
+  return <section className="tb-map">
     <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'end'}}>
-      <h1 style={{margin:0,font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>SIE outline</h1>
+      <div>
+        <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>181 bites · 4 sections · 34 leaves</span>
+        <h1 style={{margin:'4px 0 0',font:'var(--text-h1)',fontFamily:'var(--font-display)'}}>SIE map</h1>
+      </div>
       <StateKey/>
     </div>
     {Object.entries(window.TB_TREE).map(([sec,s])=>{
       const ids=Object.values(s.leaves).flatMap(l=>l.ids);
       const assessed=ids.filter(id=>results[id]).length;
       const ready=ids.filter(id=>isReady(biteState(results,id))).length;
-      return <div key={sec} style={{display:'grid',gap:10}}>
+      return <section key={sec} style={{display:'grid',gap:14,padding:'18px 18px 20px',background:'var(--paper)',border:'1px solid var(--border)',borderRadius:'var(--radius-lg)',boxShadow:'var(--edge-card)',borderLeft:'6px solid var(--clover-500)'}}>
         <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'baseline'}}>
           <div>
             <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Section {sec}</span>
-            <h2 style={{margin:'4px 0 0',font:'600 20px var(--font-display)'}}>{s.title}</h2>
+            <h2 style={{margin:'4px 0 0',font:'600 22px var(--font-display)'}}>{s.title}</h2>
           </div>
-          <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{ready} ready · {assessed} assessed · {ids.length}</span>
+          <span style={{font:'500 12px var(--font-body)',color:'var(--text-faint)'}}>{ready} ready · {assessed} assessed · {ids.length}</span>
         </div>
         {Object.entries(s.leaves).map(([leaf,l])=>(
-          <div key={leaf} style={{display:'grid',gap:6}}>
-            <strong style={{font:'600 13px var(--font-body)',color:'var(--text-muted)'}}>{leaf} {l.title}</strong>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(44px,1fr))',gap:6}}>
+          <div key={leaf} className="tb-leaf">
+            <div>
+              <span style={{font:'600 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{leaf}</span>
+              <strong style={{display:'block',marginTop:2,font:'600 13px var(--font-body)',color:'var(--text-body)'}}>{l.title}</strong>
+            </div>
+            <div className="tb-tiles">
               {l.ids.map(id=>{
                 const t=biteOf(id);
-                const st=biteState(results,id);
-                const k=stateKey(st);
-                const todayHit=todayIds.has(id);
-                return <button key={id} type="button" title={t.id+' '+t.title+' · '+st+(isStub(t)?' · stub':'')} onClick={()=>openModule(id,'outline')} style={{minHeight:44,minWidth:44,padding:4,border:todayHit?'2px solid var(--sunny-500)':(isStub(t)?'1px dashed var(--border-strong)':'1px solid var(--state-'+k+')'),borderRadius:8,background:`var(--state-${k}-bg)`,color:`var(--state-${k})`,font:'500 10px var(--font-mono)',cursor:'pointer'}}>{t.id.replace('B','')}</button>;
+                return <BiteTile key={id} topic={t} state={biteState(results,id)} today={todayIds.has(id)} onOpen={()=>openModule(id,'outline')}/>;
               })}
             </div>
           </div>
         ))}
-      </div>;
+      </section>;
     })}
   </section>;
 }
@@ -562,17 +636,14 @@ function BiteNote({topic}){
 
 function NoteView({topic,state,back,onTeach}){
   return <section className="tb-note">
-    <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
-      <button onClick={back} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← Back</button>
-      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>Note</span>
-    </div>
-    <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
-      <StateBadge state={state||'Unassessed'}/>
-      <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{topic.id} · {topic.leaf}</span>
-    </div>
-    <Card padding={28}>
-      <h1 style={{margin:'0 0 8px',font:'600 28px var(--font-display)'}}>{topic.title}</h1>
-      <p style={{margin:'0 0 16px',color:'var(--text-muted)'}}>{topic.subtitle}</p>
+    <FlowChrome back={back} backLabel="Back" phase="note"/>
+    <Card padding={32}>
+      <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>{topic.leaf} · {topic.leafTitle||topic.leaf}</span>
+      <h1 style={{margin:'8px 0 10px',font:'700 34px/1.15 var(--font-display)'}}>{topic.title}</h1>
+      <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap',marginBottom:18}}>
+        <StateBadge state={state||'Unassessed'}/>
+        <span style={{color:'var(--text-faint)',font:'500 12px var(--font-body)'}}>{topic.read||'8 min'} read</span>
+      </div>
       <BiteNote topic={topic}/>
     </Card>
     <Button fullWidth size="lg" onClick={onTeach}>Teach it back</Button>
@@ -583,43 +654,31 @@ function TeachView({topic,state,answer,setAnswer,result,err,submit,onNote,goHome
   const next=nextBite(topic.id);
   const pop=result&&(result.state==='Exam-Ready'||result.state==='Mastered');
   return <section style={{display:'grid',gap:16}}>
-    <div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap',alignItems:'center'}}>
-      <button onClick={onNote} style={{all:'unset',cursor:'pointer',font:'600 13px var(--font-body)',color:'var(--clover-600)'}}>← Note</button>
-      <span style={{font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>Teach-back</span>
-    </div>
+    <FlowChrome back={onNote} backLabel="Note" phase={result?'signal':'teach'}/>
     <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
       <StateBadge state={result?result.state:(state||'Unassessed')}/>
-      <span style={{font:'500 11px var(--font-mono)',color:'var(--tangerine-600)'}}>{topic.id} · {topic.leaf}</span>
+      <span style={{font:'500 13px var(--font-body)',color:'var(--text-muted)'}}>{topic.title}</span>
     </div>
-    <div className="tb-teach">
+    <div className={result?'tb-teach':'tb-teach-write'}>
       <Card padding={24}>
-        <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--tangerine-600)'}}>Your turn</span>
-        <h2 style={{margin:'6px 0 14px',font:'600 22px var(--font-display)'}}>Explain it to a colleague.</h2>
-        <p style={{margin:'0 0 14px',color:'var(--text-muted)',font:'500 14px var(--font-body)'}}>{topic.title}</p>
-        <TeachBackBox value={answer} onChange={setAnswer} prompt={topic.prompt} placeholder={topic.placeholder} rows={8}/>
+        <h2 style={{margin:'0 0 14px',font:'600 26px var(--font-display)'}}>Explain it to a colleague.</h2>
+        <TeachBackBox value={answer} onChange={setAnswer} prompt={topic.prompt} placeholder={topic.placeholder} rows={result?8:12}/>
         <div style={{marginTop:14}}><Button fullWidth size="lg" onClick={submit}>Grade my teach-back</Button></div>
         {err&&<p role="alert" style={{margin:'10px 0 0',color:'var(--coral-700)',font:'600 12px var(--font-body)'}}>{err}</p>}
       </Card>
-      <div style={{display:'grid',gap:14,alignContent:'start'}}>
-        {!result
-          ? <Card sunken padding={26} style={{border:'1px dashed var(--border-strong)'}}>
-              <i className="ph-bold ph-arrow-elbow-down-right" style={{fontSize:26,color:'var(--tangerine-500)'}}></i>
-              <h3 style={{margin:'10px 0 6px',font:'600 20px var(--font-display)'}}>Your signal will appear here.</h3>
-              <p style={{margin:0,color:'var(--text-muted)',font:'500 13px/1.6 var(--font-body)'}}>We’ll compare your explanation with the {topic.criteria.length} things an exam-ready answer needs.</p>
+      {result
+        ? <div style={{display:'grid',gap:14,alignContent:'start'}}>
+            <div className={pop?'tb-pop':undefined}><ResultBanner state={result.state}/></div>
+            <Card padding="4px 22px">
+              {result.crits.map(c=><CriterionRow key={c.id} outcome={c.outcome} label={c.label} feedback={c.feedback}/>)}
             </Card>
-          : <>
-              <div className={pop?'tb-pop':undefined}><ResultBanner state={result.state}/></div>
-              <Card padding="4px 22px">
-                {result.crits.map(c=><CriterionRow key={c.id} outcome={c.outcome} label={c.label} feedback={c.feedback}/>)}
-              </Card>
-              <p style={{margin:0,font:'500 12px var(--font-mono)',color:'var(--text-faint)'}}>{result.attempts||1} · Available</p>
-              <div style={{display:'grid',gap:8}}>
-                {next&&<Button onClick={()=>openNext(next.id)}>Next · {next.title}</Button>}
-                {STRUGGLE.has(result.state)&&<Button variant="ghost" onClick={goBrush}>Review this miss in Brush-up</Button>}
-                <Button variant="ghost" onClick={goHome}>{next?'Back to today':'Done for now'}</Button>
-              </div>
-            </>}
-      </div>
+            <div style={{display:'grid',gap:8}}>
+              {next&&<Button size="lg" onClick={()=>openNext(next.id)}>Next bite · {next.title}</Button>}
+              {STRUGGLE.has(result.state)&&<Button variant="ghost" onClick={goBrush}>Review this miss in Brush-up</Button>}
+              <Button variant="ghost" onClick={goHome}>{next?'Overview':'Done for now'}</Button>
+            </div>
+          </div>
+        : null}
     </div>
   </section>;
 }

@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d9bf09363ad7","ui_kits/web/screens.jsx":"545c44f61c4f"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d9bf09363ad7","ui_kits/web/screens.jsx":"30b92ab121de"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -219,6 +219,45 @@ function authoredPlannedBy(plan, dayStr) {
     });
     return n;
 }
+function workQueue(results, examDate, planStart) {
+    const todayStr = ymd(new Date());
+    const unreadyId = id => !isReady(biteState(results, id));
+    if (!examDate) {
+        const next = window.TB_BITES.filter(b => unreadyId(b.id));
+        const authored = next.filter(b => !isStub(b));
+        const rest = next.filter(b => isStub(b));
+        return { ids: authored.concat(rest).slice(0, 5).map(b => b.id), todayIds: [], overdueIds: [], planned: false };
+    }
+    const plan = buildPlan(examDate, planStart);
+    const todayIds = plan.byDay[todayStr] || [];
+    const overdueIds = [];
+    Object.keys(plan.byDay).sort().forEach(day => {
+        if (day >= todayStr)
+            return;
+        (plan.byDay[day] || []).forEach(id => {
+            const t = biteOf(id);
+            if (t && !isStub(t) && unreadyId(id))
+                overdueIds.push(id);
+        });
+    });
+    const seen = new Set();
+    const ids = [];
+    overdueIds.concat(todayIds).forEach(id => { if (!seen.has(id)) {
+        seen.add(id);
+        ids.push(id);
+    } });
+    return { ids, todayIds, overdueIds, planned: true };
+}
+function FlowChrome({ back, backLabel, phase }) {
+    const steps = [['note', 'Read'], ['teach', 'Teach'], ['signal', 'Signal']];
+    return React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
+        React.createElement("button", { type: "button", onClick: back, style: { all: 'unset', cursor: 'pointer', font: '600 13px var(--font-body)', color: 'var(--clover-600)' } },
+            "\u2190 ",
+            backLabel),
+        React.createElement("div", { style: { display: 'flex', gap: 8, alignItems: 'center', font: '600 11px var(--font-body)', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--text-faint)' } }, steps.map(([id, label], i) => React.createElement(React.Fragment, { key: id },
+            i > 0 && React.createElement("span", { "aria-hidden": "true" }, "\u2192"),
+            React.createElement("span", { style: { color: phase === id ? 'var(--clover-600)' : undefined } }, label)))));
+}
 function grade(topic, answer) {
     const a = answer.toLowerCase();
     const crits = topic.criteria.map(c => {
@@ -397,15 +436,18 @@ function ReadinessSummary({ results }) {
     const assessed = rows.reduce((a, r) => a + r.assessed, 0);
     const total = rows.reduce((a, r) => a + r.total, 0);
     const counts = readinessCounts(results);
-    return React.createElement(Card, { padding: 18 },
-        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 10 } },
-            React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Ready \u00B7 Exam-Ready or Mastered"),
-            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
-                ready,
-                " ready \u00B7 ",
-                assessed,
-                " assessed \u00B7 ",
+    return React.createElement(Card, { padding: 18, style: { display: 'grid', alignContent: 'start', gap: 10 } },
+        React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Readiness"),
+        React.createElement("div", { className: "tb-dash-num", style: { fontSize: 42 } },
+            ready,
+            React.createElement("span", { style: { font: '600 16px var(--font-body)', color: 'var(--text-faint)' } },
+                " / ",
                 total)),
+        React.createElement("span", { style: { font: '500 12px var(--font-body)', color: 'var(--text-muted)' } },
+            ready,
+            " Exam-Ready or Mastered \u00B7 ",
+            assessed,
+            " assessed"),
         React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 8 } }, rows.map(r => (React.createElement("div", { key: r.sec, style: { display: 'grid', gap: 6, minWidth: 0 } },
             React.createElement(ProgressBar, { value: r.ready, max: r.total }),
             React.createElement("span", { style: { font: '600 10px var(--font-body)', letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--text-faint)' } },
@@ -415,7 +457,7 @@ function ReadinessSummary({ results }) {
                 r.ready,
                 "/",
                 r.total))))),
-        React.createElement("div", { style: { display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 12 } }, window.TB_STATES.map(s => (React.createElement("span", { key: s, style: { padding: '4px 8px', borderRadius: 'var(--radius-pill)', background: `var(--state-${stateKey(s)}-bg)`, color: `var(--state-${stateKey(s)})`, font: '600 11px var(--font-body)' } },
+        React.createElement("div", { style: { display: 'flex', gap: 6, flexWrap: 'wrap' } }, window.TB_STATES.map(s => (React.createElement("span", { key: s, style: { padding: '4px 8px', borderRadius: 'var(--radius-pill)', background: `var(--state-${stateKey(s)}-bg)`, color: `var(--state-${stateKey(s)})`, font: '600 11px var(--font-body)' } },
             s,
             " ",
             counts[s])))));
@@ -507,9 +549,34 @@ function DayCell({ date, todayStr, selected, onSelect, plan, results, compact })
             "+",
             extra));
 }
+function WorkNow({ ids, results, openModule, todayIds, overdueIds, empty }) {
+    if (!ids || ids.length === 0)
+        return React.createElement(Card, { sunken: true, padding: 22 },
+            React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)' } }, empty));
+    const todaySet = new Set(todayIds || []);
+    const overdueSet = new Set(overdueIds || []);
+    return React.createElement("div", { style: { display: 'grid', gap: 10 } }, ids.map(id => {
+        const t = biteOf(id);
+        const st = biteState(results, id);
+        const isToday = todaySet.has(id);
+        const isOverdue = overdueSet.has(id);
+        return React.createElement(Card, { key: id, padding: 18, style: { display: 'grid', gridTemplateColumns: 'minmax(0,1fr) auto', gap: 12, alignItems: 'center', background: isToday ? 'var(--sunny-100)' : isOverdue ? 'var(--coral-100)' : undefined, boxShadow: isToday ? 'inset 0 3px 0 var(--sunny-500)' : 'var(--edge-card)' } },
+            React.createElement("div", { style: { minWidth: 0 } },
+                React.createElement("div", { style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
+                    isToday && React.createElement("span", { style: { font: '600 11px var(--font-body)', letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--sunny-700)' } }, "Today"),
+                    isOverdue && React.createElement("span", { style: { font: '600 11px var(--font-body)', letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--coral-700)' } }, "Overdue"),
+                    React.createElement(StateBadge, { state: st, size: "sm" }),
+                    isStub(t) && React.createElement("span", { style: { font: '500 11px var(--font-body)', color: 'var(--text-faint)' } }, "stub")),
+                React.createElement("strong", { style: { display: 'block', marginTop: 6, font: '600 18px var(--font-display)' } }, t.title),
+                React.createElement("span", { style: { color: 'var(--text-faint)', font: '500 12px var(--font-body)' } },
+                    t.leafTitle || t.leaf,
+                    " \u00B7 Teach-back \u00B7 ",
+                    t.read || '8 min')),
+            React.createElement(Button, { onClick: () => openModule(id) }, "Open"));
+    }));
+}
 function HomeView({ results, examDate, planStart, openModule, goCalendar }) {
     const today = startOfDay(new Date());
-    const todayStr = ymd(today);
     const plan = buildPlan(examDate, planStart);
     const remaining = window.TB_BITES.filter(b => !isReady(biteState(results, b.id))).length;
     const exam = examDate ? startOfDay(parseYmd(examDate)) : null;
@@ -520,47 +587,54 @@ function HomeView({ results, examDate, planStart, openModule, goCalendar }) {
     const authored = window.TB_BITES.filter(b => b.demo);
     const authoredReady = authored.filter(b => isReady(biteState(results, b.id))).length;
     const authoredLine = authored.map(b => biteState(results, b.id)).reduce((acc, st) => { acc[st] = (acc[st] || 0) + 1; return acc; }, {});
-    const todayIds = plan.byDay[todayStr] || [];
+    const queue = workQueue(results, examDate, planStart);
+    const todayStr = ymd(today);
     const nextEntry = Object.entries(plan.byDay).sort((a, b) => a[0].localeCompare(b[0])).find(([day, ids]) => day >= todayStr && firstAuthoredBite(ids.map(biteOf), b => !isReady(biteState(results, b.id))));
     const upcoming = nextEntry && firstAuthoredBite(nextEntry[1].map(biteOf), b => !isReady(biteState(results, b.id)));
-    const plannedByToday = authoredPlannedBy(plan, todayStr);
-    const emptyToday = todayIds.length === 0 ? (nextEntry ? `Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.` : 'Nothing scheduled.') : 'No modules on this day.';
-    return React.createElement("section", { style: { display: 'grid', gap: 22 } },
-        React.createElement("div", { className: "tb-home" },
-            React.createElement("div", { style: { display: 'grid', gap: 16, minWidth: 0 } },
-                React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Today"),
+    const plannedByToday = authoredPlannedBy(plan, ymd(today));
+    const empty = queue.planned
+        ? (upcoming ? `Nothing scheduled today. Next up is ${upcoming.title}.` : 'Nothing left to teach back.')
+        : (remaining === 0 ? 'Every bite is ready. Open Outline to roam.' : 'Open a bite to start.');
+    return React.createElement("section", { className: "tb-dash" },
+        React.createElement("div", null,
+            React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "SIE"),
+            React.createElement("h1", { style: { margin: '4px 0 0', font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "Overview")),
+        React.createElement("div", { className: "tb-metrics" },
+            React.createElement(Card, { padding: 18, style: { display: 'grid', alignContent: 'start', gap: 8 } },
+                React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Days until exam"),
+                examDate && !past
+                    ? React.createElement("div", { className: "tb-dash-num" }, countdown)
+                    : React.createElement("div", { className: "tb-dash-num", style: { fontSize: 28, color: 'var(--text-faint)' } }, "Not set"),
+                !examDate
+                    ? React.createElement(Button, { size: "sm", variant: "ghost", onClick: goCalendar }, "Set a date on Calendar")
+                    : React.createElement("span", { style: { color: 'var(--text-muted)', font: '500 12px var(--font-body)' } }, past ? 'Exam day has passed.' : 'Study days include today.')),
+            React.createElement(Card, { padding: 18, style: { display: 'grid', alignContent: 'start', gap: 8 } },
+                React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Pace"),
+                React.createElement("div", { className: "tb-dash-num", style: { fontSize: pace == null ? 42 : undefined } },
+                    pace == null ? remaining : (pace.toFixed(1)),
+                    React.createElement("span", { style: { font: '600 16px var(--font-body)', color: 'var(--text-faint)' } }, pace == null ? ' left' : ' / day')),
+                React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', font: '500 12px var(--font-body)' } }, pace == null ? 'Remaining modules. Calendar sets the daily pace.' : 'Remaining ' + remaining + ' modules ÷ ' + studyDaysLeft + ' study days' + (pace >= 7 ? (' · ' + (pace * 7).toFixed(1) + ' / week') : '') + '.'),
                 examDate
-                    ? React.createElement(DayList, { ids: todayIds, results: results, openModule: openModule, today: true, empty: emptyToday })
-                    : React.createElement(Card, { sunken: true, padding: 20 },
-                        React.createElement("p", { style: { margin: '0 0 12px', color: 'var(--text-muted)' } }, "Set an exam date to spread the modules. Stubs stay on the calendar."),
-                        React.createElement(Button, { size: "sm", onClick: goCalendar }, "Open Calendar"))),
-            React.createElement("aside", { style: { display: 'grid', gap: 14, alignContent: 'start' } },
-                React.createElement(Card, { padding: 18 },
-                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Days until exam"),
-                    React.createElement("div", { style: { font: '700 32px var(--font-display)' } }, examDate && !past ? countdown : '—'),
-                    !examDate && React.createElement(Button, { size: "sm", variant: "ghost", onClick: goCalendar, style: { marginTop: 10 } }, "Set exam date")),
-                React.createElement(Card, { padding: 18 },
-                    React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Pace"),
-                    React.createElement("div", { style: { font: '700 28px var(--font-display)' } }, pace == null ? '—' : (pace.toFixed(1) + ' / day')),
-                    React.createElement("p", { style: { margin: '6px 0 0', color: 'var(--text-muted)', font: '500 12px var(--font-body)' } }, pace == null ? 'Remaining modules ÷ remaining days.' : 'Remaining ' + remaining + ' modules ÷ ' + studyDaysLeft + ' study days' + (pace >= 7 ? (' · ' + (pace * 7).toFixed(1) + ' / week') : '') + '.'),
-                    examDate
-                        ? React.createElement(React.Fragment, null,
-                            React.createElement(PlanChart, { ready: authoredReady, total: authored.length, planStart: planStart, examDate: examDate, plan: plan }),
-                            React.createElement("p", { style: { margin: '8px 0 0', font: '500 12px var(--font-body)', color: 'var(--text-muted)' } },
-                                React.createElement("strong", null,
-                                    authoredReady,
-                                    " of ",
-                                    authored.length,
-                                    " authored notes ready"),
-                                plannedByToday ? ` · plan called for ${plannedByToday} by today` : '',
-                                ". ",
-                                Object.entries(authoredLine).map(([k, v]) => v + ' ' + k).join(', ') || 'all Unassessed',
-                                "."),
-                            React.createElement("p", { style: { margin: '4px 0 0', font: '500 12px var(--font-body)', color: 'var(--text-faint)' } },
-                                window.TB_BITE_COUNT - authored.length,
-                                " title stubs stay on the calendar."))
-                        : React.createElement("p", { style: { margin: '8px 0 0', color: 'var(--text-muted)' } }, "No plan until a date is set.")),
-                React.createElement(ReadinessSummary, { results: results }))));
+                    ? React.createElement(React.Fragment, null,
+                        React.createElement(PlanChart, { ready: authoredReady, total: authored.length, planStart: planStart, examDate: examDate, plan: plan }),
+                        React.createElement("p", { style: { margin: 0, font: '500 12px var(--font-body)', color: 'var(--text-muted)' } },
+                            React.createElement("strong", null,
+                                authoredReady,
+                                " of ",
+                                authored.length,
+                                " authored notes ready"),
+                            plannedByToday ? ` · plan called for ${plannedByToday} by today` : '',
+                            ". ",
+                            Object.entries(authoredLine).map(([k, v]) => v + ' ' + k).join(', ') || 'all Unassessed',
+                            "."),
+                        React.createElement("p", { style: { margin: 0, font: '500 12px var(--font-body)', color: 'var(--text-faint)' } },
+                            window.TB_BITE_COUNT - authored.length,
+                            " title stubs are outline-only."))
+                    : null),
+            React.createElement(ReadinessSummary, { results: results })),
+        React.createElement("div", { style: { display: 'grid', gap: 12 } },
+            React.createElement("h2", { style: { margin: 0, font: '600 20px var(--font-display)', color: queue.todayIds.length ? 'var(--sunny-700)' : 'var(--text-body)' } }, "Work on now"),
+            React.createElement(WorkNow, { ids: queue.ids, results: results, openModule: openModule, todayIds: queue.todayIds, overdueIds: queue.overdueIds, empty: empty })));
 }
 function CalendarView({ results, examDate, setExamDate, planStart, setPlanStart, openModule }) {
     const today = startOfDay(new Date());
@@ -600,7 +674,9 @@ function CalendarView({ results, examDate, setExamDate, planStart, setPlanStart,
         React.createElement("div", { className: "tb-cal" },
             React.createElement("div", { style: { display: 'grid', gap: 16, minWidth: 0 } },
                 React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' } },
-                    React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, calMode === 'week' ? fmtRange(weekStart, addDays(weekStart, 6)) : (examDate ? ('Through ' + fmtLong(examDate)) : 'Look-ahead')),
+                    React.createElement("div", null,
+                        React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Calendar"),
+                        React.createElement("h1", { style: { margin: '4px 0 0', font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, calMode === 'week' ? fmtRange(weekStart, addDays(weekStart, 6)) : (examDate ? ('Through ' + fmtLong(examDate)) : 'Look-ahead'))),
                     React.createElement("div", { style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' } },
                         React.createElement(Button, { size: "sm", variant: "ghost", onClick: () => setCalMode(m => m === 'week' ? 'month' : 'week') }, calMode === 'week' ? 'Month view' : 'Week view'),
                         calMode === 'week' && React.createElement(React.Fragment, null,
@@ -622,9 +698,7 @@ function CalendarView({ results, examDate, setExamDate, planStart, setPlanStart,
                                     ? React.createElement(DayCell, { key: ymd(date), date: date, todayStr: todayStr, selected: selected, onSelect: setSelected, plan: plan, results: results, compact: true })
                                     : React.createElement("div", { key: 'e' + ri + '-' + di }))));
                         })),
-                examDate
-                    ? React.createElement(DayList, { ids: selectedIds, results: results, openModule: (id) => openModule(id, 'calendar'), heading: selected === todayStr ? 'Today' : fmtLong(selected), today: selected === todayStr, empty: selected === todayStr && todayIds.length === 0 ? (nextEntry ? `Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.` : 'Nothing scheduled.') : 'No modules on this day.' })
-                    : React.createElement(DayList, { ids: [], results: results, openModule: openModule, heading: "Today", empty: "Set an exam date to spread the modules." })),
+                examDate && React.createElement(DayList, { ids: selectedIds, results: results, openModule: (id) => openModule(id, 'calendar'), heading: selected === todayStr ? 'Today' : fmtLong(selected), today: selected === todayStr, empty: selected === todayStr && todayIds.length === 0 ? (nextEntry ? `Nothing scheduled. The next bite is ${upcoming.title} on ${fmtLong(nextEntry[0])}.` : 'Nothing scheduled.') : 'No modules on this day.' })),
             React.createElement("aside", { style: { display: 'grid', gap: 14, alignContent: 'start' } },
                 React.createElement(Card, { padding: 18 },
                     React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Exam date"),
@@ -662,42 +736,44 @@ function LoginView({ setUser, setView }) {
             React.createElement(BrandButton, { kind: "apple", label: mode === 'login' ? 'Continue with Apple' : 'Sign up with Apple', onClick: () => social('apple') })),
         React.createElement("p", { style: { margin: '14px 0 0', font: '500 11px var(--font-mono)', color: 'var(--text-faint)' } }, "Frontend stub \u00B7 nothing is sent"));
 }
+function BiteTile({ topic, state, today, onOpen }) {
+    const k = stateKey(state);
+    return React.createElement("button", { type: "button", className: "tb-tile", title: topic.title + ' · ' + state + (isStub(topic) ? ' · stub' : ''), onClick: onOpen, style: { border: today ? '2px solid var(--sunny-500)' : (isStub(topic) ? '1px dashed var(--border-strong)' : '1px solid var(--state-' + k + ')'), background: `var(--state-${k}-bg)`, color: `var(--state-${k})`, boxShadow: today ? 'inset 0 3px 0 var(--sunny-500)' : 'none' } }, topic.title);
+}
 function OutlineView({ results, openModule, examDate, planStart }) {
     const todayStr = ymd(new Date());
     const plan = buildPlan(examDate, planStart);
     const todayIds = new Set(plan.byDay[todayStr] || []);
-    return React.createElement("section", { style: { display: 'grid', gap: 16 } },
+    return React.createElement("section", { className: "tb-map" },
         React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'end' } },
-            React.createElement("h1", { style: { margin: 0, font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "SIE outline"),
+            React.createElement("div", null,
+                React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "181 bites \u00B7 4 sections \u00B7 34 leaves"),
+                React.createElement("h1", { style: { margin: '4px 0 0', font: 'var(--text-h1)', fontFamily: 'var(--font-display)' } }, "SIE map")),
             React.createElement(StateKey, null)),
         Object.entries(window.TB_TREE).map(([sec, s]) => {
             const ids = Object.values(s.leaves).flatMap(l => l.ids);
             const assessed = ids.filter(id => results[id]).length;
             const ready = ids.filter(id => isReady(biteState(results, id))).length;
-            return React.createElement("div", { key: sec, style: { display: 'grid', gap: 10 } },
+            return React.createElement("section", { key: sec, style: { display: 'grid', gap: 14, padding: '18px 18px 20px', background: 'var(--paper)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', boxShadow: 'var(--edge-card)', borderLeft: '6px solid var(--clover-500)' } },
                 React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'baseline' } },
                     React.createElement("div", null,
                         React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } },
                             "Section ",
                             sec),
-                        React.createElement("h2", { style: { margin: '4px 0 0', font: '600 20px var(--font-display)' } }, s.title)),
-                    React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
+                        React.createElement("h2", { style: { margin: '4px 0 0', font: '600 22px var(--font-display)' } }, s.title)),
+                    React.createElement("span", { style: { font: '500 12px var(--font-body)', color: 'var(--text-faint)' } },
                         ready,
                         " ready \u00B7 ",
                         assessed,
                         " assessed \u00B7 ",
                         ids.length)),
-                Object.entries(s.leaves).map(([leaf, l]) => (React.createElement("div", { key: leaf, style: { display: 'grid', gap: 6 } },
-                    React.createElement("strong", { style: { font: '600 13px var(--font-body)', color: 'var(--text-muted)' } },
-                        leaf,
-                        " ",
-                        l.title),
-                    React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(44px,1fr))', gap: 6 } }, l.ids.map(id => {
+                Object.entries(s.leaves).map(([leaf, l]) => (React.createElement("div", { key: leaf, className: "tb-leaf" },
+                    React.createElement("div", null,
+                        React.createElement("span", { style: { font: '600 11px var(--font-mono)', color: 'var(--tangerine-600)' } }, leaf),
+                        React.createElement("strong", { style: { display: 'block', marginTop: 2, font: '600 13px var(--font-body)', color: 'var(--text-body)' } }, l.title)),
+                    React.createElement("div", { className: "tb-tiles" }, l.ids.map(id => {
                         const t = biteOf(id);
-                        const st = biteState(results, id);
-                        const k = stateKey(st);
-                        const todayHit = todayIds.has(id);
-                        return React.createElement("button", { key: id, type: "button", title: t.id + ' ' + t.title + ' · ' + st + (isStub(t) ? ' · stub' : ''), onClick: () => openModule(id, 'outline'), style: { minHeight: 44, minWidth: 44, padding: 4, border: todayHit ? '2px solid var(--sunny-500)' : (isStub(t) ? '1px dashed var(--border-strong)' : '1px solid var(--state-' + k + ')'), borderRadius: 8, background: `var(--state-${k}-bg)`, color: `var(--state-${k})`, font: '500 10px var(--font-mono)', cursor: 'pointer' } }, t.id.replace('B', ''));
+                        return React.createElement(BiteTile, { key: id, topic: t, state: biteState(results, id), today: todayIds.has(id), onOpen: () => openModule(id, 'outline') });
                     }))))));
         }));
 }
@@ -717,18 +793,18 @@ function BiteNote({ topic }) {
 }
 function NoteView({ topic, state, back, onTeach }) {
     return React.createElement("section", { className: "tb-note" },
-        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
-            React.createElement("button", { onClick: back, style: { all: 'unset', cursor: 'pointer', font: '600 13px var(--font-body)', color: 'var(--clover-600)' } }, "\u2190 Back"),
-            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } }, "Note")),
-        React.createElement("div", { style: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' } },
-            React.createElement(StateBadge, { state: state || 'Unassessed' }),
-            React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
-                topic.id,
+        React.createElement(FlowChrome, { back: back, backLabel: "Back", phase: "note" }),
+        React.createElement(Card, { padding: 32 },
+            React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } },
+                topic.leaf,
                 " \u00B7 ",
-                topic.leaf)),
-        React.createElement(Card, { padding: 28 },
-            React.createElement("h1", { style: { margin: '0 0 8px', font: '600 28px var(--font-display)' } }, topic.title),
-            React.createElement("p", { style: { margin: '0 0 16px', color: 'var(--text-muted)' } }, topic.subtitle),
+                topic.leafTitle || topic.leaf),
+            React.createElement("h1", { style: { margin: '8px 0 10px', font: '700 34px/1.15 var(--font-display)' } }, topic.title),
+            React.createElement("div", { style: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 18 } },
+                React.createElement(StateBadge, { state: state || 'Unassessed' }),
+                React.createElement("span", { style: { color: 'var(--text-faint)', font: '500 12px var(--font-body)' } },
+                    topic.read || '8 min',
+                    " read")),
             React.createElement(BiteNote, { topic: topic })),
         React.createElement(Button, { fullWidth: true, size: "lg", onClick: onTeach }, "Teach it back"));
 }
@@ -736,45 +812,29 @@ function TeachView({ topic, state, answer, setAnswer, result, err, submit, onNot
     const next = nextBite(topic.id);
     const pop = result && (result.state === 'Exam-Ready' || result.state === 'Mastered');
     return React.createElement("section", { style: { display: 'grid', gap: 16 } },
-        React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' } },
-            React.createElement("button", { onClick: onNote, style: { all: 'unset', cursor: 'pointer', font: '600 13px var(--font-body)', color: 'var(--clover-600)' } }, "\u2190 Note"),
-            React.createElement("span", { style: { font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } }, "Teach-back")),
+        React.createElement(FlowChrome, { back: onNote, backLabel: "Note", phase: result ? 'signal' : 'teach' }),
         React.createElement("div", { style: { display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' } },
             React.createElement(StateBadge, { state: result ? result.state : (state || 'Unassessed') }),
-            React.createElement("span", { style: { font: '500 11px var(--font-mono)', color: 'var(--tangerine-600)' } },
-                topic.id,
-                " \u00B7 ",
-                topic.leaf)),
-        React.createElement("div", { className: "tb-teach" },
+            React.createElement("span", { style: { font: '500 13px var(--font-body)', color: 'var(--text-muted)' } }, topic.title)),
+        React.createElement("div", { className: result ? 'tb-teach' : 'tb-teach-write' },
             React.createElement(Card, { padding: 24 },
-                React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--tangerine-600)' } }, "Your turn"),
-                React.createElement("h2", { style: { margin: '6px 0 14px', font: '600 22px var(--font-display)' } }, "Explain it to a colleague."),
-                React.createElement("p", { style: { margin: '0 0 14px', color: 'var(--text-muted)', font: '500 14px var(--font-body)' } }, topic.title),
-                React.createElement(TeachBackBox, { value: answer, onChange: setAnswer, prompt: topic.prompt, placeholder: topic.placeholder, rows: 8 }),
+                React.createElement("h2", { style: { margin: '0 0 14px', font: '600 26px var(--font-display)' } }, "Explain it to a colleague."),
+                React.createElement(TeachBackBox, { value: answer, onChange: setAnswer, prompt: topic.prompt, placeholder: topic.placeholder, rows: result ? 8 : 12 }),
                 React.createElement("div", { style: { marginTop: 14 } },
                     React.createElement(Button, { fullWidth: true, size: "lg", onClick: submit }, "Grade my teach-back")),
                 err && React.createElement("p", { role: "alert", style: { margin: '10px 0 0', color: 'var(--coral-700)', font: '600 12px var(--font-body)' } }, err)),
-            React.createElement("div", { style: { display: 'grid', gap: 14, alignContent: 'start' } }, !result
-                ? React.createElement(Card, { sunken: true, padding: 26, style: { border: '1px dashed var(--border-strong)' } },
-                    React.createElement("i", { className: "ph-bold ph-arrow-elbow-down-right", style: { fontSize: 26, color: 'var(--tangerine-500)' } }),
-                    React.createElement("h3", { style: { margin: '10px 0 6px', font: '600 20px var(--font-display)' } }, "Your signal will appear here."),
-                    React.createElement("p", { style: { margin: 0, color: 'var(--text-muted)', font: '500 13px/1.6 var(--font-body)' } },
-                        "We\u2019ll compare your explanation with the ",
-                        topic.criteria.length,
-                        " things an exam-ready answer needs."))
-                : React.createElement(React.Fragment, null,
+            result
+                ? React.createElement("div", { style: { display: 'grid', gap: 14, alignContent: 'start' } },
                     React.createElement("div", { className: pop ? 'tb-pop' : undefined },
                         React.createElement(ResultBanner, { state: result.state })),
                     React.createElement(Card, { padding: "4px 22px" }, result.crits.map(c => React.createElement(CriterionRow, { key: c.id, outcome: c.outcome, label: c.label, feedback: c.feedback }))),
-                    React.createElement("p", { style: { margin: 0, font: '500 12px var(--font-mono)', color: 'var(--text-faint)' } },
-                        result.attempts || 1,
-                        " \u00B7 Available"),
                     React.createElement("div", { style: { display: 'grid', gap: 8 } },
-                        next && React.createElement(Button, { onClick: () => openNext(next.id) },
-                            "Next \u00B7 ",
+                        next && React.createElement(Button, { size: "lg", onClick: () => openNext(next.id) },
+                            "Next bite \u00B7 ",
                             next.title),
                         STRUGGLE.has(result.state) && React.createElement(Button, { variant: "ghost", onClick: goBrush }, "Review this miss in Brush-up"),
-                        React.createElement(Button, { variant: "ghost", onClick: goHome }, next ? 'Back to today' : 'Done for now'))))));
+                        React.createElement(Button, { variant: "ghost", onClick: goHome }, next ? 'Overview' : 'Done for now')))
+                : null));
 }
 function makeQuizItems(bites, count, styles) {
     const wantTF = styles.includes('tf');
