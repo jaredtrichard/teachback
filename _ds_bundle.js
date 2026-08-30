@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d9bf09363ad7","ui_kits/web/screens.jsx":"30b92ab121de"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":4,"namespace":"TeachbackDesignSystem_417209","components":[{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"IconButton","sourcePath":"components/core/IconButton.jsx"},{"name":"ProgressBar","sourcePath":"components/core/ProgressBar.jsx"},{"name":"StateBadge","sourcePath":"components/core/StateBadge.jsx"},{"name":"StreakBadge","sourcePath":"components/core/StreakBadge.jsx"},{"name":"CriterionRow","sourcePath":"components/feedback/CriterionRow.jsx"},{"name":"ResultBanner","sourcePath":"components/feedback/ResultBanner.jsx"},{"name":"TeachBackBox","sourcePath":"components/forms/TeachBackBox.jsx"},{"name":"TopicChip","sourcePath":"components/forms/TopicChip.jsx"}],"sourceHashes":{"components/core/Button.jsx":"e01ceef1c02c","components/core/Card.jsx":"0d9ac0509e80","components/core/IconButton.jsx":"dfa72346bb73","components/core/ProgressBar.jsx":"f8bc11d881e5","components/core/StateBadge.jsx":"810a0a25092b","components/core/StreakBadge.jsx":"70ab39a9fd82","components/feedback/CriterionRow.jsx":"22c72e51fe32","components/feedback/ResultBanner.jsx":"b12ca72d8138","components/forms/TeachBackBox.jsx":"b4a21aad9482","components/forms/TopicChip.jsx":"f05431774c65","ui_kits/web/data.js":"d9bf09363ad7","ui_kits/web/screens.jsx":"3a45ed449612"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 const __ds_ns = (window.TeachbackDesignSystem_417209 = window.TeachbackDesignSystem_417209 || {});
@@ -229,7 +229,7 @@ function workQueue(results, examDate, planStart) {
         return { ids: authored.concat(rest).slice(0, 5).map(b => b.id), todayIds: [], overdueIds: [], planned: false };
     }
     const plan = buildPlan(examDate, planStart);
-    const todayIds = plan.byDay[todayStr] || [];
+    const todayIds = (plan.byDay[todayStr] || []).filter(unreadyId);
     const overdueIds = [];
     Object.keys(plan.byDay).sort().forEach(day => {
         if (day >= todayStr)
@@ -602,9 +602,9 @@ function HomeView({ results, examDate, planStart, openModule, goCalendar }) {
         React.createElement("div", { className: "tb-metrics" },
             React.createElement(Card, { padding: 18, style: { display: 'grid', alignContent: 'start', gap: 8 } },
                 React.createElement("span", { style: { font: 'var(--text-label)', letterSpacing: 'var(--tracking-label)', textTransform: 'uppercase', color: 'var(--text-faint)' } }, "Days until exam"),
-                examDate && !past
-                    ? React.createElement("div", { className: "tb-dash-num" }, countdown)
-                    : React.createElement("div", { className: "tb-dash-num", style: { fontSize: 28, color: 'var(--text-faint)' } }, "Not set"),
+                !examDate
+                    ? React.createElement("div", { className: "tb-dash-num", style: { fontSize: 28, color: 'var(--text-faint)' } }, "Not set")
+                    : React.createElement("div", { className: "tb-dash-num" }, countdown),
                 !examDate
                     ? React.createElement(Button, { size: "sm", variant: "ghost", onClick: goCalendar }, "Set a date on Calendar")
                     : React.createElement("span", { style: { color: 'var(--text-muted)', font: '500 12px var(--font-body)' } }, past ? 'Exam day has passed.' : 'Study days include today.')),

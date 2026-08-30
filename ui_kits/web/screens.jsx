@@ -54,7 +54,7 @@ function workQueue(results,examDate,planStart){
     return {ids:authored.concat(rest).slice(0,5).map(b=>b.id),todayIds:[],overdueIds:[],planned:false};
   }
   const plan=buildPlan(examDate,planStart);
-  const todayIds=plan.byDay[todayStr]||[];
+  const todayIds=(plan.byDay[todayStr]||[]).filter(unreadyId);
   const overdueIds=[];
   Object.keys(plan.byDay).sort().forEach(day=>{
     if(day>=todayStr) return;
@@ -424,9 +424,9 @@ function HomeView({results,examDate,planStart,openModule,goCalendar}){
     <div className="tb-metrics">
       <Card padding={18} style={{display:'grid',alignContent:'start',gap:8}}>
         <span style={{font:'var(--text-label)',letterSpacing:'var(--tracking-label)',textTransform:'uppercase',color:'var(--text-faint)'}}>Days until exam</span>
-        {examDate&&!past
-          ? <div className="tb-dash-num">{countdown}</div>
-          : <div className="tb-dash-num" style={{fontSize:28,color:'var(--text-faint)'}}>Not set</div>}
+        {!examDate
+          ? <div className="tb-dash-num" style={{fontSize:28,color:'var(--text-faint)'}}>Not set</div>
+          : <div className="tb-dash-num">{countdown}</div>}
         {!examDate
           ? <Button size="sm" variant="ghost" onClick={goCalendar}>Set a date on Calendar</Button>
           : <span style={{color:'var(--text-muted)',font:'500 12px var(--font-body)'}}>{past?'Exam day has passed.':'Study days include today.'}</span>}
