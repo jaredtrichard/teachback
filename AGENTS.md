@@ -8,6 +8,8 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 Explanation-first SIE prep. 181 official outline bites, 34 FINRA leaves. Teach-back readiness (Gap / Misconception / Rusty / Exam-Ready / Mastered) is the module assessment. QBank is right/wrong only and never writes those states. Plan: `docs/backend-plan.md`. UI blueprint (do not re-litigate): firstmate data `tb-review-teachback-frontend-interactivity-73/report.md`.
 
+Study has two modes: overview Home (today's notes, days until exam, pace merged with progress-versus-plan, summary readiness) and a sequential work path (note alone → teach-back + Signal after submit → next bite). Calendar is its own nav item. Outline is the section-grouped 181-bite grid, not a second home. Product behavior: `readme.md`.
+
 ## Content vs user state
 
 Product content is compiled from `content/` into `ui_kits/web/data.js` (`python3 content/compile.py`). Per-user progress, exam date, answers, results, and QBank history belong in `store/tb-store.js` (local-first). Hosted cloud is a stub. Optional file server: `node server/store-server.mjs` (writes gitignored `data/users/`).

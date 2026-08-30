@@ -4,11 +4,14 @@ Explanation-first SIE prep. Read a bite, teach it back.
 
 Product-facing frontend kit on the frozen product grain:
 
-- Home pairs a one-week look-ahead calendar (today is the first column; arrows shift the window; Month view scrolls continuously to the exam date) with a section-grouped **181**-bite readiness grid; each grid cell is colored by its bite's own readiness. Yellow is today. Coral is overdue authored unready work only — stubs are never coral.
+- Two study modes: an overview Home, and a sequential flow-state work path
+- Home is today's notes, days until the exam (not the exam date itself), pace with progress-versus-plan merged in, and summary readiness. Yellow is today. Coral is overdue authored unready work only — stubs are never coral.
+- Calendar is its own nav item (week look-ahead; today is the first column; arrows shift the window; Month view scrolls continuously to the exam date). Exam date is set here.
+- Outline is the section-grouped **181**-bite readiness grid with section and leaf names. Hover a cell for the bite title. It is an outline of the SIE, not a second home.
+- Work path: note page only → teach-back page (explanation on the left, Signal after submit) → next bite. Note and explanation are never on the same page. No left TOC, calendar, countdown, pace, or readiness summary in the flow.
 - Pace is remaining modules divided by remaining study days
-- Same-page note, teach-back, and readiness feedback (no read-gate)
 - Frontend-only email, Google, Facebook, and Apple login stubs
-- Left nav is Home / Outline / Brush-up. Brush-up is flashcards for spaced recall (Gap / Misconception / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
+- Left nav is Home / Outline / Calendar / Brush-up. Brush-up is flashcards for spaced recall (Gap / Misconception / Rusty / quiz misses / unassessed authored) plus Create quiz in the top right; generated questions are honest stubs, scored right/wrong only, and never write readiness. Grading a card only schedules the next due date.
 - v3 tokens: cream, desaturated clover, Sora / DM Sans, no XP
 - **181** official outline bites, **34** FINRA leaves as folders
 - QBank is right/wrong only — it does not write Gap / Rusty / Exam-Ready / Mastered

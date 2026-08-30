@@ -8,7 +8,7 @@ Source outline: FINRA SIE Content Outline ©2024 (the PDF this repo already cite
 
 Nobody uses this yet. Do not buy a region, a cluster, or an auth vendor.
 
-**Default now:** local-first. The kit already writes `localStorage` key `tb-frontend-review:v2`. Keep that as the live adapter. Extract one `Store` interface so the UI rewrite can swap backends without a second persist path.
+**Default now:** local-first. The kit writes `localStorage` key `tb-frontend-review:v3` (falls back to `v2` on read). Keep that as the live adapter until the UI loads `store/tb-store.js`. Adapter details: `store/README.md`.
 
 **Next, only if a second device or a second human appears:** a tiny optional file store (`data/users/<id>.json`, gitignored) behind the same interface. A 40-line local HTTP server is enough. No custom k8s.
 
@@ -27,7 +27,7 @@ Two piles. Do not mix them.
 - State vocabulary (Unassessed → Gap → Misconception → Rusty → Exam-Ready → Mastered)
 - QBank items when authored (right/wrong only; they never write module readiness)
 
-Source files live under `content/`. `ui_kits/web/data.js` is a generated kit bundle the current `<script src="./data.js">` tag can load. Extra fields (`status`) are ignored by today’s screens and usable by the rewrite.
+Source files live under `content/`. `ui_kits/web/data.js` is a generated kit bundle the current `<script src="./data.js">` tag can load. Extra fields (`status`) are ignored by today’s screens, which still key off `demo`.
 
 **Per-user (not committed):**
 
@@ -39,7 +39,7 @@ Source files live under `content/`. `ui_kits/web/data.js` is a generated kit bun
 - `view` / last bite (session chrome)
 - `streak` (derived later; do not invent activity)
 
-XP is out of the product grain. Do not persist it in the new schema. Old `xp` keys may remain in localStorage until the UI rewrite drops them.
+XP is out of the product grain. Do not persist it in the new schema. Old `xp` keys may remain in localStorage until a load migrates them away (the live kit already drops `xp` on read).
 
 Schema sketch:
 
