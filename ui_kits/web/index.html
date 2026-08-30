@@ -1,5 +1,5 @@
-<!-- @dsCard group="Web app" viewport="1240x820" name="Teach-back web app" subtitle="Overview home, sequential teach-back, Brush-up flashcards (interactive)" -->
-<!-- @startingPoint section="Screens" subtitle="Overview home and sequential work path" viewport="1240x820" -->
+<!-- @dsCard group="Web app" viewport="1240x820" name="Teach-back web app" subtitle="Overview dashboard, SIE map, sequential read-then-teach (interactive)" -->
+<!-- @startingPoint section="Screens" subtitle="Overview dashboard and sequential work path" viewport="1240x820" -->
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>teachback — web app</title>
 <link rel="stylesheet" href="../../styles.css">
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
@@ -10,10 +10,18 @@ a{color:var(--color-primary)}a:hover{color:var(--color-primary-hover)}
 .tb-body{display:grid;grid-template-columns:188px minmax(0,1fr);max-width:1280px;margin:0 auto;width:100%}
 .tb-nav{padding:12px 12px 48px;display:grid;gap:8px;align-content:start;border-right:1px solid var(--border)}
 .tb-main{padding:22px var(--page-pad) 80px;min-width:0}
-.tb-home,.tb-cal{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.75fr);gap:22px;align-items:start}
+.tb-dash{display:grid;gap:28px}
+.tb-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.tb-dash-num{font:700 clamp(40px,5vw,56px)/1 var(--font-display);letter-spacing:-.03em}
+.tb-cal{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.75fr);gap:22px;align-items:start}
+.tb-map{display:grid;gap:32px}
+.tb-leaf{display:grid;grid-template-columns:minmax(148px,220px) minmax(0,1fr);gap:10px 16px;align-items:start}
+.tb-tiles{display:flex;flex-wrap:wrap;gap:6px}
+.tb-tile{min-height:44px;max-width:220px;padding:8px 10px;border-radius:8px;text-align:left;cursor:pointer;font:600 12px/1.3 var(--font-body);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .tb-flow{max-width:1100px;margin:0 auto;width:100%}
-.tb-note{max-width:760px;margin:0 auto;display:grid;gap:16px}
-.tb-teach{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:22px;align-items:start}
+.tb-note{max-width:720px;margin:0 auto;display:grid;gap:18px}
+.tb-teach{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:22px;align-items:start}
+.tb-teach-write{max-width:720px;margin:0 auto;display:grid;gap:16px}
 @keyframes tb-pop{0%{transform:scale(.96);opacity:.4}100%{transform:scale(1);opacity:1}}
 .tb-pop{animation:tb-pop var(--dur-pop) var(--ease-pop)}
 .tb-field{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--border-strong);border-radius:var(--radius-md);font:500 15px var(--font-body);background:var(--paper);color:var(--text-body)}
@@ -21,7 +29,8 @@ a{color:var(--color-primary)}a:hover{color:var(--color-primary-hover)}
 @media (max-width:900px){
   .tb-body{grid-template-columns:1fr}
   .tb-nav{grid-auto-flow:column;justify-content:start;overflow-x:auto;border-right:0;border-bottom:1px solid var(--border);padding:10px var(--page-pad)}
-  .tb-home,.tb-cal,.tb-teach{grid-template-columns:1fr}
+  .tb-metrics,.tb-cal,.tb-teach,.tb-leaf{grid-template-columns:1fr}
+  .tb-tile{max-width:none;flex:1 1 140px}
 }
 </style>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
